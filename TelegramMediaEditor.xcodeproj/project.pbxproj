@@ -8,22 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C7228F33C5A00475B7D /* AppDelegate.swift */; };
-		D7389C7528F33C5A00475B7D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C7428F33C5A00475B7D /* SceneDelegate.swift */; };
-		D7389C7728F33C5A00475B7D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C7628F33C5A00475B7D /* ViewController.swift */; };
-		D7389C7A28F33C5A00475B7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7389C7828F33C5A00475B7D /* Main.storyboard */; };
 		D7389C7C28F33C5C00475B7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7389C7B28F33C5C00475B7D /* Assets.xcassets */; };
 		D7389C7F28F33C5C00475B7D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7389C7D28F33C5C00475B7D /* LaunchScreen.storyboard */; };
+		D7389C8728F345D100475B7D /* MediaAccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C8628F345D100475B7D /* MediaAccessViewController.swift */; };
+		D7389C8B28F3487800475B7D /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D7389C8A28F3487800475B7D /* Lottie */; };
+		D7389C8E28F34BC000475B7D /* duck.json in Resources */ = {isa = PBXBuildFile; fileRef = D7389C8D28F34BC000475B7D /* duck.json */; };
+		D7389C9328F35C4B00475B7D /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C9228F35C4B00475B7D /* AppRouter.swift */; };
+		D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C9428F3627B00475B7D /* PhotosViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D7389C6F28F33C5A00475B7D /* TelegramMediaEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelegramMediaEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7389C7228F33C5A00475B7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		D7389C7428F33C5A00475B7D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D7389C7628F33C5A00475B7D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		D7389C7928F33C5A00475B7D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D7389C7B28F33C5C00475B7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7389C7E28F33C5C00475B7D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D7389C8028F33C5C00475B7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7389C8628F345D100475B7D /* MediaAccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaAccessViewController.swift; sourceTree = "<group>"; };
+		D7389C8D28F34BC000475B7D /* duck.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = duck.json; sourceTree = "<group>"; };
+		D7389C9228F35C4B00475B7D /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		D7389C9428F3627B00475B7D /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7389C8B28F3487800475B7D /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,14 +61,31 @@
 			isa = PBXGroup;
 			children = (
 				D7389C7228F33C5A00475B7D /* AppDelegate.swift */,
-				D7389C7428F33C5A00475B7D /* SceneDelegate.swift */,
-				D7389C7628F33C5A00475B7D /* ViewController.swift */,
-				D7389C7828F33C5A00475B7D /* Main.storyboard */,
-				D7389C7B28F33C5C00475B7D /* Assets.xcassets */,
-				D7389C7D28F33C5C00475B7D /* LaunchScreen.storyboard */,
+				D7389C9228F35C4B00475B7D /* AppRouter.swift */,
+				D7389C8828F345D500475B7D /* Screens */,
+				D7389C8C28F3491000475B7D /* Resources */,
 				D7389C8028F33C5C00475B7D /* Info.plist */,
 			);
 			path = TelegramMediaEditor;
+			sourceTree = "<group>";
+		};
+		D7389C8828F345D500475B7D /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				D7389C8628F345D100475B7D /* MediaAccessViewController.swift */,
+				D7389C9428F3627B00475B7D /* PhotosViewController.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		D7389C8C28F3491000475B7D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D7389C7D28F33C5C00475B7D /* LaunchScreen.storyboard */,
+				D7389C7B28F33C5C00475B7D /* Assets.xcassets */,
+				D7389C8D28F34BC000475B7D /* duck.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +104,9 @@
 			dependencies = (
 			);
 			name = TelegramMediaEditor;
+			packageProductDependencies = (
+				D7389C8A28F3487800475B7D /* Lottie */,
+			);
 			productName = TelegramMediaEditor;
 			productReference = D7389C6F28F33C5A00475B7D /* TelegramMediaEditor.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +135,9 @@
 				Base,
 			);
 			mainGroup = D7389C6628F33C5A00475B7D;
+			packageReferences = (
+				D7389C8928F3487800475B7D /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			productRefGroup = D7389C7028F33C5A00475B7D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -126,8 +153,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7389C7F28F33C5C00475B7D /* LaunchScreen.storyboard in Resources */,
+				D7389C8E28F34BC000475B7D /* duck.json in Resources */,
 				D7389C7C28F33C5C00475B7D /* Assets.xcassets in Resources */,
-				D7389C7A28F33C5A00475B7D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,23 +165,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7389C7728F33C5A00475B7D /* ViewController.swift in Sources */,
+				D7389C9328F35C4B00475B7D /* AppRouter.swift in Sources */,
+				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
+				D7389C8728F345D100475B7D /* MediaAccessViewController.swift in Sources */,
 				D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */,
-				D7389C7528F33C5A00475B7D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		D7389C7828F33C5A00475B7D /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D7389C7928F33C5A00475B7D /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D7389C7D28F33C5C00475B7D /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -292,9 +312,9 @@
 				INFOPLIST_FILE = TelegramMediaEditor/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -320,9 +340,9 @@
 				INFOPLIST_FILE = TelegramMediaEditor/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -358,6 +378,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D7389C8928F3487800475B7D /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 3.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D7389C8A28F3487800475B7D /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D7389C8928F3487800475B7D /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D7389C6728F33C5A00475B7D /* Project object */;
 }

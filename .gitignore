@@ -3,3 +3,7 @@
 
 # User settings
 xcuserdata/
+
+# Swift Package Manager
+Package.resolved
+.swiftpm
