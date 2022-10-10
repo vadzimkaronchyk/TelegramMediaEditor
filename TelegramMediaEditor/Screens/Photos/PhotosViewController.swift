@@ -10,8 +10,8 @@ import Photos
 
 final class PhotosViewController: UICollectionViewController {
     
-    var onPhotoSelected: (() -> Void)?
     var onAccessRestricted: (() -> Void)?
+    var onPhotoSelected: ((PHAsset) -> Void)?
     
     private var fetchResult: PHFetchResult<PHAsset>?
     private let imageManager = PHCachingImageManager()
@@ -43,8 +43,8 @@ final class PhotosViewController: UICollectionViewController {
         super.init(coder: coder)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         setupViews()
         loadPhotos()
@@ -70,10 +70,24 @@ extension PhotosViewController {
             for: indexPath
         ) as! PhotoCell
         let asset = fetchResult.object(at: indexPath.item)
-        imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: nil) { (image, info) in
+        imageManager.requestImage(
+            for: asset,
+            targetSize: targetSize,
+            contentMode: .aspectFill,
+            options: nil
+        ) { image, info in
             cell.image = image
         }
         return cell
+    }
+    
+    override func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let fetchResult = fetchResult else { return }
+        let asset = fetchResult.object(at: indexPath.item)
+        onPhotoSelected?(asset)
     }
 }
 

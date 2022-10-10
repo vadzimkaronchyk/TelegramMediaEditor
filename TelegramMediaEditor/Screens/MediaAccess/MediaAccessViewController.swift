@@ -74,9 +74,14 @@ private extension MediaAccessViewController {
     }
     
     func setupViews() {
+        setupView()
         setupAnimationView()
         setupTitleLabel()
         setupAccessButton()
+    }
+    
+    func setupView() {
+        view.backgroundColor = .black
     }
     
     func setupAnimationView() {
