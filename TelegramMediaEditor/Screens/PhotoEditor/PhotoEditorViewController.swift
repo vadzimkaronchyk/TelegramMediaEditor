@@ -71,17 +71,26 @@ private extension PhotoEditorViewController {
     
     func setupViews() {
         setupView()
-        setupNavigationBar()
+        setupUndoBarButtonItem()
+        setupClearBarButtonItem()
+        setupNavigationItem()
         setupPhotoImageView()
+        setupEditingToolsView()
     }
     
     func setupView() {
         view.backgroundColor = .black
     }
     
-    func setupNavigationBar() {
+    func setupUndoBarButtonItem() {
         undoBarButtonItem.tintColor = .white
+    }
+    
+    func setupClearBarButtonItem() {
         clearBarButtonItem.tintColor = .white
+    }
+    
+    func setupNavigationItem() {
         navigationItem.setLeftBarButton(undoBarButtonItem, animated: false)
         navigationItem.setRightBarButton(clearBarButtonItem, animated: false)
     }
@@ -95,6 +104,15 @@ private extension PhotoEditorViewController {
     func setupPhotoImageView() {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
+    }
+    
+    func setupEditingToolsView() {
+        editingToolsView.onCancel = { [weak self] in
+            self?.onClose?()
+        }
+        editingToolsView.onSave = { [weak self] in
+            self?.onClose?()
+        }
     }
     
     func loadImageFromAsset() {
