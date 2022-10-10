@@ -62,7 +62,6 @@ private extension PhotoEditorViewController {
             photoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             photoImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
-            editingToolsView.heightAnchor.constraint(equalToConstant: 162),
             editingToolsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             editingToolsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             editingToolsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
