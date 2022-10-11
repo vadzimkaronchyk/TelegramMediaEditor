@@ -7,13 +7,41 @@
 
 import UIKit
 
-final class LassoView: DrawingToolView {
+final class LassoView: UIView {
     
-    init() {
-        super.init(imageName: "lasso")
+    private let imageView = UIImageView()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        commonInit()
+    }
+}
+
+private extension LassoView {
+    
+    func commonInit() {
+        setupLayout()
+        setupViews()
+    }
+    
+    func setupLayout() {
+        addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+    
+    func setupViews() {
+        imageView.image = .init(named: "lasso")
+        imageView.contentMode = .scaleAspectFill
     }
 }

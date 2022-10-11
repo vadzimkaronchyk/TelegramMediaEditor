@@ -18,13 +18,14 @@
 		D7389CA228F36F9800475B7D /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CA128F36F9800475B7D /* PhotoCell.swift */; };
 		D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB328F40CFA00475B7D /* PhotoEditorViewController.swift */; };
 		D7389CB628F47E7400475B7D /* EditingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB528F47E7400475B7D /* EditingToolsView.swift */; };
-		D7389CBA28F4AF2E00475B7D /* PenVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB928F4AF2E00475B7D /* PenVIew.swift */; };
+		D7389CBA28F4AF2E00475B7D /* PenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB928F4AF2E00475B7D /* PenView.swift */; };
 		D7389CBC28F4AF5E00475B7D /* BrushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CBB28F4AF5E00475B7D /* BrushView.swift */; };
 		D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CBD28F4AF9A00475B7D /* EraserView.swift */; };
 		D7389CC028F4AFB600475B7D /* PencilView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CBF28F4AFB600475B7D /* PencilView.swift */; };
 		D7389CC228F4AFEC00475B7D /* LassoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CC128F4AFEC00475B7D /* LassoView.swift */; };
 		D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CC328F4B0BA00475B7D /* NeonBrushView.swift */; };
-		D7389CC828F4BF4E00475B7D /* DrawingToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CC728F4BF4E00475B7D /* DrawingToolView.swift */; };
+		D7389CD328F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */; };
+		D7389CDD28F5E9A400475B7D /* ToolsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CDC28F5E9A400475B7D /* ToolsPickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,13 +41,14 @@
 		D7389CA128F36F9800475B7D /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		D7389CB328F40CFA00475B7D /* PhotoEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorViewController.swift; sourceTree = "<group>"; };
 		D7389CB528F47E7400475B7D /* EditingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingToolsView.swift; sourceTree = "<group>"; };
-		D7389CB928F4AF2E00475B7D /* PenVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenVIew.swift; sourceTree = "<group>"; };
+		D7389CB928F4AF2E00475B7D /* PenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenView.swift; sourceTree = "<group>"; };
 		D7389CBB28F4AF5E00475B7D /* BrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrushView.swift; sourceTree = "<group>"; };
 		D7389CBD28F4AF9A00475B7D /* EraserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserView.swift; sourceTree = "<group>"; };
 		D7389CBF28F4AFB600475B7D /* PencilView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilView.swift; sourceTree = "<group>"; };
 		D7389CC128F4AFEC00475B7D /* LassoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LassoView.swift; sourceTree = "<group>"; };
 		D7389CC328F4B0BA00475B7D /* NeonBrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeonBrushView.swift; sourceTree = "<group>"; };
-		D7389CC728F4BF4E00475B7D /* DrawingToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolView.swift; sourceTree = "<group>"; };
+		D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtensions.swift; sourceTree = "<group>"; };
+		D7389CDC28F5E9A400475B7D /* ToolsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				D7389C7228F33C5A00475B7D /* AppDelegate.swift */,
 				D7389C9228F35C4B00475B7D /* AppRouter.swift */,
 				D7389C8828F345D500475B7D /* Screens */,
+				D7389CD128F5B3EE00475B7D /* Extensions */,
 				D7389C8C28F3491000475B7D /* Resources */,
 				D7389C8028F33C5C00475B7D /* Info.plist */,
 			);
@@ -138,8 +141,7 @@
 		D7389CC528F4B12E00475B7D /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				D7389CC728F4BF4E00475B7D /* DrawingToolView.swift */,
-				D7389CB928F4AF2E00475B7D /* PenVIew.swift */,
+				D7389CB928F4AF2E00475B7D /* PenView.swift */,
 				D7389CBB28F4AF5E00475B7D /* BrushView.swift */,
 				D7389CC328F4B0BA00475B7D /* NeonBrushView.swift */,
 				D7389CBF28F4AFB600475B7D /* PencilView.swift */,
@@ -153,9 +155,18 @@
 			isa = PBXGroup;
 			children = (
 				D7389CB528F47E7400475B7D /* EditingToolsView.swift */,
+				D7389CDC28F5E9A400475B7D /* ToolsPickerView.swift */,
 				D7389CC528F4B12E00475B7D /* Tools */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D7389CD128F5B3EE00475B7D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,11 +255,12 @@
 				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
 				D7389C8728F345D100475B7D /* MediaAccessViewController.swift in Sources */,
 				D7389CB628F47E7400475B7D /* EditingToolsView.swift in Sources */,
-				D7389CBA28F4AF2E00475B7D /* PenVIew.swift in Sources */,
+				D7389CBA28F4AF2E00475B7D /* PenView.swift in Sources */,
 				D7389CC028F4AFB600475B7D /* PencilView.swift in Sources */,
 				D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */,
 				D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */,
-				D7389CC828F4BF4E00475B7D /* DrawingToolView.swift in Sources */,
+				D7389CDD28F5E9A400475B7D /* ToolsPickerView.swift in Sources */,
+				D7389CD328F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

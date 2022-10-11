@@ -9,14 +9,7 @@ import UIKit
 
 final class EditingToolsView: UIView {
     
-    private let toolsStackView = UIStackView()
-    private let penView = PenView()
-    private let brushView = BrushView()
-    private let neonBrushView = NeonBrushView()
-    private let pencilView = PencilView()
-    private let lassoView = LassoView()
-    private let eraserView = EraserView()
-    
+    private let toolsPickerView = ToolsPickerView()
     private let bottomControlsStackView = UIStackView()
     private let toolsSegmentedControl = UISegmentedControl()
     private let cancelButton = UIButton(type: .system)
@@ -46,21 +39,19 @@ final class EditingToolsView: UIView {
 private extension EditingToolsView {
     
     func setupLayout() {
-        addSubview(toolsStackView)
+        addSubview(toolsPickerView)
         addSubview(bottomControlsStackView)
         
-        toolsStackView.translatesAutoresizingMaskIntoConstraints = false
+        toolsPickerView.translatesAutoresizingMaskIntoConstraints = false
         bottomControlsStackView.translatesAutoresizingMaskIntoConstraints = false
         toolsSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            toolsStackView.heightAnchor.constraint(equalToConstant: 88),
-            toolsStackView.widthAnchor.constraint(equalToConstant: 240),
-            toolsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            toolsStackView.topAnchor.constraint(equalTo: topAnchor, constant: 33),
-            toolsStackView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor),
+            toolsPickerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            toolsPickerView.topAnchor.constraint(equalTo: topAnchor, constant: 33),
+            toolsPickerView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor),
             bottomControlsStackView.heightAnchor.constraint(equalToConstant: 33),
             bottomControlsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             bottomControlsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
@@ -72,7 +63,6 @@ private extension EditingToolsView {
     
     func setupViews() {
         setupView()
-        setupToolsStackView()
         setupBottomControlsStackView()
         setupToolsSegmentedControl()
         setupCancelButton()
@@ -81,18 +71,6 @@ private extension EditingToolsView {
     
     func setupView() {
         backgroundColor = .black
-    }
-    
-    func setupToolsStackView() {
-        toolsStackView.axis = .horizontal
-        toolsStackView.distribution = .fillEqually
-        toolsStackView.spacing = 24
-        toolsStackView.addArrangedSubview(penView)
-        toolsStackView.addArrangedSubview(brushView)
-        toolsStackView.addArrangedSubview(neonBrushView)
-        toolsStackView.addArrangedSubview(pencilView)
-        toolsStackView.addArrangedSubview(lassoView)
-        toolsStackView.addArrangedSubview(eraserView)
     }
     
     func setupBottomControlsStackView() {
