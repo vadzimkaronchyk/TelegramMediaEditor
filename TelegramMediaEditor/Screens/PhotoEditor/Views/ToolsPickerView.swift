@@ -18,6 +18,12 @@ final class ToolsPickerView: UIView {
     private let eraserView = EraserView()
     private let bottomGradientLayer = CAGradientLayer()
     
+    private lazy var selectedToolView: UIView = penView
+    
+    private var runningAnimators = [UIViewPropertyAnimator]()
+    
+    private let selectedPenOffset = 16.0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -67,20 +73,72 @@ private extension ToolsPickerView {
     }
     
     func setupViews() {
+        setupView()
+        setupToolsStackView()
+        setupToolViews()
+    }
+    
+    func setupView() {
+        clipsToBounds = true
+    }
+    
+    func setupToolsStackView() {
         toolsStackView.axis = .horizontal
         toolsStackView.distribution = .fillEqually
         toolsStackView.spacing = 24
+    }
+    
+    func setupToolViews() {
         toolsStackView.addArrangedSubview(penView)
-        toolsStackView.addArrangedSubview(brushView)
-        toolsStackView.addArrangedSubview(neonBrushView)
-        toolsStackView.addArrangedSubview(pencilView)
-        toolsStackView.addArrangedSubview(lassoView)
-        toolsStackView.addArrangedSubview(eraserView)
+        penView.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(toolViewTapped)
+        ))
+        [brushView, neonBrushView, pencilView, lassoView, eraserView].forEach {
+            toolsStackView.addArrangedSubview($0)
+            $0.transform = .init(translationX: 0, y: selectedPenOffset)
+            $0.addGestureRecognizer(UITapGestureRecognizer(
+                target: self,
+                action: #selector(toolViewTapped)
+            ))
+        }
     }
     
     func setupLayers() {
         layer.addSublayer(bottomGradientLayer)
         bottomGradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.cgColor]
         bottomGradientLayer.locations = [0.0, 1.0]
+    }
+}
+
+// MARK: - Actions
+
+private extension ToolsPickerView {
+    
+    @objc func toolViewTapped(_ sender: UITapGestureRecognizer) {
+        guard
+            runningAnimators.isEmpty,
+            let view = sender.view,
+            selectedToolView != view
+        else { return }
+        
+        let hideAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeIn) {
+            self.selectedToolView.transform = .init(translationX: 0, y: self.selectedPenOffset)
+        }
+        let showAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+            view.transform = .init(translationX: 0, y: 0)
+        }
+        showAnimator.addCompletion { _ in
+            self.selectedToolView = view
+            self.runningAnimators.removeAll()
+        }
+        
+        runningAnimators.append(contentsOf: [
+            hideAnimator,
+            showAnimator
+        ])
+        
+        hideAnimator.startAnimation()
+        showAnimator.startAnimation()
     }
 }
