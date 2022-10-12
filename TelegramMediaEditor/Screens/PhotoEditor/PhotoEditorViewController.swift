@@ -94,24 +94,58 @@ private extension PhotoEditorViewController {
         navigationItem.setRightBarButton(clearBarButtonItem, animated: false)
     }
     
-    @objc func undoBarButtonItemTapped(_ sender: UIBarButtonItem) {
-    }
-    
-    @objc func clearBarButtonItemTapped(_ sender: UIBarButtonItem) {
-    }
-    
     func setupPhotoImageView() {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
     }
     
     func setupEditingToolsView() {
-        editingToolsView.onCancel = { [weak self] in
+        editingToolsView.onAddShapeTapped = { [weak self] view in
+            self?.presentShapesPopover(sourceView: view)
+        }
+        editingToolsView.onCancelTapped = { [weak self] in
             self?.onClose?()
         }
-        editingToolsView.onSave = { [weak self] in
+        editingToolsView.onSaveTapped = { [weak self] in
             self?.onClose?()
         }
+    }
+    
+    func presentShapesPopover(sourceView: UIView) {
+        let width = 180.0
+        let height = 220.0
+        
+        let viewController = MenuPopoverViewController()
+        viewController.menuItems = [
+            .init(title: "Rectangle", imageName: "shapeRectangle"),
+            .init(title: "Ellipse", imageName: "shapeEllipse"),
+            .init(title: "Bubble", imageName: "shapeBubble"),
+            .init(title: "Star", imageName: "shapeStar"),
+            .init(title: "Arrow", imageName: "shapeArrow")
+        ]
+        viewController.onSelected = { [weak viewController] item in
+            viewController?.dismiss(animated: true)
+        }
+        viewController.modalPresentationStyle = .popover
+        viewController.preferredContentSize = .init(width: width, height: height)
+        
+        guard let presentationController = viewController.popoverPresentationController else { return }
+        
+        presentationController.delegate = self
+        presentationController.permittedArrowDirections = []
+        presentationController.popoverLayoutMargins = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        
+        presentationController.sourceView = sourceView
+        presentationController.sourceRect = .init(
+            origin: .init(
+                x: sourceView.bounds.midX - width/2,
+                y: -sourceView.bounds.midY - height/2
+            ),
+            size: sourceView.bounds.size
+        )
+        
+        viewController.modalTransitionStyle = .crossDissolve
+        present(viewController, animated: true)
     }
     
     func loadImageFromAsset() {
@@ -123,5 +157,23 @@ private extension PhotoEditorViewController {
         ) { [weak self] image, info in
             self?.photoImageView.image = image
         }
+    }
+}
+
+// MARK: - Actions
+
+private extension PhotoEditorViewController {
+    
+    @objc func undoBarButtonItemTapped(_ sender: UIBarButtonItem) {
+    }
+    
+    @objc func clearBarButtonItemTapped(_ sender: UIBarButtonItem) {
+    }
+}
+
+extension PhotoEditorViewController: UIPopoverPresentationControllerDelegate {
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        .none
     }
 }

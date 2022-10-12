@@ -10,13 +10,15 @@ import UIKit
 final class EditingToolsView: UIView {
     
     private let toolsPickerView = ToolsPickerView()
+    private let addShapeButton = UIButton(type: .system)
     private let bottomControlsStackView = UIStackView()
     private let toolsSegmentedControl = UISegmentedControl()
     private let cancelButton = UIButton(type: .system)
     private let saveButton = UIButton(type: .system)
     
-    var onCancel: VoidClosure?
-    var onSave: VoidClosure?
+    var onAddShapeTapped: Closure<UIView>?
+    var onCancelTapped: VoidClosure?
+    var onSaveTapped: VoidClosure?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,9 +42,11 @@ private extension EditingToolsView {
     
     func setupLayout() {
         addSubview(toolsPickerView)
+        addSubview(addShapeButton)
         addSubview(bottomControlsStackView)
         
         toolsPickerView.translatesAutoresizingMaskIntoConstraints = false
+        addShapeButton.translatesAutoresizingMaskIntoConstraints = false
         bottomControlsStackView.translatesAutoresizingMaskIntoConstraints = false
         toolsSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
@@ -52,6 +56,10 @@ private extension EditingToolsView {
             toolsPickerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             toolsPickerView.topAnchor.constraint(equalTo: topAnchor, constant: 33),
             toolsPickerView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor),
+            addShapeButton.heightAnchor.constraint(equalToConstant: 33),
+            addShapeButton.widthAnchor.constraint(equalTo: addShapeButton.heightAnchor),
+            addShapeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            addShapeButton.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor, constant: -8),
             bottomControlsStackView.heightAnchor.constraint(equalToConstant: 33),
             bottomControlsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             bottomControlsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
@@ -63,6 +71,7 @@ private extension EditingToolsView {
     
     func setupViews() {
         setupView()
+        setupAddShapeButton()
         setupBottomControlsStackView()
         setupToolsSegmentedControl()
         setupCancelButton()
@@ -71,6 +80,14 @@ private extension EditingToolsView {
     
     func setupView() {
         backgroundColor = .black
+    }
+    
+    func setupAddShapeButton() {
+        addShapeButton.tintColor = .white
+        addShapeButton.backgroundColor = .white.withAlphaComponent(0.1)
+        addShapeButton.layer.cornerRadius = 16.5
+        addShapeButton.setImage(.init(named: "add"), for: .normal)
+        addShapeButton.addTarget(self, action: #selector(addShapeButtonTapped), for: .touchUpInside)
     }
     
     func setupBottomControlsStackView() {
@@ -119,11 +136,15 @@ private extension EditingToolsView {
 
 private extension EditingToolsView {
     
-    @objc private func cancelButtonTapped(_ sender: UIButton) {
-        onCancel?()
+    @objc func addShapeButtonTapped(_ sender: UIButton) {
+        onAddShapeTapped?(sender)
     }
     
-    @objc private func saveButtonTapped(_ sender: UIButton) {
-        onSave?()
+    @objc func cancelButtonTapped(_ sender: UIButton) {
+        onCancelTapped?()
+    }
+    
+    @objc func saveButtonTapped(_ sender: UIButton) {
+        onSaveTapped?()
     }
 }
