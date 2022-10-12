@@ -16,7 +16,7 @@ final class MediaAccessViewController: UIViewController {
     private let titleLabel = UILabel()
     private let accessButton = UIButton(type: .system)
     
-    var onAccessGranted: (() -> Void)?
+    var onAccessGranted: VoidClosure?
     
     private var didBecomeActiveNotificationObserver: NSObjectProtocol?
     

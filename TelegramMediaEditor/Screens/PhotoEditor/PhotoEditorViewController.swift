@@ -28,7 +28,7 @@ final class PhotoEditorViewController: UIViewController {
     private let asset: PHAsset
     private let imageManager = PHCachingImageManager()
     
-    var onClose: (() -> Void)?
+    var onClose: VoidClosure?
     
     init(asset: PHAsset) {
         self.asset = asset

@@ -26,6 +26,7 @@
 		D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CC328F4B0BA00475B7D /* NeonBrushView.swift */; };
 		D7389CD328F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */; };
 		D7389CDD28F5E9A400475B7D /* ToolsPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CDC28F5E9A400475B7D /* ToolsPickerView.swift */; };
+		D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79130F828F72C4F0074A5A0 /* Closure.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		D7389CC328F4B0BA00475B7D /* NeonBrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeonBrushView.swift; sourceTree = "<group>"; };
 		D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtensions.swift; sourceTree = "<group>"; };
 		D7389CDC28F5E9A400475B7D /* ToolsPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolsPickerView.swift; sourceTree = "<group>"; };
+		D79130F828F72C4F0074A5A0 /* Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Closure.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */,
+				D79130F828F72C4F0074A5A0 /* Closure.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				D7389CBC28F4AF5E00475B7D /* BrushView.swift in Sources */,
 				D7389CC228F4AFEC00475B7D /* LassoView.swift in Sources */,
 				D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */,
+				D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */,
 				D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */,
 				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
 				D7389C8728F345D100475B7D /* MediaAccessViewController.swift in Sources */,

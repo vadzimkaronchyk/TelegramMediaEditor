@@ -15,8 +15,8 @@ final class EditingToolsView: UIView {
     private let cancelButton = UIButton(type: .system)
     private let saveButton = UIButton(type: .system)
     
-    var onCancel: (() -> Void)?
-    var onSave: (() -> Void)?
+    var onCancel: VoidClosure?
+    var onSave: VoidClosure?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

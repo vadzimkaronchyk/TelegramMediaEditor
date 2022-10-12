@@ -10,8 +10,8 @@ import Photos
 
 final class PhotosViewController: UICollectionViewController {
     
-    var onAccessRestricted: (() -> Void)?
-    var onPhotoSelected: ((PHAsset) -> Void)?
+    var onAccessRestricted: VoidClosure?
+    var onPhotoSelected: Closure<PHAsset>?
     
     private var fetchResult: PHFetchResult<PHAsset>?
     private let imageManager = PHCachingImageManager()
