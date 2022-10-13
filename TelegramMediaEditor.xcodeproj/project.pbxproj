@@ -29,6 +29,14 @@
 		D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79130F828F72C4F0074A5A0 /* Closure.swift */; };
 		D79130FC28F733B90074A5A0 /* MenuPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79130FB28F733B90074A5A0 /* MenuPopoverViewController.swift */; };
 		D79130FE28F74EFB0074A5A0 /* MenuPopoverItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79130FD28F74EFB0074A5A0 /* MenuPopoverItemView.swift */; };
+		D791310128F7E9380074A5A0 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310028F7E9380074A5A0 /* ColorPickerViewController.swift */; };
+		D791310328F7F85E0074A5A0 /* ColorPickerGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310228F7F85E0074A5A0 /* ColorPickerGridView.swift */; };
+		D791310528F7F94B0074A5A0 /* ColorPickerSpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310428F7F94B0074A5A0 /* ColorPickerSpectrumView.swift */; };
+		D791310728F7F9550074A5A0 /* ColorPickerSlidersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310628F7F9550074A5A0 /* ColorPickerSlidersView.swift */; };
+		D791310928F7F9BC0074A5A0 /* ColorPickerOpacityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310828F7F9BC0074A5A0 /* ColorPickerOpacityView.swift */; };
+		D791310B28F800A20074A5A0 /* ColorPickerColorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310A28F800A20074A5A0 /* ColorPickerColorsView.swift */; };
+		D791310D28F80C650074A5A0 /* ColorPickerSeparatoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310C28F80C650074A5A0 /* ColorPickerSeparatoView.swift */; };
+		D791310F28F80CF90074A5A0 /* UIStackViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D791310E28F80CF90074A5A0 /* UIStackViewExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +63,14 @@
 		D79130F828F72C4F0074A5A0 /* Closure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Closure.swift; sourceTree = "<group>"; };
 		D79130FB28F733B90074A5A0 /* MenuPopoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPopoverViewController.swift; sourceTree = "<group>"; };
 		D79130FD28F74EFB0074A5A0 /* MenuPopoverItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPopoverItemView.swift; sourceTree = "<group>"; };
+		D791310028F7E9380074A5A0 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
+		D791310228F7F85E0074A5A0 /* ColorPickerGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerGridView.swift; sourceTree = "<group>"; };
+		D791310428F7F94B0074A5A0 /* ColorPickerSpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSpectrumView.swift; sourceTree = "<group>"; };
+		D791310628F7F9550074A5A0 /* ColorPickerSlidersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSlidersView.swift; sourceTree = "<group>"; };
+		D791310828F7F9BC0074A5A0 /* ColorPickerOpacityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerOpacityView.swift; sourceTree = "<group>"; };
+		D791310A28F800A20074A5A0 /* ColorPickerColorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerColorsView.swift; sourceTree = "<group>"; };
+		D791310C28F80C650074A5A0 /* ColorPickerSeparatoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSeparatoView.swift; sourceTree = "<group>"; };
+		D791310E28F80CF90074A5A0 /* UIStackViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +120,7 @@
 				D7389C9F28F36F6200475B7D /* MediaAccess */,
 				D7389CA028F36F6A00475B7D /* Photos */,
 				D7389CB228F40CDE00475B7D /* PhotoEditor */,
+				D79130FF28F7E91D0074A5A0 /* ColorPicker */,
 				D79130FA28F733A20074A5A0 /* MenuPopover */,
 			);
 			path = Screens;
@@ -173,6 +190,7 @@
 			children = (
 				D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */,
 				D79130F828F72C4F0074A5A0 /* Closure.swift */,
+				D791310E28F80CF90074A5A0 /* UIStackViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -184,6 +202,20 @@
 				D79130FD28F74EFB0074A5A0 /* MenuPopoverItemView.swift */,
 			);
 			path = MenuPopover;
+			sourceTree = "<group>";
+		};
+		D79130FF28F7E91D0074A5A0 /* ColorPicker */ = {
+			isa = PBXGroup;
+			children = (
+				D791310028F7E9380074A5A0 /* ColorPickerViewController.swift */,
+				D791310228F7F85E0074A5A0 /* ColorPickerGridView.swift */,
+				D791310428F7F94B0074A5A0 /* ColorPickerSpectrumView.swift */,
+				D791310628F7F9550074A5A0 /* ColorPickerSlidersView.swift */,
+				D791310828F7F9BC0074A5A0 /* ColorPickerOpacityView.swift */,
+				D791310C28F80C650074A5A0 /* ColorPickerSeparatoView.swift */,
+				D791310A28F800A20074A5A0 /* ColorPickerColorsView.swift */,
+			);
+			path = ColorPicker;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,12 +295,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D791310B28F800A20074A5A0 /* ColorPickerColorsView.swift in Sources */,
 				D79130FC28F733B90074A5A0 /* MenuPopoverViewController.swift in Sources */,
+				D791310D28F80C650074A5A0 /* ColorPickerSeparatoView.swift in Sources */,
+				D791310528F7F94B0074A5A0 /* ColorPickerSpectrumView.swift in Sources */,
 				D7389C9328F35C4B00475B7D /* AppRouter.swift in Sources */,
 				D7389CA228F36F9800475B7D /* PhotoCell.swift in Sources */,
 				D7389CBC28F4AF5E00475B7D /* BrushView.swift in Sources */,
+				D791310728F7F9550074A5A0 /* ColorPickerSlidersView.swift in Sources */,
 				D7389CC228F4AFEC00475B7D /* LassoView.swift in Sources */,
 				D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */,
+				D791310328F7F85E0074A5A0 /* ColorPickerGridView.swift in Sources */,
+				D791310F28F80CF90074A5A0 /* UIStackViewExtensions.swift in Sources */,
 				D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */,
 				D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */,
 				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
@@ -276,9 +314,11 @@
 				D7389CB628F47E7400475B7D /* EditingToolsView.swift in Sources */,
 				D7389CBA28F4AF2E00475B7D /* PenView.swift in Sources */,
 				D7389CC028F4AFB600475B7D /* PencilView.swift in Sources */,
+				D791310128F7E9380074A5A0 /* ColorPickerViewController.swift in Sources */,
 				D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */,
 				D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */,
 				D7389CDD28F5E9A400475B7D /* ToolsPickerView.swift in Sources */,
+				D791310928F7F9BC0074A5A0 /* ColorPickerOpacityView.swift in Sources */,
 				D79130FE28F74EFB0074A5A0 /* MenuPopoverItemView.swift in Sources */,
 				D7389CD328F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift in Sources */,
 			);

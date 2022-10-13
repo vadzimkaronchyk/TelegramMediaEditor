@@ -70,15 +70,20 @@ private extension PhotoEditorViewController {
     
     func setupViews() {
         setupView()
+        setupNavigationItem()
         setupUndoBarButtonItem()
         setupClearBarButtonItem()
-        setupNavigationItem()
         setupPhotoImageView()
         setupEditingToolsView()
     }
     
     func setupView() {
         view.backgroundColor = .black
+    }
+    
+    func setupNavigationItem() {
+        navigationItem.setLeftBarButton(undoBarButtonItem, animated: false)
+        navigationItem.setRightBarButton(clearBarButtonItem, animated: false)
     }
     
     func setupUndoBarButtonItem() {
@@ -89,17 +94,15 @@ private extension PhotoEditorViewController {
         clearBarButtonItem.tintColor = .white
     }
     
-    func setupNavigationItem() {
-        navigationItem.setLeftBarButton(undoBarButtonItem, animated: false)
-        navigationItem.setRightBarButton(clearBarButtonItem, animated: false)
-    }
-    
     func setupPhotoImageView() {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
     }
     
     func setupEditingToolsView() {
+        editingToolsView.onColorPickerTapped = { [weak self] in
+            self?.presentColorPicker()
+        }
         editingToolsView.onAddShapeTapped = { [weak self] view in
             self?.presentShapesPopover(sourceView: view)
         }
@@ -109,6 +112,17 @@ private extension PhotoEditorViewController {
         editingToolsView.onSaveTapped = { [weak self] in
             self?.onClose?()
         }
+    }
+    
+    func presentColorPicker() {
+//        if #available(iOS 14.0, *) {
+//            let viewController = UIColorPickerViewController()
+//            present(viewController, animated: true)
+//        } else {
+        let viewController = ColorPickerViewController()
+        let navigationController = UINavigationController(rootViewController: viewController)
+        present(navigationController, animated: true)
+//        }
     }
     
     func presentShapesPopover(sourceView: UIView) {

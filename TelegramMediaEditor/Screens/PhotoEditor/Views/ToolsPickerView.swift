@@ -89,19 +89,19 @@ private extension ToolsPickerView {
     }
     
     func setupToolViews() {
-        toolsStackView.addArrangedSubview(penView)
-        penView.addGestureRecognizer(UITapGestureRecognizer(
-            target: self,
-            action: #selector(toolViewTapped)
-        ))
-        [brushView, neonBrushView, pencilView, lassoView, eraserView].forEach {
-            toolsStackView.addArrangedSubview($0)
-            $0.transform = .init(translationX: 0, y: selectedPenOffset)
-            $0.addGestureRecognizer(UITapGestureRecognizer(
+        let toolViews = [penView, brushView, neonBrushView, pencilView, lassoView, eraserView]
+        let selectedToolIndex = 0
+        toolViews.enumerated().forEach {
+            $1.transform = .init(
+                translationX: 0,
+                y: $0 == selectedToolIndex ? 0 : selectedPenOffset
+            )
+            $1.addGestureRecognizer(UITapGestureRecognizer(
                 target: self,
                 action: #selector(toolViewTapped)
             ))
         }
+        toolsStackView.addArrangedSubviews(toolViews)
     }
     
     func setupLayers() {
