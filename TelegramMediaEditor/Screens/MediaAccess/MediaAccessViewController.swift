@@ -90,6 +90,7 @@ private extension MediaAccessViewController {
     
     func setupTitleLabel() {
         titleLabel.text = "Access Your Photos and Videos"
+        titleLabel.numberOfLines = 0
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
         titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
@@ -105,7 +106,7 @@ private extension MediaAccessViewController {
         accessButton.addTarget(self, action: #selector(accessButtonTapped), for: .touchUpInside)
     }
     
-    @objc func accessButtonTapped(_ sender: UIButton) {
+    @objc func accessButtonTapped(_ button: UIButton) {
         let status = PHPhotoLibrary.authorizationStatus()
         handlePhotoLibraryAuthorizationStatus(status)
     }
@@ -118,7 +119,7 @@ private extension MediaAccessViewController {
             presentRestrictedAccessWarningAlert()
         case .authorized, .limited:
             onAccessGranted?()
-        @unknown default:
+        default:
             break
         }
     }
@@ -158,7 +159,7 @@ private extension MediaAccessViewController {
             break
         case .authorized, .limited:
             onAccessGranted?()
-        @unknown default:
+        default:
             break
         }
     }

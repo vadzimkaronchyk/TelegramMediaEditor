@@ -10,7 +10,7 @@ import Photos
 
 final class AppRouter {
     
-    private let window = UIWindow()
+    private let window = AppWindow()
     
     func launch() {
         window.makeKeyAndVisible()

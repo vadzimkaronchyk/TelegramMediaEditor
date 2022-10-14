@@ -64,11 +64,10 @@ private extension ToolsPickerView {
         
         NSLayoutConstraint.activate([
             toolsStackView.heightAnchor.constraint(equalToConstant: 88),
-            toolsStackView.widthAnchor.constraint(equalToConstant: 240),
             toolsStackView.topAnchor.constraint(equalTo: topAnchor),
             toolsStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolsStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            toolsStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            toolsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
@@ -84,14 +83,14 @@ private extension ToolsPickerView {
     
     func setupToolsStackView() {
         toolsStackView.axis = .horizontal
-        toolsStackView.distribution = .fillEqually
-        toolsStackView.spacing = 24
+        toolsStackView.distribution = .equalSpacing
     }
     
     func setupToolViews() {
         let toolViews = [penView, brushView, neonBrushView, pencilView, lassoView, eraserView]
         let selectedToolIndex = 0
         toolViews.enumerated().forEach {
+            $1.widthAnchor.constraint(equalToConstant: 20).isActive = true
             $1.transform = .init(
                 translationX: 0,
                 y: $0 == selectedToolIndex ? 0 : selectedPenOffset
@@ -115,10 +114,10 @@ private extension ToolsPickerView {
 
 private extension ToolsPickerView {
     
-    @objc func toolViewTapped(_ sender: UITapGestureRecognizer) {
+    @objc func toolViewTapped(_ gestureRecognizer: UITapGestureRecognizer) {
         guard
             runningAnimators.isEmpty,
-            let view = sender.view,
+            let view = gestureRecognizer.view,
             selectedToolView != view
         else { return }
         

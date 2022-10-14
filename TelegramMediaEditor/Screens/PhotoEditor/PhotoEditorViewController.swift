@@ -30,6 +30,8 @@ final class PhotoEditorViewController: UIViewController {
     
     var onClose: VoidClosure?
     
+    private var drawingColor: HSBColor = .white
+    
     init(asset: PHAsset) {
         self.asset = asset
         super.init(nibName: nil, bundle: nil)
@@ -59,11 +61,11 @@ private extension PhotoEditorViewController {
         
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
-            photoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            photoImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            photoImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            photoImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             photoImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
-            editingToolsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            editingToolsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            editingToolsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            editingToolsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             editingToolsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
@@ -75,6 +77,7 @@ private extension PhotoEditorViewController {
         setupClearBarButtonItem()
         setupPhotoImageView()
         setupEditingToolsView()
+        updateDrawingColor(.white)
     }
     
     func setupView() {
@@ -100,7 +103,7 @@ private extension PhotoEditorViewController {
     }
     
     func setupEditingToolsView() {
-        editingToolsView.onColorPickerTapped = { [weak self] in
+        editingToolsView.onColorsCircleTapped = { [weak self] in
             self?.presentColorPicker()
         }
         editingToolsView.onAddShapeTapped = { [weak self] view in
@@ -112,6 +115,9 @@ private extension PhotoEditorViewController {
         editingToolsView.onSaveTapped = { [weak self] in
             self?.onClose?()
         }
+        editingToolsView.onColorSelected = { [weak self] color in
+            self?.handleEditingToolsViewSelectedColor(color)
+        }
     }
     
     func presentColorPicker() {
@@ -120,8 +126,11 @@ private extension PhotoEditorViewController {
 //            present(viewController, animated: true)
 //        } else {
         let viewController = ColorPickerViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-        present(navigationController, animated: true)
+        viewController.setColor(drawingColor)
+        viewController.onColorSelected = { [weak self] color in
+            self?.updateDrawingColor(color)
+        }
+        present(viewController, animated: true)
 //        }
     }
     
@@ -172,16 +181,25 @@ private extension PhotoEditorViewController {
             self?.photoImageView.image = image
         }
     }
+    
+    func updateDrawingColor(_ color: HSBColor) {
+        drawingColor = color
+        editingToolsView.updateDrawingColor(color)
+    }
+    
+    func handleEditingToolsViewSelectedColor(_ color: HSBColor) {
+        drawingColor = color
+    }
 }
 
 // MARK: - Actions
 
 private extension PhotoEditorViewController {
     
-    @objc func undoBarButtonItemTapped(_ sender: UIBarButtonItem) {
+    @objc func undoBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
     }
     
-    @objc func clearBarButtonItemTapped(_ sender: UIBarButtonItem) {
+    @objc func clearBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
     }
 }
 

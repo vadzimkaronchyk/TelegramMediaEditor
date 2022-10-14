@@ -7,94 +7,98 @@
 
 import UIKit
 
+protocol ColorPicker: UIView {
+    var onColorSelected: Closure<HSBColor>? { get set }
+    func updateColor(_ color: HSBColor)
+}
+
 final class ColorPickerViewController: UIViewController {
     
-    private lazy var eyeDropperBarButtonItem = UIBarButtonItem(
-        image: .init(named: "eyedropper"),
-        style: .plain,
-        target: self,
-        action: #selector(eyeDropperBarButtonItemTapped)
-    )
-    private lazy var closeBarButtonItem = UIBarButtonItem(
-        image: .init(named: "close"),
-        style: .plain,
-        target: self,
-        action: #selector(closeBarButtonItemTapped)
-    )
+    private let scrollView = UIScrollView()
     private let contentStackView = UIStackView()
     private let pickerTypeSegmentedControl = UISegmentedControl()
+    private let headerView = ColorPickerHeaderView()
     private let gridView = ColorPickerGridView()
     private let spectrumView = ColorPickerSpectrumView()
-    private let slidersView = ColorPickerSlidersView()
+    private let rgbView = ColorPickerRGBView()
     private let opacityView = ColorPickerOpacityView()
-    private let separatorView = ColorPickerSeparatoView()
+    private let separatorView = ColorPickerSeparatorView()
     private let colorsView = ColorPickerColorsView()
     
     private var pickerTypeViews: [UIView] {
-        [gridView, spectrumView, slidersView]
+        [gridView, spectrumView, rgbView]
     }
+    
+    private var colorPickers: [ColorPicker] {
+        [gridView, spectrumView, rgbView, opacityView, colorsView]
+    }
+    
+    private var eyeDropperColorPickerWindow: EyeDropperColorPickerWindow?
+    
+    var onColorSelected: Closure<HSBColor>?
+    
+    private(set) var selectedColor: HSBColor = .black
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupLayout()
         setupViews()
-        selectPickerTypeView(atIndex: 0)
+        setupColorPickers()
+        setSelectedPickerTypeView(atIndex: 0)
+        setSelectedColor(selectedColor)
+    }
+    
+    func setColor(_ color: HSBColor) {
+        selectedColor = color
+        setSelectedColor(color)
     }
 }
 
 private extension ColorPickerViewController {
     
     func setupLayout() {
-        view.addSubview(contentStackView)
+        view.addSubview(scrollView)
         
+        let contentView = UIView()
+        scrollView.addSubview(contentView)
+        contentView.addSubview(contentStackView)
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        headerView.translatesAutoresizingMaskIntoConstraints = false
         gridView.translatesAutoresizingMaskIntoConstraints = false
         spectrumView.translatesAutoresizingMaskIntoConstraints = false
-        slidersView.translatesAutoresizingMaskIntoConstraints = false
+        rgbView.translatesAutoresizingMaskIntoConstraints = false
         opacityView.translatesAutoresizingMaskIntoConstraints = false
         separatorView.translatesAutoresizingMaskIntoConstraints = false
         colorsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            contentStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            contentStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            contentStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            contentStackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            gridView.widthAnchor.constraint(equalTo: gridView.heightAnchor, multiplier: 358/328),
-            spectrumView.widthAnchor.constraint(equalTo: spectrumView.heightAnchor, multiplier: 358/328),
-            slidersView.widthAnchor.constraint(equalTo: slidersView.heightAnchor, multiplier: 358/328),
-            opacityView.heightAnchor.constraint(equalToConstant: 58),
-            separatorView.heightAnchor.constraint(equalToConstant: 39),
-            colorsView.heightAnchor.constraint(equalToConstant: 82)
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            contentStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            contentStackView.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.bottomAnchor, constant: -16),
+            headerView.heightAnchor.constraint(equalToConstant: 54),
+            separatorView.heightAnchor.constraint(equalToConstant: 39)
         ])
     }
     
     func setupViews() {
-        setupNavigationItem()
-        setupEyeDropperBarButtonItem()
-        setupCloseBarButtonItem()
         setupView()
         setupContentStackView()
         setupPickerTypeSegmentedControl()
-    }
-    
-    func setupNavigationItem() {
-        navigationItem.setLeftBarButton(eyeDropperBarButtonItem, animated: false)
-        navigationItem.setRightBarButton(closeBarButtonItem, animated: false)
-        navigationItem.title = "Colors"
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationItem.standardAppearance = appearance
-    }
-    
-    func setupEyeDropperBarButtonItem() {
-        eyeDropperBarButtonItem.tintColor = .white
-    }
-    
-    func setupCloseBarButtonItem() {
-        closeBarButtonItem.tintColor = .white
+        setupHeaderView()
     }
     
     func setupView() {
@@ -105,14 +109,24 @@ private extension ColorPickerViewController {
         contentStackView.axis = .vertical
         contentStackView.spacing = 4
         contentStackView.addArrangedSubviews([
+            headerView,
             pickerTypeSegmentedControl,
             gridView,
             spectrumView,
-            slidersView,
+            rgbView,
             opacityView,
             separatorView,
             colorsView
         ])
+    }
+    
+    func setupColorPickers() {
+        for picker in colorPickers {
+            picker.onColorSelected = { [weak self, weak picker] color in
+                self?.setSelectedColor(color, sender: picker)
+                self?.onColorSelected?(color)
+            }
+        }
     }
     
     func setupPickerTypeSegmentedControl() {
@@ -130,15 +144,33 @@ private extension ColorPickerViewController {
         pickerTypeSegmentedControl.insertSegment(withTitle: "Grid", at: 0, animated: false)
         pickerTypeSegmentedControl.insertSegment(withTitle: "Spectrum", at: 1, animated: false)
         pickerTypeSegmentedControl.insertSegment(withTitle: "Sliders", at: 2, animated: false)
-        pickerTypeSegmentedControl.backgroundColor = .secondaryLabel
-        pickerTypeSegmentedControl.selectedSegmentTintColor = .darkGray
         pickerTypeSegmentedControl.selectedSegmentIndex = 0
         pickerTypeSegmentedControl.addTarget(self, action: #selector(pickerTypeSegmentedControlChanged), for: .valueChanged)
     }
     
-    func selectPickerTypeView(atIndex index: Int) {
+    func setupHeaderView() {
+        headerView.onEyeDropperTapped = { [weak self] in
+            self?.showEyeDropperColorPicker()
+        }
+        headerView.onEyeDropperLongPressed = { [weak self] gestureRecognizer in
+            guard let self = self else { return }
+            self.showEyeDropperColorPicker(gestureRecognizer: gestureRecognizer)
+        }
+        headerView.onCloseTapped = { [weak self] in
+            self?.dismiss(animated: true)
+        }
+    }
+    
+    func setSelectedPickerTypeView(atIndex index: Int) {
         pickerTypeViews.enumerated().forEach {
             $1.isHidden = $0 != index
+        }
+    }
+    
+    func setSelectedColor(_ color: HSBColor, sender: ColorPicker? = nil) {
+        headerView.updateColor(color)
+        for picker in colorPickers where picker !== sender {
+            picker.updateColor(color)
         }
     }
 }
@@ -147,14 +179,36 @@ private extension ColorPickerViewController {
 
 private extension ColorPickerViewController {
     
-    @objc func eyeDropperBarButtonItemTapped(_ sender: UIBarButtonItem) {
+    @objc func pickerTypeSegmentedControlChanged(_ segmentedControl: UISegmentedControl) {
+        rgbView.endEditing(true)
+        setSelectedPickerTypeView(atIndex: segmentedControl.selectedSegmentIndex)
     }
     
-    @objc func closeBarButtonItemTapped(_ sender: UIBarButtonItem) {
-        dismiss(animated: true)
-    }
-    
-    @objc func pickerTypeSegmentedControlChanged(_ sender: UISegmentedControl) {
-        selectPickerTypeView(atIndex: sender.selectedSegmentIndex)
+    func showEyeDropperColorPicker(gestureRecognizer: UIGestureRecognizer? = nil) {
+        guard
+            let windowScene = UIWindowScene.focused,
+            let currentWindow = UIWindow.keyWindow as? AppWindow
+        else { return }
+        
+        let location = gestureRecognizer?.location(in: currentWindow)
+        let presentingViewController = presentingViewController
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            let colorPickerWindow = EyeDropperColorPickerWindow(
+                windowScene: windowScene,
+                bottomWindow: currentWindow,
+                initialLocation: location
+            )
+            self.eyeDropperColorPickerWindow = colorPickerWindow
+            currentWindow.receivingTouchesWindow = colorPickerWindow
+            colorPickerWindow.onColorSelected = { [weak presentingViewController] color in
+                presentingViewController?.present(self, animated: true)
+                currentWindow.makeKeyAndVisible()
+                self.eyeDropperColorPickerWindow = nil
+                self.setColor(color)
+                self.onColorSelected?(color)
+            }
+            colorPickerWindow.makeKeyAndVisible()
+        }
     }
 }

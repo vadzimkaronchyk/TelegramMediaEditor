@@ -9,32 +9,47 @@ import UIKit
 
 final class EditingToolsView: UIView {
     
-    private let colorPickerButton = UIButton(type: .system)
+    private let colorsCircleView = ColorsCircleView()
     private let toolsPickerView = ToolsPickerView()
     private let addShapeButton = UIButton(type: .system)
     private let bottomControlsStackView = UIStackView()
     private let toolsSegmentedControl = UISegmentedControl()
     private let cancelButton = UIButton(type: .system)
     private let saveButton = UIButton(type: .system)
+    private let spectrumView = ColorSpectrumView()
+    private let spectrumCursorView = ColorSliderCursorView()
     
-    var onColorPickerTapped: VoidClosure?
+    var onColorsCircleTapped: VoidClosure?
     var onAddShapeTapped: Closure<UIView>?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
+    var onColorSelected: Closure<HSBColor>?
+    
+    private var color: HSBColor = .black
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        
+        setupLayout()
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        commonInit()
+        fatalError("init(coder:) has not been implemented")
     }
     
-    private func commonInit() {
-        setupLayout()
-        setupViews()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        updateCursorViewLocation(color: color)
+    }
+    
+    func updateDrawingColor(_ color: HSBColor) {
+        self.color = color
+        colorsCircleView.color = color
+        spectrumCursorView.color = color
+        spectrumCursorView.outlineColor = color
+        updateCursorViewLocation(color: color)
     }
 }
 
@@ -43,25 +58,29 @@ final class EditingToolsView: UIView {
 private extension EditingToolsView {
     
     func setupLayout() {
-        addSubview(colorPickerButton)
+        addSubview(colorsCircleView)
         addSubview(toolsPickerView)
         addSubview(addShapeButton)
         addSubview(bottomControlsStackView)
+        addSubview(spectrumView)
+        spectrumView.addSubview(spectrumCursorView)
         
-        colorPickerButton.translatesAutoresizingMaskIntoConstraints = false
+        colorsCircleView.translatesAutoresizingMaskIntoConstraints = false
         toolsPickerView.translatesAutoresizingMaskIntoConstraints = false
         addShapeButton.translatesAutoresizingMaskIntoConstraints = false
         bottomControlsStackView.translatesAutoresizingMaskIntoConstraints = false
         toolsSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
+        spectrumView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            colorPickerButton.heightAnchor.constraint(equalToConstant: 33),
-            colorPickerButton.widthAnchor.constraint(equalTo: colorPickerButton.heightAnchor),
-            colorPickerButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            colorPickerButton.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor, constant: -8),
+            colorsCircleView.heightAnchor.constraint(equalToConstant: 33),
+            colorsCircleView.widthAnchor.constraint(equalTo: colorsCircleView.heightAnchor),
+            colorsCircleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            colorsCircleView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor, constant: -8),
             toolsPickerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            toolsPickerView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 240/390),
             toolsPickerView.topAnchor.constraint(equalTo: topAnchor, constant: 33),
             toolsPickerView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor),
             addShapeButton.heightAnchor.constraint(equalToConstant: 33),
@@ -74,26 +93,26 @@ private extension EditingToolsView {
             bottomControlsStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             cancelButton.heightAnchor.constraint(equalTo: cancelButton.widthAnchor),
             saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor),
+            spectrumView.widthAnchor.constraint(equalTo: spectrumView.heightAnchor, multiplier: 12/10),
+            spectrumView.leadingAnchor.constraint(equalTo: colorsCircleView.leadingAnchor),
+            spectrumView.trailingAnchor.constraint(equalTo: addShapeButton.centerXAnchor),
+            spectrumView.bottomAnchor.constraint(equalTo: colorsCircleView.bottomAnchor)
         ])
     }
     
     func setupViews() {
         setupView()
-        setupColorPickerButton()
         setupAddShapeButton()
         setupBottomControlsStackView()
         setupToolsSegmentedControl()
         setupCancelButton()
         setupSaveButton()
+        setupSpectrumView()
+        addGestureRecognizers()
     }
     
     func setupView() {
         backgroundColor = .black
-    }
-    
-    func setupColorPickerButton() {
-        colorPickerButton.setImage(.init(named: "colorPicker"), for: .normal)
-        colorPickerButton.addTarget(self, action: #selector(colorPickerButtonTapped), for: .touchUpInside)
     }
     
     func setupAddShapeButton() {
@@ -130,8 +149,6 @@ private extension EditingToolsView {
         toolsSegmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
         toolsSegmentedControl.insertSegment(withTitle: "Draw", at: 0, animated: false)
         toolsSegmentedControl.insertSegment(withTitle: "Text", at: 1, animated: false)
-        toolsSegmentedControl.backgroundColor = .secondaryLabel
-        toolsSegmentedControl.selectedSegmentTintColor = .darkGray
         toolsSegmentedControl.selectedSegmentIndex = 0
     }
     
@@ -146,25 +163,87 @@ private extension EditingToolsView {
         saveButton.setImage(.init(named: "download"), for: .normal)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
+    
+    func setupSpectrumView() {
+        spectrumView.isHidden = true
+        spectrumView.cornerRadius = 16
+        spectrumCursorView.frame.size = .square(size: 36)
+    }
+    
+    func addGestureRecognizers() {
+        colorsCircleView.addGestureRecognizer(UITapGestureRecognizer(
+            target: self,
+            action: #selector(handleColorCircleViewTapGesture)
+        ))
+        colorsCircleView.addGestureRecognizer(UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(handleColorCircleViewLongPressGesture)
+        ))
+    }
+    
+    func updateCursorViewLocation(color: HSBColor) {
+        if let location = spectrumView.location(forColor: color) {
+            spectrumCursorView.center = .init(
+                x: spectrumView.bounds.minX + location.x,
+                y: spectrumView.bounds.minY + location.y
+            )
+            spectrumCursorView.isHidden = false
+        } else {
+            spectrumCursorView.isHidden = true
+        }
+    }
 }
 
 // MARK: - Action methods
 
 private extension EditingToolsView {
     
-    @objc func colorPickerButtonTapped(_ sender: UIButton) {
-        onColorPickerTapped?()
+    @objc func addShapeButtonTapped(_ button: UIButton) {
+        onAddShapeTapped?(button)
     }
     
-    @objc func addShapeButtonTapped(_ sender: UIButton) {
-        onAddShapeTapped?(sender)
-    }
-    
-    @objc func cancelButtonTapped(_ sender: UIButton) {
+    @objc func cancelButtonTapped(_ button: UIButton) {
         onCancelTapped?()
     }
     
-    @objc func saveButtonTapped(_ sender: UIButton) {
+    @objc func saveButtonTapped(_ button: UIButton) {
         onSaveTapped?()
+    }
+    
+    @objc func handleColorCircleViewTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
+        onColorsCircleTapped?()
+    }
+    
+    @objc func handleColorCircleViewLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        switch gestureRecognizer.state {
+        case .began:
+            spectrumView.isHidden = false
+        case .ended, .cancelled, .failed:
+            spectrumView.isHidden = true
+        case .changed:
+            let location = gestureRecognizer.location(in: spectrumView)
+            let clampedLocation = CGPoint(
+                x: location.x.clamped(
+                    minValue: spectrumView.bounds.minX,
+                    maxValue: spectrumView.bounds.maxX
+                ),
+                y: location.y.clamped(
+                    minValue: spectrumView.bounds.minY,
+                    maxValue: spectrumView.bounds.maxY
+                )
+            )
+            let color = spectrumView.color(atLocation: clampedLocation)
+
+            self.color = color
+            colorsCircleView.color = color
+            spectrumCursorView.isHidden = false
+            spectrumCursorView.center = clampedLocation
+            spectrumCursorView.color = color
+            spectrumCursorView.outlineColor = color
+
+            onColorSelected?(color)
+        default:
+            break
+        }
     }
 }
