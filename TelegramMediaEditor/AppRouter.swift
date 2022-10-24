@@ -40,19 +40,31 @@ private extension AppRouter {
         viewController.onAccessRestricted = { [weak self] in
             self?.showMediaAccessScreen()
         }
-        viewController.onPhotoSelected = { [weak self] asset in
-            self?.showPhotoEditorScreen(asset: asset)
+        viewController.onPhotoSelected = { [weak self] in
+            self?.showPhotoEditorScreen(
+                fromViewController: viewController,
+                withTransition: $0.0,
+                asset: $0.1
+            )
         }
         window.rootViewController = viewController
     }
     
-    func showPhotoEditorScreen(asset: PHAsset) {
+    func showPhotoEditorScreen(
+        fromViewController: PhotosViewController,
+        withTransition transition: PhotoZoomTransition,
+        asset: PHAsset
+    ) {
         let viewController = PhotoEditorViewController(asset: asset)
-        viewController.onClose = { [weak viewController] in
-            viewController?.dismiss(animated: true)
-        }
         let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = .overFullScreen
-        window.rootViewController?.present(navigationController, animated: true)
+        navigationController.navigationBar.standardAppearance = {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithTransparentBackground()
+            return appearance
+        }()
+        navigationController.transitioningDelegate = transition
+        navigationController.modalPresentationStyle = .custom
+        
+        fromViewController.present(navigationController, animated: true)
     }
 }

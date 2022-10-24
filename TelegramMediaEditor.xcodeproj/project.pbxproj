@@ -79,6 +79,9 @@
 		D7B0C5472906D85900EBA3ED /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */; };
 		D7B0C54B2906EBC700EBA3ED /* ShimmerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */; };
 		D7B0C54D2907028300EBA3ED /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */; };
+		D7B0C55029070F6200EBA3ED /* PhotoZoomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54F29070F6200EBA3ED /* PhotoZoomTransition.swift */; };
+		D7B0C55829071E2000EBA3ED /* PhotoZoomInAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55729071E2000EBA3ED /* PhotoZoomInAnimation.swift */; };
+		D7B0C55A29071E2900EBA3ED /* PhotoZoomOutAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55929071E2900EBA3ED /* PhotoZoomOutAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,6 +158,9 @@
 		D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
 		D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerButton.swift; sourceTree = "<group>"; };
 		D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
+		D7B0C54F29070F6200EBA3ED /* PhotoZoomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomTransition.swift; sourceTree = "<group>"; };
+		D7B0C55729071E2000EBA3ED /* PhotoZoomInAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomInAnimation.swift; sourceTree = "<group>"; };
+		D7B0C55929071E2900EBA3ED /* PhotoZoomOutAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomOutAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +228,7 @@
 		72C42C8C29000FD600823835 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				D7B0C54E29070F4E00EBA3ED /* PhotoTransition */,
 				7212E9F828FF44A200AA6C00 /* HSBColor.swift */,
 				72C42C8A29000FD200823835 /* RGBColor.swift */,
 				72C42CA1290149B400823835 /* Progress.swift */,
@@ -464,6 +471,16 @@
 			path = CanvasView;
 			sourceTree = "<group>";
 		};
+		D7B0C54E29070F4E00EBA3ED /* PhotoTransition */ = {
+			isa = PBXGroup;
+			children = (
+				D7B0C54F29070F6200EBA3ED /* PhotoZoomTransition.swift */,
+				D7B0C55729071E2000EBA3ED /* PhotoZoomInAnimation.swift */,
+				D7B0C55929071E2900EBA3ED /* PhotoZoomOutAnimation.swift */,
+			);
+			path = PhotoTransition;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -552,6 +569,7 @@
 				D791310D28F80C650074A5A0 /* ColorPickerSeparatorView.swift in Sources */,
 				D791310528F7F94B0074A5A0 /* ColorPickerSpectrumView.swift in Sources */,
 				D7389C9328F35C4B00475B7D /* AppRouter.swift in Sources */,
+				D7B0C55029070F6200EBA3ED /* PhotoZoomTransition.swift in Sources */,
 				72C42C9329002EB200823835 /* CGPointExtensions.swift in Sources */,
 				72C42CB429034F2900823835 /* ColorGridCursorView.swift in Sources */,
 				7212E9C128FD590200AA6C00 /* ColorPreviewView.swift in Sources */,
@@ -575,6 +593,7 @@
 				D791310F28F80CF90074A5A0 /* UIStackViewExtensions.swift in Sources */,
 				7212E9FB28FF536B00AA6C00 /* ColorCodeView.swift in Sources */,
 				D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */,
+				D7B0C55A29071E2900EBA3ED /* PhotoZoomOutAnimation.swift in Sources */,
 				D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */,
 				D7B0C5422906C9E900EBA3ED /* CanvasView.swift in Sources */,
 				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
@@ -599,6 +618,7 @@
 				72C42CA62901B2F600823835 /* PaddedTextField.swift in Sources */,
 				D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */,
 				72C42CB629036A7600823835 /* ColorsCircleView.swift in Sources */,
+				D7B0C55829071E2000EBA3ED /* PhotoZoomInAnimation.swift in Sources */,
 				72C42CB8290565E500823835 /* EyeDropperColorPickerWindow.swift in Sources */,
 				72C42C8E2900107200823835 /* UIColorExtensions.swift in Sources */,
 				D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */,
@@ -750,10 +770,13 @@
 				DEVELOPMENT_TEAM = 2A9T46XUDR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TelegramMediaEditor/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -778,10 +801,13 @@
 				DEVELOPMENT_TEAM = 2A9T46XUDR;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TelegramMediaEditor/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This app requires access to photo library";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

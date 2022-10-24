@@ -51,6 +51,10 @@ final class EditingToolsView: UIView {
         spectrumCursorView.outlineColor = color
         updateCursorViewLocation(color: color)
     }
+    
+    func setSaveButtonEnabled(_ enabled: Bool) {
+        saveButton.isEnabled = enabled
+    }
 }
 
 // MARK: - Setup methods
@@ -112,7 +116,7 @@ private extension EditingToolsView {
     }
     
     func setupView() {
-        backgroundColor = .black
+        backgroundColor = .clear
     }
     
     func setupAddShapeButton() {
@@ -147,6 +151,7 @@ private extension EditingToolsView {
         toolsSegmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
         toolsSegmentedControl.setTitleTextAttributes(normalTextAttributes, for: .highlighted)
         toolsSegmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
+        toolsSegmentedControl.backgroundColor = .secondarySystemBackground
         toolsSegmentedControl.insertSegment(withTitle: "Draw", at: 0, animated: false)
         toolsSegmentedControl.insertSegment(withTitle: "Text", at: 1, animated: false)
         toolsSegmentedControl.selectedSegmentIndex = 0

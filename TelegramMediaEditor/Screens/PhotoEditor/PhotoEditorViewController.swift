@@ -29,8 +29,6 @@ final class PhotoEditorViewController: UIViewController {
     private let asset: PHAsset
     private let imageManager = PHCachingImageManager()
     
-    var onClose: VoidClosure?
-    
     private var drawingColor: HSBColor = .white
     
     init(asset: PHAsset) {
@@ -49,6 +47,12 @@ final class PhotoEditorViewController: UIViewController {
         setupViews()
         loadImageFromAsset()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        photoImageView.isHidden = false
+    }
 }
 
 private extension PhotoEditorViewController {
@@ -63,9 +67,9 @@ private extension PhotoEditorViewController {
         editingToolsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            photoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
-            photoImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            photoImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            photoImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            photoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             photoImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
             canvasView.topAnchor.constraint(equalTo: photoImageView.topAnchor),
             canvasView.leadingAnchor.constraint(equalTo: photoImageView.leadingAnchor),
@@ -73,7 +77,7 @@ private extension PhotoEditorViewController {
             canvasView.bottomAnchor.constraint(equalTo: photoImageView.bottomAnchor),
             editingToolsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             editingToolsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            editingToolsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            editingToolsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     
@@ -110,6 +114,7 @@ private extension PhotoEditorViewController {
     func setupPhotoImageView() {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
+        photoImageView.isHidden = true
     }
     
     func setupCanvasView() {
@@ -118,10 +123,12 @@ private extension PhotoEditorViewController {
             let canUndo = self.canvasView.canUndo
             self.undoBarButtonItem.isEnabled = canUndo
             self.clearBarButtonItem.isEnabled = canUndo
+            self.editingToolsView.setSaveButtonEnabled(canUndo)
         }
     }
     
     func setupEditingToolsView() {
+        editingToolsView.setSaveButtonEnabled(false)
         editingToolsView.onColorsCircleTapped = { [weak self] in
             self?.presentColorPicker()
         }
@@ -129,10 +136,10 @@ private extension PhotoEditorViewController {
             self?.presentShapesPopover(sourceView: view)
         }
         editingToolsView.onCancelTapped = { [weak self] in
-            self?.onClose?()
+            self?.dismiss(animated: true)
         }
         editingToolsView.onSaveTapped = { [weak self] in
-            self?.onClose?()
+            self?.dismiss(animated: true)
         }
         editingToolsView.onColorSelected = { [weak self] color in
             self?.handleEditingToolsViewSelectedColor(color)
@@ -140,17 +147,17 @@ private extension PhotoEditorViewController {
     }
     
     func presentColorPicker() {
-//        if #available(iOS 14.0, *) {
-//            let viewController = UIColorPickerViewController()
-//            present(viewController, animated: true)
-//        } else {
+        //        if #available(iOS 14.0, *) {
+        //            let viewController = UIColorPickerViewController()
+        //            present(viewController, animated: true)
+        //        } else {
         let viewController = ColorPickerViewController()
         viewController.setColor(drawingColor)
         viewController.onColorSelected = { [weak self] color in
             self?.updateDrawingColor(color)
         }
         present(viewController, animated: true)
-//        }
+        //        }
     }
     
     func presentShapesPopover(sourceView: UIView) {
@@ -209,6 +216,7 @@ private extension PhotoEditorViewController {
     
     func handleEditingToolsViewSelectedColor(_ color: HSBColor) {
         drawingColor = color
+        canvasView.drawingColor = color.uiColor
     }
 }
 
@@ -229,5 +237,12 @@ extension PhotoEditorViewController: UIPopoverPresentationControllerDelegate {
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
+    }
+}
+
+extension PhotoEditorViewController {
+    
+    func transitionImageView() -> UIImageView? {
+        photoImageView
     }
 }

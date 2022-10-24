@@ -21,6 +21,8 @@ final class ColorsCircleView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        backgroundColor = .clear
+        
         gradientLayer.type = .conic
         gradientLayer.colors = [
             HSBColor(hue: 60/360, saturation: 0.69, brightness: 0.89).cgColor,

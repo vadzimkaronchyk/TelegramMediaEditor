@@ -11,8 +11,9 @@ import Photos
 final class PhotosViewController: UICollectionViewController {
     
     var onAccessRestricted: VoidClosure?
-    var onPhotoSelected: Closure<PHAsset>?
+    var onPhotoSelected: Closure<(PhotoZoomTransition, PHAsset)>?
     
+    private var selectedIndexPath: IndexPath?
     private var fetchResult: PHFetchResult<PHAsset>?
     private let imageManager = PHCachingImageManager()
     private let targetSize: CGSize = {
@@ -20,6 +21,8 @@ final class PhotosViewController: UICollectionViewController {
         let size = width / 3
         return CGSize(width: size, height: size)
     }()
+    
+    private let photoZoomTransition = PhotoZoomTransition()
     
     init() {
         let fraction: CGFloat = 1 / 3
@@ -86,14 +89,18 @@ extension PhotosViewController {
         didSelectItemAt indexPath: IndexPath
     ) {
         guard let fetchResult = fetchResult else { return }
+        selectedIndexPath = indexPath
         let asset = fetchResult.object(at: indexPath.item)
-        onPhotoSelected?(asset)
+        onPhotoSelected?((photoZoomTransition, asset))
     }
 }
 
 extension PhotosViewController: UICollectionViewDataSourcePrefetching {
     
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        prefetchItemsAt indexPaths: [IndexPath]
+    ) {
         guard let fetchResult = fetchResult else { return }
         DispatchQueue.main.async {
             self.imageManager.startCachingImages(
@@ -105,7 +112,10 @@ extension PhotosViewController: UICollectionViewDataSourcePrefetching {
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cancelPrefetchingForItemsAt indexPaths: [IndexPath]
+    ) {
         guard let fetchResult = fetchResult else { return }
         DispatchQueue.main.async {
             self.imageManager.stopCachingImages(
@@ -115,6 +125,57 @@ extension PhotosViewController: UICollectionViewDataSourcePrefetching {
                 options: nil
             )
         }
+    }
+}
+
+extension PhotosViewController {
+    
+    func transitionDidEnd() {
+        guard
+            let selectedIndexPath = selectedIndexPath,
+            let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+        else { return }
+        
+        let cellFrame = collectionView.convert(cell.frame, to: view)
+        
+        if cellFrame.minY < collectionView.contentInset.top {
+            collectionView.scrollToItem(at: selectedIndexPath, at: .top, animated: false)
+        } else if cellFrame.maxY > view.frame.height - collectionView.contentInset.bottom {
+            collectionView.scrollToItem(at: selectedIndexPath, at: .bottom, animated: false)
+        }
+    }
+    
+    func transitionImageView() -> UIImageView? {
+        guard let selectedIndexPath = selectedIndexPath else { return nil }
+        return getImageViewFromCollectionViewCell(
+            collectionView: collectionView,
+            selectedIndexPath: selectedIndexPath
+        )
+    }
+    
+    func referenceImageViewFrame() -> CGRect? {
+        guard let selectedIndexPath = selectedIndexPath else { return nil }
+        
+        view.layoutIfNeeded()
+        collectionView.layoutIfNeeded()
+        
+        guard let unconvertedFrame = getFrameFromCollectionViewCell(
+            collectionView: collectionView,
+            selectedIndexPath: selectedIndexPath
+        ) else { return nil }
+        
+        let cellFrame = collectionView.convert(unconvertedFrame, to: view)
+        
+        if cellFrame.minY < collectionView.contentInset.top {
+            return .init(
+                x: cellFrame.minX,
+                y: collectionView.contentInset.top,
+                width: cellFrame.width,
+                height: cellFrame.height - (collectionView.contentInset.top - cellFrame.minY)
+            )
+        }
+        
+        return cellFrame
     }
 }
 
@@ -132,5 +193,63 @@ private extension PhotosViewController {
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
         fetchResult = PHAsset.fetchAssets(with: .image, options: options)
+    }
+    
+    func getImageViewFromCollectionViewCell(
+        collectionView: UICollectionView,
+        selectedIndexPath: IndexPath
+    ) -> UIImageView? {
+        let visibleCells = collectionView.indexPathsForVisibleItems
+        
+        //If the current indexPath is not visible in the collectionView,
+        //scroll the collectionView to the cell to prevent it from returning a nil value
+        if !visibleCells.contains(selectedIndexPath) {
+            //Scroll the collectionView to the current selectedIndexPath which is offscreen
+            collectionView.scrollToItem(
+                at: selectedIndexPath,
+                at: .centeredVertically,
+                animated: false
+            )
+            
+            //Reload the items at the newly visible indexPaths
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+            collectionView.layoutIfNeeded()
+            
+            let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+            return cell?.imageView
+        } else {
+            let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+            return cell?.imageView
+        }
+        
+    }
+    
+    func getFrameFromCollectionViewCell(
+        collectionView: UICollectionView,
+        selectedIndexPath: IndexPath
+    ) -> CGRect? {
+        //Get the currently visible cells from the collectionView
+        let visibleCells = collectionView.indexPathsForVisibleItems
+        
+        //If the current indexPath is not visible in the collectionView,
+        //scroll the collectionView to the cell to prevent it from returning a nil value
+        if !visibleCells.contains(selectedIndexPath) {
+            //Scroll the collectionView to the cell that is currently offscreen
+            collectionView.scrollToItem(
+                at: selectedIndexPath,
+                at: .centeredVertically,
+                animated: false
+            )
+            
+            //Reload the items at the newly visible indexPaths
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+            collectionView.layoutIfNeeded()
+            
+            let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+            return cell?.frame
+        } else {
+            let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+            return cell?.frame
+        }
     }
 }
