@@ -77,6 +77,8 @@
 		D7B0C5422906C9E900EBA3ED /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C5412906C9E900EBA3ED /* CanvasView.swift */; };
 		D7B0C5452906D7C900EBA3ED /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C5442906D7C900EBA3ED /* Line.swift */; };
 		D7B0C5472906D85900EBA3ED /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */; };
+		D7B0C54B2906EBC700EBA3ED /* ShimmerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */; };
+		D7B0C54D2907028300EBA3ED /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -151,6 +153,8 @@
 		D7B0C5412906C9E900EBA3ED /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 		D7B0C5442906D7C900EBA3ED /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
+		D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerButton.swift; sourceTree = "<group>"; };
+		D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -329,6 +333,7 @@
 			isa = PBXGroup;
 			children = (
 				D7389C8628F345D100475B7D /* MediaAccessViewController.swift */,
+				D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */,
 			);
 			path = MediaAccess;
 			sourceTree = "<group>";
@@ -388,6 +393,7 @@
 				D791310E28F80CF90074A5A0 /* UIStackViewExtensions.swift */,
 				7212E9C928FD924300AA6C00 /* UICollectionViewExtensions.swift */,
 				72C42C8D2900107200823835 /* UIColorExtensions.swift */,
+				D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */,
 				72C42CBE29058E7200823835 /* UIWindowExtensions.swift */,
 				72C42CBC2905858C00823835 /* UIWindowSceneExtensions.swift */,
 			);
@@ -549,6 +555,7 @@
 				72C42C9329002EB200823835 /* CGPointExtensions.swift in Sources */,
 				72C42CB429034F2900823835 /* ColorGridCursorView.swift in Sources */,
 				7212E9C128FD590200AA6C00 /* ColorPreviewView.swift in Sources */,
+				D7B0C54D2907028300EBA3ED /* UIViewExtensions.swift in Sources */,
 				D7389CA228F36F9800475B7D /* PhotoCell.swift in Sources */,
 				D7389CBC28F4AF5E00475B7D /* BrushView.swift in Sources */,
 				7212E9F728FF017300AA6C00 /* ColorSliderTrackView.swift in Sources */,
@@ -582,6 +589,7 @@
 				D7389CB628F47E7400475B7D /* EditingToolsView.swift in Sources */,
 				D7389CBA28F4AF2E00475B7D /* PenView.swift in Sources */,
 				D7389CC028F4AFB600475B7D /* PencilView.swift in Sources */,
+				D7B0C54B2906EBC700EBA3ED /* ShimmerButton.swift in Sources */,
 				D791310128F7E9380074A5A0 /* ColorPickerViewController.swift in Sources */,
 				72C42C9B2901468700823835 /* ColorSliderTextFieldModel.swift in Sources */,
 				D7B0C5472906D85900EBA3ED /* CGRectExtensions.swift in Sources */,

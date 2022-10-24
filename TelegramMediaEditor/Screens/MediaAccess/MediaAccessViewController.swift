@@ -14,7 +14,7 @@ final class MediaAccessViewController: UIViewController {
     private let containerView = UIView()
     private let animationView = AnimationView(name: "duck")
     private let titleLabel = UILabel()
-    private let accessButton = UIButton(type: .system)
+    private let accessButton = ShimmerButton(type: .system)
     
     var onAccessGranted: VoidClosure?
     
@@ -33,10 +33,17 @@ final class MediaAccessViewController: UIViewController {
         animationView.play()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        accessButton.startAnimation()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
         animationView.stop()
+        accessButton.stopAnimation()
     }
 }
 
