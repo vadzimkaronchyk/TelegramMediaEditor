@@ -23,6 +23,7 @@ final class PhotoEditorViewController: UIViewController {
         action: #selector(clearBarButtonItemTapped)
     )
     private let photoImageView = UIImageView()
+    private let canvasView = CanvasView()
     private let editingToolsView = EditingToolsView()
     
     private let asset: PHAsset
@@ -54,9 +55,11 @@ private extension PhotoEditorViewController {
     
     func setupLayout() {
         view.addSubview(photoImageView)
+        view.addSubview(canvasView)
         view.addSubview(editingToolsView)
         
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
+        canvasView.translatesAutoresizingMaskIntoConstraints = false
         editingToolsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -64,6 +67,10 @@ private extension PhotoEditorViewController {
             photoImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             photoImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
+            canvasView.topAnchor.constraint(equalTo: photoImageView.topAnchor),
+            canvasView.leadingAnchor.constraint(equalTo: photoImageView.leadingAnchor),
+            canvasView.trailingAnchor.constraint(equalTo: photoImageView.trailingAnchor),
+            canvasView.bottomAnchor.constraint(equalTo: photoImageView.bottomAnchor),
             editingToolsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             editingToolsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             editingToolsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -76,6 +83,7 @@ private extension PhotoEditorViewController {
         setupUndoBarButtonItem()
         setupClearBarButtonItem()
         setupPhotoImageView()
+        setupCanvasView()
         setupEditingToolsView()
         updateDrawingColor(.white)
     }
@@ -85,6 +93,8 @@ private extension PhotoEditorViewController {
     }
     
     func setupNavigationItem() {
+        undoBarButtonItem.isEnabled = false
+        clearBarButtonItem.isEnabled = false
         navigationItem.setLeftBarButton(undoBarButtonItem, animated: false)
         navigationItem.setRightBarButton(clearBarButtonItem, animated: false)
     }
@@ -100,6 +110,15 @@ private extension PhotoEditorViewController {
     func setupPhotoImageView() {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
+    }
+    
+    func setupCanvasView() {
+        canvasView.onUndoChanged = { [weak self] in
+            guard let self = self else { return }
+            let canUndo = self.canvasView.canUndo
+            self.undoBarButtonItem.isEnabled = canUndo
+            self.clearBarButtonItem.isEnabled = canUndo
+        }
     }
     
     func setupEditingToolsView() {
@@ -184,6 +203,7 @@ private extension PhotoEditorViewController {
     
     func updateDrawingColor(_ color: HSBColor) {
         drawingColor = color
+        canvasView.drawingColor = color.uiColor
         editingToolsView.updateDrawingColor(color)
     }
     
@@ -197,9 +217,11 @@ private extension PhotoEditorViewController {
 private extension PhotoEditorViewController {
     
     @objc func undoBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
+        canvasView.undo()
     }
     
     @objc func clearBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
+        canvasView.clearAll()
     }
 }
 
