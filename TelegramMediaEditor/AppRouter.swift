@@ -29,6 +29,13 @@ private extension AppRouter {
     }
     
     func showPhotosScreen() {
+        let transition = CATransition()
+        transition.type = .reveal
+        transition.subtype = .fromBottom
+        transition.duration = 0.3
+        transition.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        window.layer.add(transition, forKey: kCATransition)
+        
         let viewController = PhotosViewController()
         viewController.onAccessRestricted = { [weak self] in
             self?.showMediaAccessScreen()
