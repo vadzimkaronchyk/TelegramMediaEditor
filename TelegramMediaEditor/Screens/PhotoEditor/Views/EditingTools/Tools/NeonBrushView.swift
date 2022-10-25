@@ -1,5 +1,5 @@
 //
-//  BrushView.swift
+//  NeonBrushView.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/10/22.
@@ -7,11 +7,13 @@
 
 import UIKit
 
-final class BrushView: UIView {
+final class NeonBrushView: UIView, DrawingToolView {
     
     private let toolImageView = UIImageView()
     private let topTipImageView = UIImageView()
     private let middleTipGradientLayer = CAGradientLayer()
+    
+    let tool = Tool.Drawing.neonBrush
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,7 +29,7 @@ final class BrushView: UIView {
         super.layoutSubviews()
         
         let width = 17.0
-        middleTipGradientLayer.frame = .init(x: (toolImageView.frame.width - width) / 2, y: 36, width: width, height: 6)
+        middleTipGradientLayer.frame = .init(x: (toolImageView.frame.width - width) / 2, y: 36, width: width, height: 14)
     }
     
     func updateDrawingColor(_ color: UIColor) {
@@ -36,13 +38,13 @@ final class BrushView: UIView {
     }
 }
 
-private extension BrushView {
+private extension NeonBrushView {
     
     func commonInit() {
         setupLayout()
         setupViews()
         setupLayers()
-        updateDrawingColor(.init(red: 1, green: 0.902, blue: 0.125, alpha: 1))
+        updateDrawingColor(.init(red: 0.196, green: 0.996, blue: 0.729, alpha: 1))
     }
     
     func setupLayout() {
@@ -65,12 +67,12 @@ private extension BrushView {
     }
     
     func setupToolImageView() {
-        toolImageView.image = .init(named: "brush")
+        toolImageView.image = .init(named: "neon")
         toolImageView.contentMode = .scaleAspectFill
     }
     
     func setupTopTipImageView() {
-        topTipImageView.image = .init(named: "brush-tip")
+        topTipImageView.image = .init(named: "neon-tip")
         topTipImageView.contentMode = .scaleAspectFill
     }
     

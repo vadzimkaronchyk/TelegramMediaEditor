@@ -7,8 +7,18 @@
 
 import UIKit
 
+struct LineSegment {
+    let firstPoint: CGPoint
+    let secondPoint: CGPoint
+}
+
 struct LinePoint {
+    
     let point: CGPoint
+    let velocity: CGFloat
+    
+    var x: CGFloat { point.x }
+    var y: CGFloat { point.y }
 }
 
 final class Line {
@@ -20,25 +30,7 @@ final class Line {
         points.last!
     }
     
-    var lineWidth: Double {
-        6
-    }
-    
-    var path: UIBezierPath {
-        let path = UIBezierPath()
-        path.lineWidth = lineWidth
-        
-        guard let firstPoint = points.first else {
-            return path
-        }
-        
-        path.move(to: firstPoint.point)
-        for i in 1..<points.count {
-            path.addLine(to: points[i].point)
-        }
-        
-        return path
-    }
+    var lineWidth = 10.0
     
     init(color: UIColor = .white, point: LinePoint) {
         self.color = color
@@ -51,5 +43,8 @@ final class Line {
     
     func appendPoints(_ points: [LinePoint]) {
         self.points.append(contentsOf: points)
+    }
+    
+    func drawInContext(_ context: CGContext) {
     }
 }

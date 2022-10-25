@@ -7,20 +7,20 @@
 
 import UIKit
 
-struct MenuPopoverItem {
-    let title: String
-    let imageName: String
+protocol MenuPopoverItem {
+    var title: String { get }
+    var imageName: String { get }
 }
 
-final class MenuPopoverViewController: UIViewController {
+final class MenuPopoverViewController<Item: MenuPopoverItem>: UIViewController {
     
     private let itemsStackView = UIStackView()
     
-    var menuItems = [MenuPopoverItem]() {
+    var menuItems = [Item]() {
         didSet { reloadItems(menuItems) }
     }
     
-    var onSelected: Closure<MenuPopoverItem>?
+    var onSelected: Closure<Item>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ final class MenuPopoverViewController: UIViewController {
 
 private extension MenuPopoverViewController {
     
-    func reloadItems(_ items: [MenuPopoverItem]) {
+    func reloadItems(_ items: [Item]) {
         itemsStackView.arrangedSubviews.forEach {
             $0.removeFromSuperview()
         }

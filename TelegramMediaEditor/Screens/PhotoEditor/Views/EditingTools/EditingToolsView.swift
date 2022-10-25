@@ -10,19 +10,18 @@ import UIKit
 final class EditingToolsView: UIView {
     
     private let colorsCircleView = ColorsCircleView()
-    private let toolsPickerView = ToolsPickerView()
+    private let drawingToolsPickerView = DrawingToolsPickerView()
     private let addShapeButton = UIButton(type: .system)
-    private let bottomControlsStackView = UIStackView()
-    private let toolsSegmentedControl = UISegmentedControl()
-    private let cancelButton = UIButton(type: .system)
-    private let saveButton = UIButton(type: .system)
+    private let bottomView = EditingToolsBottomView()
     private let spectrumView = ColorSpectrumView()
     private let spectrumCursorView = ColorSliderCursorView()
     
     var onColorsCircleTapped: VoidClosure?
+    var onToolSelected: Closure<Tool>?
     var onAddShapeTapped: Closure<UIView>?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
+    var onStrokeShapeTapped: Closure<UIView>?
     var onColorSelected: Closure<HSBColor>?
     
     private var color: HSBColor = .black
@@ -52,8 +51,12 @@ final class EditingToolsView: UIView {
         updateCursorViewLocation(color: color)
     }
     
+    func updateStrokeShape(_ strokeShape: StrokeShape) {
+        bottomView.updateStrokeShape(strokeShape)
+    }
+    
     func setSaveButtonEnabled(_ enabled: Bool) {
-        saveButton.isEnabled = enabled
+        bottomView.setSaveButtonEnabled(enabled)
     }
 }
 
@@ -63,60 +66,66 @@ private extension EditingToolsView {
     
     func setupLayout() {
         addSubview(colorsCircleView)
-        addSubview(toolsPickerView)
+        addSubview(drawingToolsPickerView)
         addSubview(addShapeButton)
-        addSubview(bottomControlsStackView)
+        addSubview(bottomView)
         addSubview(spectrumView)
         spectrumView.addSubview(spectrumCursorView)
         
         colorsCircleView.translatesAutoresizingMaskIntoConstraints = false
-        toolsPickerView.translatesAutoresizingMaskIntoConstraints = false
+        drawingToolsPickerView.translatesAutoresizingMaskIntoConstraints = false
         addShapeButton.translatesAutoresizingMaskIntoConstraints = false
-        bottomControlsStackView.translatesAutoresizingMaskIntoConstraints = false
-        toolsSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
+        bottomView.translatesAutoresizingMaskIntoConstraints = false
         spectrumView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             colorsCircleView.heightAnchor.constraint(equalToConstant: 33),
             colorsCircleView.widthAnchor.constraint(equalTo: colorsCircleView.heightAnchor),
             colorsCircleView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            colorsCircleView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor, constant: -8),
-            toolsPickerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            toolsPickerView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 240/390),
-            toolsPickerView.topAnchor.constraint(equalTo: topAnchor, constant: 33),
-            toolsPickerView.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor),
+            colorsCircleView.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -8),
+            drawingToolsPickerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            drawingToolsPickerView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 240/390),
+            drawingToolsPickerView.topAnchor.constraint(equalTo: topAnchor, constant: 1),
+            drawingToolsPickerView.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
             addShapeButton.heightAnchor.constraint(equalToConstant: 33),
             addShapeButton.widthAnchor.constraint(equalTo: addShapeButton.heightAnchor),
             addShapeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            addShapeButton.bottomAnchor.constraint(equalTo: bottomControlsStackView.topAnchor, constant: -8),
-            bottomControlsStackView.heightAnchor.constraint(equalToConstant: 33),
-            bottomControlsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            bottomControlsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            bottomControlsStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            cancelButton.heightAnchor.constraint(equalTo: cancelButton.widthAnchor),
-            saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor),
+            addShapeButton.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -8),
+            bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
             spectrumView.widthAnchor.constraint(equalTo: spectrumView.heightAnchor, multiplier: 12/10),
             spectrumView.leadingAnchor.constraint(equalTo: colorsCircleView.leadingAnchor),
             spectrumView.trailingAnchor.constraint(equalTo: addShapeButton.centerXAnchor),
-            spectrumView.bottomAnchor.constraint(equalTo: colorsCircleView.bottomAnchor)
+            spectrumView.bottomAnchor.constraint(equalTo: colorsCircleView.bottomAnchor),
         ])
     }
     
     func setupViews() {
         setupView()
+        setupDrawingToolsPickerView()
         setupAddShapeButton()
-        setupBottomControlsStackView()
-        setupToolsSegmentedControl()
-        setupCancelButton()
-        setupSaveButton()
+        setupBottomView()
         setupSpectrumView()
         addGestureRecognizers()
+        
+        spectrumView.isHidden = true
     }
     
     func setupView() {
         backgroundColor = .clear
+    }
+    
+    func setupDrawingToolsPickerView() {
+        drawingToolsPickerView.onToolSelected = { [weak self] tool in
+            self?.onToolSelected?(.drawing(tool))
+        }
+        drawingToolsPickerView.onToolHighlighted = { [weak self] tool in
+            self?.bottomView.showBottomToolSettingsView()
+        }
+        drawingToolsPickerView.onToolDehighlighted = { [weak self] in
+            self?.bottomView.showBottomControlsView()
+        }
     }
     
     func setupAddShapeButton() {
@@ -127,50 +136,22 @@ private extension EditingToolsView {
         addShapeButton.addTarget(self, action: #selector(addShapeButtonTapped), for: .touchUpInside)
     }
     
-    func setupBottomControlsStackView() {
-        bottomControlsStackView.alignment = .center
-        bottomControlsStackView.axis = .horizontal
-        bottomControlsStackView.distribution = .fill
-        bottomControlsStackView.spacing = 16
-        bottomControlsStackView.addArrangedSubviews([
-            cancelButton,
-            toolsSegmentedControl,
-            saveButton
-        ])
-    }
-    
-    func setupToolsSegmentedControl() {
-        let normalTextAttributes: [NSAttributedString.Key: AnyObject] = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 13, weight: .medium),
-        ]
-        let selectedTextAttributes: [NSAttributedString.Key: AnyObject] = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: 13, weight: .semibold),
-        ]
-        toolsSegmentedControl.setTitleTextAttributes(normalTextAttributes, for: .normal)
-        toolsSegmentedControl.setTitleTextAttributes(normalTextAttributes, for: .highlighted)
-        toolsSegmentedControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
-        toolsSegmentedControl.backgroundColor = .secondarySystemBackground
-        toolsSegmentedControl.insertSegment(withTitle: "Draw", at: 0, animated: false)
-        toolsSegmentedControl.insertSegment(withTitle: "Text", at: 1, animated: false)
-        toolsSegmentedControl.selectedSegmentIndex = 0
-    }
-    
-    func setupCancelButton() {
-        cancelButton.tintColor = .white
-        cancelButton.setImage(.init(named: "cancel"), for: .normal)
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-    }
-    
-    func setupSaveButton() {
-        saveButton.tintColor = .white
-        saveButton.setImage(.init(named: "download"), for: .normal)
-        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+    func setupBottomView() {
+        bottomView.onCancelTapped = { [weak self] in
+            self?.onCancelTapped?()
+        }
+        bottomView.onSaveTapped = { [weak self] in
+            self?.onSaveTapped?()
+        }
+        bottomView.onBackTapped = { [weak self] in
+            self?.drawingToolsPickerView.dehighlight()
+        }
+        bottomView.onStrokeShapeTapped = { [weak self] view in
+            self?.onStrokeShapeTapped?(view)
+        }
     }
     
     func setupSpectrumView() {
-        spectrumView.isHidden = true
         spectrumView.cornerRadius = 16
         spectrumCursorView.frame.size = .square(size: 36)
     }
@@ -205,14 +186,6 @@ private extension EditingToolsView {
     
     @objc func addShapeButtonTapped(_ button: UIButton) {
         onAddShapeTapped?(button)
-    }
-    
-    @objc func cancelButtonTapped(_ button: UIButton) {
-        onCancelTapped?()
-    }
-    
-    @objc func saveButtonTapped(_ button: UIButton) {
-        onSaveTapped?()
     }
     
     @objc func handleColorCircleViewTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {

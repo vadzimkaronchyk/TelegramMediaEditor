@@ -1,5 +1,5 @@
 //
-//  LassoView.swift
+//  EraserView.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/10/22.
@@ -7,9 +7,11 @@
 
 import UIKit
 
-final class LassoView: UIView {
+final class EraserView: UIView, DrawingToolView {
     
     private let imageView = UIImageView()
+    
+    let tool = Tool.Drawing.eraser
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +24,7 @@ final class LassoView: UIView {
     }
 }
 
-private extension LassoView {
+private extension EraserView {
     
     func commonInit() {
         setupLayout()
@@ -41,7 +43,7 @@ private extension LassoView {
     }
     
     func setupViews() {
-        imageView.image = .init(named: "lasso")
         imageView.contentMode = .scaleAspectFill
+        imageView.image = .init(named: "eraser")
     }
 }

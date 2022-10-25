@@ -141,42 +141,59 @@ private extension PhotoEditorViewController {
         editingToolsView.onSaveTapped = { [weak self] in
             self?.dismiss(animated: true)
         }
+        editingToolsView.onStrokeShapeTapped = { [weak self] view in
+            self?.presentStrokeShapePopover(sourceView: view)
+        }
         editingToolsView.onColorSelected = { [weak self] color in
             self?.handleEditingToolsViewSelectedColor(color)
         }
     }
     
     func presentColorPicker() {
-        //        if #available(iOS 14.0, *) {
-        //            let viewController = UIColorPickerViewController()
-        //            present(viewController, animated: true)
-        //        } else {
         let viewController = ColorPickerViewController()
         viewController.setColor(drawingColor)
         viewController.onColorSelected = { [weak self] color in
             self?.updateDrawingColor(color)
         }
         present(viewController, animated: true)
-        //        }
     }
     
     func presentShapesPopover(sourceView: UIView) {
-        let width = 180.0
-        let height = 220.0
-        
-        let viewController = MenuPopoverViewController()
-        viewController.menuItems = [
-            .init(title: "Rectangle", imageName: "shapeRectangle"),
-            .init(title: "Ellipse", imageName: "shapeEllipse"),
-            .init(title: "Bubble", imageName: "shapeBubble"),
-            .init(title: "Star", imageName: "shapeStar"),
-            .init(title: "Arrow", imageName: "shapeArrow")
-        ]
+        let viewController = MenuPopoverViewController<Shape>()
+        viewController.menuItems = Shape.allCases
         viewController.onSelected = { [weak viewController] item in
             viewController?.dismiss(animated: true)
         }
+        
+        presentPopover(
+            viewController: viewController,
+            sourceView: sourceView,
+            contentSize: .init(width: 180, height: 220)
+        )
+    }
+    
+    func presentStrokeShapePopover(sourceView: UIView) {
+        let viewController = MenuPopoverViewController<StrokeShape>()
+        viewController.menuItems = StrokeShape.allCases
+        viewController.onSelected = { [weak self, weak viewController] item in
+            self?.editingToolsView.updateStrokeShape(item)
+            viewController?.dismiss(animated: true)
+        }
+        
+        presentPopover(
+            viewController: viewController,
+            sourceView: sourceView,
+            contentSize: .init(width: 150, height: 88)
+        )
+    }
+    
+    func presentPopover(
+        viewController: UIViewController,
+        sourceView: UIView,
+        contentSize: CGSize
+    ) {
         viewController.modalPresentationStyle = .popover
-        viewController.preferredContentSize = .init(width: width, height: height)
+        viewController.preferredContentSize = contentSize
         
         guard let presentationController = viewController.popoverPresentationController else { return }
         
@@ -187,8 +204,8 @@ private extension PhotoEditorViewController {
         presentationController.sourceView = sourceView
         presentationController.sourceRect = .init(
             origin: .init(
-                x: sourceView.bounds.midX - width/2,
-                y: -sourceView.bounds.midY - height/2
+                x: sourceView.bounds.midX - contentSize.width/2,
+                y: -sourceView.bounds.midY - contentSize.height/2
             ),
             size: sourceView.bounds.size
         )

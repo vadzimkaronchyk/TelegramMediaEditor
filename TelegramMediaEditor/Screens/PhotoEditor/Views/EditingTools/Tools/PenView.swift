@@ -7,11 +7,13 @@
 
 import UIKit
 
-final class PenView: UIView {
+final class PenView: UIView, DrawingToolView {
     
     private let toolImageView = UIImageView()
     private let topTipImageView = UIImageView()
     private let middleTipGradientLayer = CAGradientLayer()
+    
+    let tool = Tool.Drawing.pen
     
     override init(frame: CGRect) {
         super.init(frame: frame)
