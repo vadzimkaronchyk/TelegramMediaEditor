@@ -64,12 +64,20 @@ extension PhotosViewController {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
+        guard let asset = dataSource.asset(at: indexPath) else {
+            return .init()
+        }
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: PhotoCell.reuseIdentifer,
             for: indexPath
         ) as! PhotoCell
-        dataSource.requestImage(at: indexPath) { image in
-            cell.image = image
+        cell.imageView.image = nil
+        cell.assetIdentifier = asset.localIdentifier
+        dataSource.requestImage(at: asset) { image in
+            guard cell.assetIdentifier == asset.localIdentifier else {
+                return
+            }
+            cell.imageView.image = image
         }
         return cell
     }

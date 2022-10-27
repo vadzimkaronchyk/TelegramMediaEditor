@@ -58,14 +58,18 @@ final class AssetsDataSource: NSObject {
     }
     
     func requestImage(at indexPath: IndexPath, completion: @escaping (UIImage?) -> Void) {
-        guard let fetchAssets = fetchAssets else { return }
-        
-        let asset = fetchAssets.object(at: indexPath.item)
+        guard let asset = asset(at: indexPath) else { return }
+        requestImage(at: asset, completion: completion)
+    }
+    
+    func requestImage(at asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
+        let requestOptions = PHImageRequestOptions()
+        requestOptions.isNetworkAccessAllowed = true
         imageManager.requestImage(
             for: asset,
             targetSize: targetSize,
             contentMode: .aspectFill,
-            options: nil
+            options: requestOptions
         ) { image, info in
             completion(image)
         }

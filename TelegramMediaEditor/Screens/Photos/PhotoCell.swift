@@ -11,10 +11,7 @@ final class PhotoCell: UICollectionViewCell {
     
     let imageView = UIImageView()
     
-    var image: UIImage? {
-        get { imageView.image }
-        set { imageView.image = newValue }
-    }
+    var assetIdentifier: String?
     
     static let reuseIdentifer = "PhotoCell"
     
