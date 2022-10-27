@@ -47,12 +47,6 @@ final class PhotoEditorViewController: UIViewController {
         setupViews()
         loadImageFromAsset()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        photoImageView.isHidden = false
-    }
 }
 
 private extension PhotoEditorViewController {
@@ -114,7 +108,6 @@ private extension PhotoEditorViewController {
     func setupPhotoImageView() {
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.clipsToBounds = true
-        photoImageView.isHidden = true
     }
     
     func setupCanvasView() {

@@ -10,7 +10,7 @@ import UIKit
 final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        0.4
+        0.3
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -26,7 +26,7 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
         }
         
         toNavigationController.view.layoutIfNeeded()
-        toViewController.view.frame = .zero // workaround to layout subviews properly(considering nav bar)
+        toViewController.view.frame = .zero // workaround to layout subviews properly with nav bar
         
         let containerView = transitionContext.containerView
         
@@ -39,28 +39,43 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
         containerView.addSubview(toNavigationController.view)
         containerView.addSubview(photoImageView)
         
-        let photoDuration = transitionDuration(using: transitionContext)
-        let photoAnimator = UIViewPropertyAnimator(
-            duration: photoDuration,
-            curve: .easeInOut
-        ) {
-            photoImageView.frame = containerView.convert(toImageView.frame, from: toImageView.superview)
-        }
-        photoAnimator.addCompletion { position in
-            photoImageView.removeFromSuperview()
-            transitionContext.completeTransition(position == .end)
-        }
-        photoAnimator.startAnimation()
-        
         toNavigationController.view.alpha = 0
+        toImageView.alpha = 0
         
-        let viewDuration = photoDuration * 0.5
-        UIView.animate(
-            withDuration: viewDuration,
-            delay: photoDuration - viewDuration,
-            options: .curveLinear
-        ) {
-            toNavigationController.view.alpha = 1
-        }
+        let photoDuration = transitionDuration(using: transitionContext)
+        UIView.animateKeyframes(
+            withDuration: photoDuration,
+            delay: 0,
+            animations: {
+                UIView.addKeyframe(
+                    withRelativeStartTime: 0,
+                    relativeDuration: 0.6
+                ) {
+                    photoImageView.frame = containerView.convert(toImageView.frame, from: toImageView.superview)
+                }
+                UIView.addKeyframe(
+                    withRelativeStartTime: 0.2,
+                    relativeDuration: 0.4
+                ) {
+                    toNavigationController.view.alpha = 1
+                }
+                UIView.addKeyframe(
+                    withRelativeStartTime: 0.6,
+                    relativeDuration: 0
+                ) {
+                    toImageView.alpha = 1
+                }
+                UIView.addKeyframe(
+                    withRelativeStartTime: 0.6,
+                    relativeDuration: 0.4
+                ) {
+                    photoImageView.alpha = 0
+                }
+            },
+            completion: { finished in
+                photoImageView.removeFromSuperview()
+                transitionContext.completeTransition(finished)
+            }
+        )
     }
 }
