@@ -48,6 +48,7 @@
 		D737485A290A9AAA00675C7A /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7374859290A9AAA00675C7A /* Tool.swift */; };
 		D737485C290AA6EA00675C7A /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737485B290AA6EA00675C7A /* Shape.swift */; };
 		D737485E290AE43D00675C7A /* EditingToolsBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737485D290AE43D00675C7A /* EditingToolsBottomView.swift */; };
+		D7374860290B18E900675C7A /* AssetsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D737485F290B18E900675C7A /* AssetsDataSource.swift */; };
 		D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C7228F33C5A00475B7D /* AppDelegate.swift */; };
 		D7389C7C28F33C5C00475B7D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7389C7B28F33C5C00475B7D /* Assets.xcassets */; };
 		D7389C7F28F33C5C00475B7D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7389C7D28F33C5C00475B7D /* LaunchScreen.storyboard */; };
@@ -135,6 +136,7 @@
 		D7374859290A9AAA00675C7A /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
 		D737485B290AA6EA00675C7A /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
 		D737485D290AE43D00675C7A /* EditingToolsBottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingToolsBottomView.swift; sourceTree = "<group>"; };
+		D737485F290B18E900675C7A /* AssetsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsDataSource.swift; sourceTree = "<group>"; };
 		D7389C6F28F33C5A00475B7D /* TelegramMediaEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelegramMediaEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7389C7228F33C5A00475B7D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7389C7B28F33C5C00475B7D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				D7389C9428F3627B00475B7D /* PhotosViewController.swift */,
+				D737485F290B18E900675C7A /* AssetsDataSource.swift */,
 				D7389CA128F36F9800475B7D /* PhotoCell.swift */,
 			);
 			path = Photos;
@@ -641,6 +644,7 @@
 				7212E9FB28FF536B00AA6C00 /* ColorCodeView.swift in Sources */,
 				D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */,
 				D7B0C55A29071E2900EBA3ED /* PhotoZoomOutAnimation.swift in Sources */,
+				D7374860290B18E900675C7A /* AssetsDataSource.swift in Sources */,
 				D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */,
 				D7B0C5422906C9E900EBA3ED /* CanvasView.swift in Sources */,
 				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
