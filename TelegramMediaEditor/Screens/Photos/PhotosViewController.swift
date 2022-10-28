@@ -30,9 +30,14 @@ final class PhotosViewController: UICollectionViewController {
         super.loadView()
         
         setupViews()
-        
         dataSource.collectionView = collectionView
-        dataSource.loadAssets()
+        
+        DispatchQueue.global().async {
+            self.dataSource.loadAssets()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -46,6 +51,7 @@ private extension PhotosViewController {
     
     func setupViews() {
         view.backgroundColor = .black
+        collectionView.prefetchDataSource = self
         collectionView.backgroundColor = .clear
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifer)
     }
