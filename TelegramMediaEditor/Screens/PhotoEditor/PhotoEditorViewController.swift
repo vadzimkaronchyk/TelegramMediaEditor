@@ -26,10 +26,11 @@ final class PhotoEditorViewController: UIViewController {
     private let canvasView = CanvasView()
     private let editingToolsView = EditingToolsView()
     
+    private(set) var isDrawingSaved = false
+    private var drawingColor: HSBColor = .white
+    
     private let asset: PHAsset
     private let imageManager = PHCachingImageManager()
-    
-    private var drawingColor: HSBColor = .white
     
     init(asset: PHAsset) {
         self.asset = asset
@@ -132,7 +133,9 @@ private extension PhotoEditorViewController {
             self?.dismiss(animated: true)
         }
         editingToolsView.onSaveTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            guard let self = self else { return }
+            let image = self.makeDrawingSnapshot()
+            self.saveImage(image)
         }
         editingToolsView.onStrokeShapeTapped = { [weak self] view in
             self?.presentStrokeShapePopover(sourceView: view)
@@ -140,6 +143,10 @@ private extension PhotoEditorViewController {
         editingToolsView.onColorSelected = { [weak self] color in
             self?.handleEditingToolsViewSelectedColor(color)
         }
+    }
+    
+    func makeDrawingSnapshot() -> UIImage {
+        view.snapshot(in: canvasView.frame)
     }
     
     func presentColorPicker() {
@@ -228,6 +235,27 @@ private extension PhotoEditorViewController {
         drawingColor = color
         canvasView.drawingColor = color.uiColor
     }
+    
+    func saveImage(_ image: UIImage) {
+        PHPhotoLibrary.shared().performChanges {
+            PHAssetCreationRequest.creationRequestForAsset(from: image)
+        } completionHandler: { saved, error in
+            DispatchQueue.main.async {
+                if saved {
+                    self.isDrawingSaved = true
+                    self.dismiss(animated: true)
+                } else {
+                    self.presentSavingImageErrorAlert(error: error)
+                }
+            }
+        }
+    }
+    
+    func presentSavingImageErrorAlert(error: Error?) {
+        let alertController = UIAlertController(title: error?.localizedDescription ?? "Unknown Error", message: nil, preferredStyle: .alert)
+        alertController.addAction(.init(title: "Ok", style: .cancel))
+        present(alertController, animated: true)
+    }
 }
 
 // MARK: - Actions
@@ -252,7 +280,16 @@ extension PhotoEditorViewController: UIPopoverPresentationControllerDelegate {
 
 extension PhotoEditorViewController {
     
-    func transitionImageView() -> UIImageView? {
-        photoImageView
+    var drawingImageView: UIImageView {
+        if isDrawingSaved {
+            let image = makeDrawingSnapshot()
+            let imageView = UIImageView(image: image)
+            imageView.frame = photoImageView.frame
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            return imageView
+        } else {
+            return photoImageView
+        }
     }
 }

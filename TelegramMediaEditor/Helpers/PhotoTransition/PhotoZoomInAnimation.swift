@@ -18,8 +18,7 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
             let fromViewController = transitionContext.viewController(forKey: .from) as? PhotosViewController,
             let toNavigationController = transitionContext.viewController(forKey: .to) as? UINavigationController,
             let toViewController = toNavigationController.topViewController as? PhotoEditorViewController,
-            let fromImageView = fromViewController.transitionImageView(),
-            let toImageView = toViewController.transitionImageView()
+            let fromImageView = fromViewController.selectedPhotoImageView
         else {
             transitionContext.completeTransition(false)
             return
@@ -28,6 +27,7 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
         toNavigationController.view.layoutIfNeeded()
         toViewController.view.frame = .zero // workaround to layout subviews properly with nav bar
         
+        let toImageView = toViewController.drawingImageView
         let containerView = transitionContext.containerView
         
         let photoImageView = UIImageView()

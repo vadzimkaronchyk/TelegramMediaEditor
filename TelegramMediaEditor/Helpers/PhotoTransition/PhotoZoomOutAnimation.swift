@@ -18,15 +18,13 @@ final class PhotoZoomOutAnimation: NSObject, UIViewControllerAnimatedTransitioni
             let fromNavigationController = transitionContext.viewController(forKey: .from) as? UINavigationController,
             let fromViewController = fromNavigationController.topViewController as? PhotoEditorViewController,
             let toViewController = transitionContext.viewController(forKey: .to) as? PhotosViewController,
-            let fromImageView = fromViewController.transitionImageView(),
-            let toImageView = toViewController.transitionImageView()
+            let toImageView = fromViewController.isDrawingSaved ? toViewController.firstPhotoImageView : toViewController.selectedPhotoImageView
         else {
             transitionContext.completeTransition(false)
             return
         }
         
-        toViewController.view.layoutIfNeeded()
-        
+        let fromImageView = fromViewController.drawingImageView
         let containerView = transitionContext.containerView
         
         let photoImageView = UIImageView()

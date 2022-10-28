@@ -139,9 +139,14 @@ extension PhotosViewController: UICollectionViewDataSourcePrefetching {
 
 extension PhotosViewController {
     
-    func transitionImageView() -> UIImageView? {
+    var selectedPhotoImageView: UIImageView? {
         guard let selectedIndexPath = selectedIndexPath else { return nil }
         let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+        return cell?.imageView
+    }
+    
+    var firstPhotoImageView: UIImageView? {
+        let cell = collectionView.cellForItem(at: .init(item: 0, section: 0)) as? PhotoCell
         return cell?.imageView
     }
 }

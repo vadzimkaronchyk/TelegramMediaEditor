@@ -34,14 +34,10 @@ class ShimmerButton: UIButton {
     }
     
     func startAnimation() {
-        guard let image = snapshot?.withRenderingMode(.alwaysTemplate) else {
-            return
-        }
-        
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: snapshot().withRenderingMode(.alwaysTemplate))
         imageView.tintColor = UIColor(white: 0.9, alpha: 1.0)
         
-        guard let image = imageView.snapshot else { return }
+        let image = imageView.snapshot()
         
         let width = bounds.size.width
         let height = bounds.size.height

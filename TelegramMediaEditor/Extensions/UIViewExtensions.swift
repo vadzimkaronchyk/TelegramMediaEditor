@@ -9,13 +9,10 @@ import UIKit
 
 extension UIView {
     
-    var snapshot: UIImage? {
-        let renderer = UIGraphicsImageRenderer(size: bounds.size)
-        
-        let image = renderer.image { context in
-            layer.render(in: context.cgContext)
+    func snapshot(in bounds: CGRect? = nil) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds ?? self.bounds)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
         }
-        
-        return image
     }
 }
