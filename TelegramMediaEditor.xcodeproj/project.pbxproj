@@ -56,9 +56,9 @@
 		D7389C8B28F3487800475B7D /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D7389C8A28F3487800475B7D /* Lottie */; };
 		D7389C8E28F34BC000475B7D /* duck.json in Resources */ = {isa = PBXBuildFile; fileRef = D7389C8D28F34BC000475B7D /* duck.json */; };
 		D7389C9328F35C4B00475B7D /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C9228F35C4B00475B7D /* AppRouter.swift */; };
-		D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C9428F3627B00475B7D /* PhotosViewController.swift */; };
-		D7389CA228F36F9800475B7D /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CA128F36F9800475B7D /* PhotoCell.swift */; };
-		D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB328F40CFA00475B7D /* PhotoEditorViewController.swift */; };
+		D7389C9528F3627B00475B7D /* AssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389C9428F3627B00475B7D /* AssetsViewController.swift */; };
+		D7389CA228F36F9800475B7D /* AssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CA128F36F9800475B7D /* AssetCell.swift */; };
+		D7389CB428F40CFA00475B7D /* AssetEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB328F40CFA00475B7D /* AssetEditorViewController.swift */; };
 		D7389CB628F47E7400475B7D /* EditingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB528F47E7400475B7D /* EditingToolsView.swift */; };
 		D7389CBA28F4AF2E00475B7D /* PenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CB928F4AF2E00475B7D /* PenView.swift */; };
 		D7389CBC28F4AF5E00475B7D /* BrushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7389CBB28F4AF5E00475B7D /* BrushView.swift */; };
@@ -88,9 +88,9 @@
 		D7B0C5472906D85900EBA3ED /* CGRectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */; };
 		D7B0C54B2906EBC700EBA3ED /* ShimmerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */; };
 		D7B0C54D2907028300EBA3ED /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */; };
-		D7B0C55029070F6200EBA3ED /* PhotoZoomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54F29070F6200EBA3ED /* PhotoZoomTransition.swift */; };
-		D7B0C55829071E2000EBA3ED /* PhotoZoomInAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55729071E2000EBA3ED /* PhotoZoomInAnimation.swift */; };
-		D7B0C55A29071E2900EBA3ED /* PhotoZoomOutAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55929071E2900EBA3ED /* PhotoZoomOutAnimation.swift */; };
+		D7B0C55029070F6200EBA3ED /* AssetZoomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54F29070F6200EBA3ED /* AssetZoomTransition.swift */; };
+		D7B0C55829071E2000EBA3ED /* AssetZoomInAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55729071E2000EBA3ED /* AssetZoomInAnimation.swift */; };
+		D7B0C55A29071E2900EBA3ED /* AssetZoomOutAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55929071E2900EBA3ED /* AssetZoomOutAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,9 +145,9 @@
 		D7389C8628F345D100475B7D /* MediaAccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaAccessViewController.swift; sourceTree = "<group>"; };
 		D7389C8D28F34BC000475B7D /* duck.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = duck.json; sourceTree = "<group>"; };
 		D7389C9228F35C4B00475B7D /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
-		D7389C9428F3627B00475B7D /* PhotosViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosViewController.swift; sourceTree = "<group>"; };
-		D7389CA128F36F9800475B7D /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
-		D7389CB328F40CFA00475B7D /* PhotoEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoEditorViewController.swift; sourceTree = "<group>"; };
+		D7389C9428F3627B00475B7D /* AssetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsViewController.swift; sourceTree = "<group>"; };
+		D7389CA128F36F9800475B7D /* AssetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetCell.swift; sourceTree = "<group>"; };
+		D7389CB328F40CFA00475B7D /* AssetEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetEditorViewController.swift; sourceTree = "<group>"; };
 		D7389CB528F47E7400475B7D /* EditingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingToolsView.swift; sourceTree = "<group>"; };
 		D7389CB928F4AF2E00475B7D /* PenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenView.swift; sourceTree = "<group>"; };
 		D7389CBB28F4AF5E00475B7D /* BrushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrushView.swift; sourceTree = "<group>"; };
@@ -177,9 +177,9 @@
 		D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtensions.swift; sourceTree = "<group>"; };
 		D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerButton.swift; sourceTree = "<group>"; };
 		D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
-		D7B0C54F29070F6200EBA3ED /* PhotoZoomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomTransition.swift; sourceTree = "<group>"; };
-		D7B0C55729071E2000EBA3ED /* PhotoZoomInAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomInAnimation.swift; sourceTree = "<group>"; };
-		D7B0C55929071E2900EBA3ED /* PhotoZoomOutAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomOutAnimation.swift; sourceTree = "<group>"; };
+		D7B0C54F29070F6200EBA3ED /* AssetZoomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetZoomTransition.swift; sourceTree = "<group>"; };
+		D7B0C55729071E2000EBA3ED /* AssetZoomInAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetZoomInAnimation.swift; sourceTree = "<group>"; };
+		D7B0C55929071E2900EBA3ED /* AssetZoomOutAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetZoomOutAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,7 +247,7 @@
 		72C42C8C29000FD600823835 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				D7B0C54E29070F4E00EBA3ED /* PhotoTransition */,
+				D7B0C54E29070F4E00EBA3ED /* AssetZoomTransition */,
 				7212E9F828FF44A200AA6C00 /* HSBColor.swift */,
 				72C42C8A29000FD200823835 /* RGBColor.swift */,
 				72C42CA1290149B400823835 /* Progress.swift */,
@@ -364,8 +364,8 @@
 			isa = PBXGroup;
 			children = (
 				D7389C9F28F36F6200475B7D /* MediaAccess */,
-				D7389CA028F36F6A00475B7D /* Photos */,
-				D7389CB228F40CDE00475B7D /* PhotoEditor */,
+				D7389CA028F36F6A00475B7D /* Assets */,
+				D7389CB228F40CDE00475B7D /* AssetEditor */,
 				D79130FF28F7E91D0074A5A0 /* ColorPicker */,
 				D79130FA28F733A20074A5A0 /* MenuPopover */,
 			);
@@ -392,23 +392,23 @@
 			path = MediaAccess;
 			sourceTree = "<group>";
 		};
-		D7389CA028F36F6A00475B7D /* Photos */ = {
+		D7389CA028F36F6A00475B7D /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				D7389C9428F3627B00475B7D /* PhotosViewController.swift */,
+				D7389C9428F3627B00475B7D /* AssetsViewController.swift */,
 				D737485F290B18E900675C7A /* AssetsDataSource.swift */,
-				D7389CA128F36F9800475B7D /* PhotoCell.swift */,
+				D7389CA128F36F9800475B7D /* AssetCell.swift */,
 			);
-			path = Photos;
+			path = Assets;
 			sourceTree = "<group>";
 		};
-		D7389CB228F40CDE00475B7D /* PhotoEditor */ = {
+		D7389CB228F40CDE00475B7D /* AssetEditor */ = {
 			isa = PBXGroup;
 			children = (
-				D7389CB328F40CFA00475B7D /* PhotoEditorViewController.swift */,
+				D7389CB328F40CFA00475B7D /* AssetEditorViewController.swift */,
 				D7389CC628F4B14A00475B7D /* Views */,
 			);
-			path = PhotoEditor;
+			path = AssetEditor;
 			sourceTree = "<group>";
 		};
 		D7389CC528F4B12E00475B7D /* Tools */ = {
@@ -516,14 +516,14 @@
 			path = CanvasView;
 			sourceTree = "<group>";
 		};
-		D7B0C54E29070F4E00EBA3ED /* PhotoTransition */ = {
+		D7B0C54E29070F4E00EBA3ED /* AssetZoomTransition */ = {
 			isa = PBXGroup;
 			children = (
-				D7B0C54F29070F6200EBA3ED /* PhotoZoomTransition.swift */,
-				D7B0C55729071E2000EBA3ED /* PhotoZoomInAnimation.swift */,
-				D7B0C55929071E2900EBA3ED /* PhotoZoomOutAnimation.swift */,
+				D7B0C54F29070F6200EBA3ED /* AssetZoomTransition.swift */,
+				D7B0C55729071E2000EBA3ED /* AssetZoomInAnimation.swift */,
+				D7B0C55929071E2900EBA3ED /* AssetZoomOutAnimation.swift */,
 			);
-			path = PhotoTransition;
+			path = AssetZoomTransition;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -615,12 +615,12 @@
 				D791310D28F80C650074A5A0 /* ColorPickerSeparatorView.swift in Sources */,
 				D791310528F7F94B0074A5A0 /* ColorPickerSpectrumView.swift in Sources */,
 				D7389C9328F35C4B00475B7D /* AppRouter.swift in Sources */,
-				D7B0C55029070F6200EBA3ED /* PhotoZoomTransition.swift in Sources */,
+				D7B0C55029070F6200EBA3ED /* AssetZoomTransition.swift in Sources */,
 				72C42C9329002EB200823835 /* CGPointExtensions.swift in Sources */,
 				72C42CB429034F2900823835 /* ColorGridCursorView.swift in Sources */,
 				7212E9C128FD590200AA6C00 /* ColorPreviewView.swift in Sources */,
 				D7B0C54D2907028300EBA3ED /* UIViewExtensions.swift in Sources */,
-				D7389CA228F36F9800475B7D /* PhotoCell.swift in Sources */,
+				D7389CA228F36F9800475B7D /* AssetCell.swift in Sources */,
 				D7389CBC28F4AF5E00475B7D /* BrushView.swift in Sources */,
 				D737485C290AA6EA00675C7A /* Shape.swift in Sources */,
 				7212E9F728FF017300AA6C00 /* ColorSliderTrackView.swift in Sources */,
@@ -643,11 +643,11 @@
 				D791310F28F80CF90074A5A0 /* UIStackViewExtensions.swift in Sources */,
 				7212E9FB28FF536B00AA6C00 /* ColorCodeView.swift in Sources */,
 				D79130F928F72C4F0074A5A0 /* Closure.swift in Sources */,
-				D7B0C55A29071E2900EBA3ED /* PhotoZoomOutAnimation.swift in Sources */,
+				D7B0C55A29071E2900EBA3ED /* AssetZoomOutAnimation.swift in Sources */,
 				D7374860290B18E900675C7A /* AssetsDataSource.swift in Sources */,
-				D7389CB428F40CFA00475B7D /* PhotoEditorViewController.swift in Sources */,
+				D7389CB428F40CFA00475B7D /* AssetEditorViewController.swift in Sources */,
 				D7B0C5422906C9E900EBA3ED /* CanvasView.swift in Sources */,
-				D7389C9528F3627B00475B7D /* PhotosViewController.swift in Sources */,
+				D7389C9528F3627B00475B7D /* AssetsViewController.swift in Sources */,
 				72C42C90290015AC00823835 /* ColorSliderModel.swift in Sources */,
 				D75F30F228FA09F20080F208 /* ColorSpectrumView.swift in Sources */,
 				7212E9CC28FDEB0C00AA6C00 /* ColorsDataSource.swift in Sources */,
@@ -670,7 +670,7 @@
 				72C42CA62901B2F600823835 /* PaddedTextField.swift in Sources */,
 				D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */,
 				72C42CB629036A7600823835 /* ColorsCircleView.swift in Sources */,
-				D7B0C55829071E2000EBA3ED /* PhotoZoomInAnimation.swift in Sources */,
+				D7B0C55829071E2000EBA3ED /* AssetZoomInAnimation.swift in Sources */,
 				72C42CB8290565E500823835 /* EyeDropperColorPickerWindow.swift in Sources */,
 				72C42C8E2900107200823835 /* UIColorExtensions.swift in Sources */,
 				D7389C7328F33C5A00475B7D /* AppDelegate.swift in Sources */,

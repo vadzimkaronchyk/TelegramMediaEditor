@@ -1,5 +1,5 @@
 //
-//  PhotosViewController.swift
+//  AssetsViewController.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/9/22.
@@ -8,18 +8,18 @@
 import UIKit
 import Photos
 
-final class PhotosViewController: UICollectionViewController {
+final class AssetsViewController: UICollectionViewController {
     
     var onAccessRestricted: VoidClosure?
-    var onPhotoSelected: Closure<(PhotoZoomTransition, PHAsset)>?
+    var onAssetSelected: Closure<(AssetZoomTransition, PHAsset)>?
     
     private var selectedIndexPath: IndexPath?
     
     private lazy var dataSource = AssetsDataSource()
-    private let photoZoomTransition = PhotoZoomTransition()
+    private let zoomTransition = AssetZoomTransition()
     
     init() {
-        super.init(collectionViewLayout: .photos())
+        super.init(collectionViewLayout: .assets())
     }
     
     required init?(coder: NSCoder) {
@@ -47,17 +47,17 @@ final class PhotosViewController: UICollectionViewController {
     }
 }
 
-private extension PhotosViewController {
+private extension AssetsViewController {
     
     func setupViews() {
         view.backgroundColor = .black
         collectionView.prefetchDataSource = self
         collectionView.backgroundColor = .clear
-        collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifer)
+        collectionView.register(AssetCell.self, forCellWithReuseIdentifier: AssetCell.reuseIdentifer)
     }
 }
 
-extension PhotosViewController {
+extension AssetsViewController {
     
     override func collectionView(
         _ collectionView: UICollectionView,
@@ -74,9 +74,9 @@ extension PhotosViewController {
             return .init()
         }
         let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: PhotoCell.reuseIdentifer,
+            withReuseIdentifier: AssetCell.reuseIdentifer,
             for: indexPath
-        ) as! PhotoCell
+        ) as! AssetCell
         cell.imageView.image = nil
         cell.assetIdentifier = asset.localIdentifier
         dataSource.requestImage(at: asset) { image in
@@ -96,7 +96,7 @@ extension PhotosViewController {
             return
         }
         selectedIndexPath = indexPath
-        onPhotoSelected?((photoZoomTransition, asset))
+        onAssetSelected?((zoomTransition, asset))
     }
     
     override func collectionView(
@@ -116,7 +116,7 @@ extension PhotosViewController {
     }
 }
 
-extension PhotosViewController: UICollectionViewDataSourcePrefetching {
+extension AssetsViewController: UICollectionViewDataSourcePrefetching {
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -137,23 +137,23 @@ extension PhotosViewController: UICollectionViewDataSourcePrefetching {
     }
 }
 
-extension PhotosViewController {
+extension AssetsViewController {
     
-    var selectedPhotoImageView: UIImageView? {
+    var selectedAssetImageView: UIImageView? {
         guard let selectedIndexPath = selectedIndexPath else { return nil }
-        let cell = collectionView.cellForItem(at: selectedIndexPath) as? PhotoCell
+        let cell = collectionView.cellForItem(at: selectedIndexPath) as? AssetCell
         return cell?.imageView
     }
     
-    var firstPhotoImageView: UIImageView? {
-        let cell = collectionView.cellForItem(at: .init(item: 0, section: 0)) as? PhotoCell
+    var firstAssetImageView: UIImageView? {
+        let cell = collectionView.cellForItem(at: .init(item: 0, section: 0)) as? AssetCell
         return cell?.imageView
     }
 }
 
 private extension UICollectionViewLayout {
     
-    static func photos() -> UICollectionViewCompositionalLayout {
+    static func assets() -> UICollectionViewCompositionalLayout {
         let fraction: CGFloat = 1 / 3
         let inset: CGFloat = 1
         

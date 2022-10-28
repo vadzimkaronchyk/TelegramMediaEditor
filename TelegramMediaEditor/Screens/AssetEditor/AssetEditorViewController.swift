@@ -1,5 +1,5 @@
 //
-//  PhotoEditorViewController.swift
+//  AssetEditorViewController.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/10/22.
@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-final class PhotoEditorViewController: UIViewController {
+final class AssetEditorViewController: UIViewController {
     
     private lazy var undoBarButtonItem = UIBarButtonItem(
         image: .init(named: "undo"),
@@ -22,7 +22,7 @@ final class PhotoEditorViewController: UIViewController {
         target: self,
         action: #selector(clearBarButtonItemTapped)
     )
-    private let photoImageView = UIImageView()
+    private let assetImageView = UIImageView()
     private let canvasView = CanvasView()
     private let editingToolsView = EditingToolsView()
     
@@ -50,26 +50,26 @@ final class PhotoEditorViewController: UIViewController {
     }
 }
 
-private extension PhotoEditorViewController {
+private extension AssetEditorViewController {
     
     func setupLayout() {
-        view.addSubview(photoImageView)
+        view.addSubview(assetImageView)
         view.addSubview(canvasView)
         view.addSubview(editingToolsView)
         
-        photoImageView.translatesAutoresizingMaskIntoConstraints = false
+        assetImageView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         editingToolsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            photoImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            photoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            photoImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
-            canvasView.topAnchor.constraint(equalTo: photoImageView.topAnchor),
-            canvasView.leadingAnchor.constraint(equalTo: photoImageView.leadingAnchor),
-            canvasView.trailingAnchor.constraint(equalTo: photoImageView.trailingAnchor),
-            canvasView.bottomAnchor.constraint(equalTo: photoImageView.bottomAnchor),
+            assetImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            assetImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            assetImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            assetImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
+            canvasView.topAnchor.constraint(equalTo: assetImageView.topAnchor),
+            canvasView.leadingAnchor.constraint(equalTo: assetImageView.leadingAnchor),
+            canvasView.trailingAnchor.constraint(equalTo: assetImageView.trailingAnchor),
+            canvasView.bottomAnchor.constraint(equalTo: assetImageView.bottomAnchor),
             editingToolsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             editingToolsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             editingToolsView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
@@ -81,7 +81,7 @@ private extension PhotoEditorViewController {
         setupNavigationItem()
         setupUndoBarButtonItem()
         setupClearBarButtonItem()
-        setupPhotoImageView()
+        setupAssetImageView()
         setupCanvasView()
         setupEditingToolsView()
         updateDrawingColor(.white)
@@ -106,9 +106,9 @@ private extension PhotoEditorViewController {
         clearBarButtonItem.tintColor = .white
     }
     
-    func setupPhotoImageView() {
-        photoImageView.contentMode = .scaleAspectFill
-        photoImageView.clipsToBounds = true
+    func setupAssetImageView() {
+        assetImageView.contentMode = .scaleAspectFill
+        assetImageView.clipsToBounds = true
     }
     
     func setupCanvasView() {
@@ -221,7 +221,7 @@ private extension PhotoEditorViewController {
             contentMode: .aspectFill,
             options: nil
         ) { [weak self] image, info in
-            self?.photoImageView.image = image
+            self?.assetImageView.image = image
         }
     }
     
@@ -260,7 +260,7 @@ private extension PhotoEditorViewController {
 
 // MARK: - Actions
 
-private extension PhotoEditorViewController {
+private extension AssetEditorViewController {
     
     @objc func undoBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
         canvasView.undo()
@@ -271,25 +271,25 @@ private extension PhotoEditorViewController {
     }
 }
 
-extension PhotoEditorViewController: UIPopoverPresentationControllerDelegate {
+extension AssetEditorViewController: UIPopoverPresentationControllerDelegate {
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
     }
 }
 
-extension PhotoEditorViewController {
+extension AssetEditorViewController {
     
     var drawingImageView: UIImageView {
         if isDrawingSaved {
             let image = makeDrawingSnapshot()
             let imageView = UIImageView(image: image)
-            imageView.frame = photoImageView.frame
+            imageView.frame = assetImageView.frame
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
             return imageView
         } else {
-            return photoImageView
+            return assetImageView
         }
     }
 }

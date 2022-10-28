@@ -1,5 +1,5 @@
 //
-//  PhotoCell.swift
+//  AssetCell.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/10/22.
@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class PhotoCell: UICollectionViewCell {
+final class AssetCell: UICollectionViewCell {
     
     let imageView = UIImageView()
     
     var assetIdentifier: String?
     
-    static let reuseIdentifer = "PhotoCell"
+    static let reuseIdentifer = "AssetCell"
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -39,8 +39,8 @@ final class ColorPickerViewController: UIViewController {
     
     private(set) var selectedColor: HSBColor = .black
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         setupLayout()
         setupViews()

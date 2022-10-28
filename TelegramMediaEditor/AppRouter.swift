@@ -23,12 +23,12 @@ private extension AppRouter {
     func showMediaAccessScreen() {
         let viewController = MediaAccessViewController()
         viewController.onAccessGranted = { [weak self] in
-            self?.showPhotosScreen()
+            self?.showAssetsScreen()
         }
         window.rootViewController = viewController
     }
     
-    func showPhotosScreen() {
+    func showAssetsScreen() {
         let transition = CATransition()
         transition.type = .reveal
         transition.subtype = .fromBottom
@@ -36,12 +36,12 @@ private extension AppRouter {
         transition.timingFunction = CAMediaTimingFunction(name: .easeIn)
         window.layer.add(transition, forKey: kCATransition)
         
-        let viewController = PhotosViewController()
+        let viewController = AssetsViewController()
         viewController.onAccessRestricted = { [weak self] in
             self?.showMediaAccessScreen()
         }
-        viewController.onPhotoSelected = { [weak self] in
-            self?.showPhotoEditorScreen(
+        viewController.onAssetSelected = { [weak self] in
+            self?.showAssetEditorScreen(
                 fromViewController: viewController,
                 withTransition: $0.0,
                 asset: $0.1
@@ -50,12 +50,12 @@ private extension AppRouter {
         window.rootViewController = viewController
     }
     
-    func showPhotoEditorScreen(
-        fromViewController: PhotosViewController,
-        withTransition transition: PhotoZoomTransition,
+    func showAssetEditorScreen(
+        fromViewController: AssetsViewController,
+        withTransition transition: AssetZoomTransition,
         asset: PHAsset
     ) {
-        let viewController = PhotoEditorViewController(asset: asset)
+        let viewController = AssetEditorViewController(asset: asset)
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.navigationBar.standardAppearance = {
             let appearance = UINavigationBarAppearance()

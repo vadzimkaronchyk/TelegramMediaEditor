@@ -1,5 +1,5 @@
 //
-//  ZoomTransition.swift
+//  AssetZoomTransition.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/24/22.
@@ -7,19 +7,19 @@
 
 import UIKit
 
-final class PhotoZoomTransition: NSObject, UIViewControllerTransitioningDelegate {
+final class AssetZoomTransition: NSObject, UIViewControllerTransitioningDelegate {
     
     func animationController(
         forPresented presented: UIViewController,
         presenting: UIViewController,
         source: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        PhotoZoomInAnimation()
+        AssetZoomInAnimation()
     }
     
     func animationController(
         forDismissed dismissed: UIViewController
     ) -> UIViewControllerAnimatedTransitioning? {
-        PhotoZoomOutAnimation()
+        AssetZoomOutAnimation()
     }
 }

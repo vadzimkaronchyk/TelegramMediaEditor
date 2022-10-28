@@ -1,5 +1,5 @@
 //
-//  PhotoZoomInAnimation.swift
+//  AssetZoomInAnimation.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/24/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitioning {
+final class AssetZoomInAnimation: NSObject, UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         0.3
@@ -15,10 +15,10 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
-            let fromViewController = transitionContext.viewController(forKey: .from) as? PhotosViewController,
+            let fromViewController = transitionContext.viewController(forKey: .from) as? AssetsViewController,
             let toNavigationController = transitionContext.viewController(forKey: .to) as? UINavigationController,
-            let toViewController = toNavigationController.topViewController as? PhotoEditorViewController,
-            let fromImageView = fromViewController.selectedPhotoImageView
+            let toViewController = toNavigationController.topViewController as? AssetEditorViewController,
+            let fromImageView = fromViewController.selectedAssetImageView
         else {
             transitionContext.completeTransition(false)
             return
@@ -30,28 +30,27 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
         let toImageView = toViewController.drawingImageView
         let containerView = transitionContext.containerView
         
-        let photoImageView = UIImageView()
-        photoImageView.clipsToBounds = true
-        photoImageView.contentMode = fromImageView.contentMode
-        photoImageView.image = fromImageView.image
-        photoImageView.frame = containerView.convert(fromImageView.frame, from: fromImageView.superview)
+        let assetImageView = UIImageView()
+        assetImageView.clipsToBounds = true
+        assetImageView.contentMode = fromImageView.contentMode
+        assetImageView.image = fromImageView.image
+        assetImageView.frame = containerView.convert(fromImageView.frame, from: fromImageView.superview)
         
         containerView.addSubview(toNavigationController.view)
-        containerView.addSubview(photoImageView)
+        containerView.addSubview(assetImageView)
         
         toNavigationController.view.alpha = 0
         toImageView.alpha = 0
         
-        let photoDuration = transitionDuration(using: transitionContext)
         UIView.animateKeyframes(
-            withDuration: photoDuration,
+            withDuration: transitionDuration(using: transitionContext),
             delay: 0,
             animations: {
                 UIView.addKeyframe(
                     withRelativeStartTime: 0,
                     relativeDuration: 0.6
                 ) {
-                    photoImageView.frame = containerView.convert(toImageView.frame, from: toImageView.superview)
+                    assetImageView.frame = containerView.convert(toImageView.frame, from: toImageView.superview)
                 }
                 UIView.addKeyframe(
                     withRelativeStartTime: 0.2,
@@ -69,11 +68,11 @@ final class PhotoZoomInAnimation: NSObject, UIViewControllerAnimatedTransitionin
                     withRelativeStartTime: 0.6,
                     relativeDuration: 0.4
                 ) {
-                    photoImageView.alpha = 0
+                    assetImageView.alpha = 0
                 }
             },
             completion: { finished in
-                photoImageView.removeFromSuperview()
+                assetImageView.removeFromSuperview()
                 transitionContext.completeTransition(finished)
             }
         )

@@ -1,5 +1,5 @@
 //
-//  PhotoZoomOutAnimation.swift
+//  AssetZoomOutAnimation.swift
 //  TelegramMediaEditor
 //
 //  Created by Vadzim Karonchyk on 10/24/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PhotoZoomOutAnimation: NSObject, UIViewControllerAnimatedTransitioning {
+final class AssetZoomOutAnimation: NSObject, UIViewControllerAnimatedTransitioning {
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         0.25
@@ -16,9 +16,9 @@ final class PhotoZoomOutAnimation: NSObject, UIViewControllerAnimatedTransitioni
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard
             let fromNavigationController = transitionContext.viewController(forKey: .from) as? UINavigationController,
-            let fromViewController = fromNavigationController.topViewController as? PhotoEditorViewController,
-            let toViewController = transitionContext.viewController(forKey: .to) as? PhotosViewController,
-            let toImageView = fromViewController.isDrawingSaved ? toViewController.firstPhotoImageView : toViewController.selectedPhotoImageView
+            let fromViewController = fromNavigationController.topViewController as? AssetEditorViewController,
+            let toViewController = transitionContext.viewController(forKey: .to) as? AssetsViewController,
+            let toImageView = fromViewController.isDrawingSaved ? toViewController.firstAssetImageView : toViewController.selectedAssetImageView
         else {
             transitionContext.completeTransition(false)
             return
