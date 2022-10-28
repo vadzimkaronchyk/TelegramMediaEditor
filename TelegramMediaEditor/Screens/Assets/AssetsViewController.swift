@@ -77,13 +77,15 @@ extension AssetsViewController {
             withReuseIdentifier: AssetCell.reuseIdentifer,
             for: indexPath
         ) as! AssetCell
-        cell.imageView.image = nil
+        
         cell.assetIdentifier = asset.localIdentifier
+        cell.setDuration(asset.duration)
+        
         dataSource.requestImage(at: asset) { image in
             guard cell.assetIdentifier == asset.localIdentifier else {
                 return
             }
-            cell.imageView.image = image
+            cell.setImage(image)
         }
         return cell
     }
