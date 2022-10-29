@@ -91,6 +91,7 @@
 		D7B0C55029070F6200EBA3ED /* AssetZoomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C54F29070F6200EBA3ED /* AssetZoomTransition.swift */; };
 		D7B0C55829071E2000EBA3ED /* AssetZoomInAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55729071E2000EBA3ED /* AssetZoomInAnimation.swift */; };
 		D7B0C55A29071E2900EBA3ED /* AssetZoomOutAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B0C55929071E2900EBA3ED /* AssetZoomOutAnimation.swift */; };
+		D7E5C130290D644300DF7812 /* VideoEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E5C12F290D644300DF7812 /* VideoEditor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -180,6 +181,7 @@
 		D7B0C54F29070F6200EBA3ED /* AssetZoomTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetZoomTransition.swift; sourceTree = "<group>"; };
 		D7B0C55729071E2000EBA3ED /* AssetZoomInAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetZoomInAnimation.swift; sourceTree = "<group>"; };
 		D7B0C55929071E2900EBA3ED /* AssetZoomOutAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetZoomOutAnimation.swift; sourceTree = "<group>"; };
+		D7E5C12F290D644300DF7812 /* VideoEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -406,6 +408,7 @@
 			isa = PBXGroup;
 			children = (
 				D7389CB328F40CFA00475B7D /* AssetEditorViewController.swift */,
+				D7E5C12F290D644300DF7812 /* VideoEditor.swift */,
 				D7389CC628F4B14A00475B7D /* Views */,
 			);
 			path = AssetEditor;
@@ -604,6 +607,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72C42C992901457F00823835 /* ColorSliderTextField.swift in Sources */,
+				D7E5C130290D644300DF7812 /* VideoEditor.swift in Sources */,
 				D791310B28F800A20074A5A0 /* ColorPickerColorsView.swift in Sources */,
 				72C42C8B29000FD200823835 /* RGBColor.swift in Sources */,
 				D737485A290A9AAA00675C7A /* Tool.swift in Sources */,

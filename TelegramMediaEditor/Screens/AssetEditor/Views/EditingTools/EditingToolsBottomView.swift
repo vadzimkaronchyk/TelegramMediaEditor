@@ -36,6 +36,10 @@ final class EditingToolsBottomView: UIView {
         bottomControlsView.setSaveButtonEnabled(enabled)
     }
     
+    func setLoadingActive(_ active: Bool) {
+        bottomControlsView.setLoadingActive(active)
+    }
+    
     func showBottomControlsView() {
         bottomControlsView.isHidden = false
         bottomControlsView.transform = .init(translationX: 0, y: bottomControlsView.frame.height)

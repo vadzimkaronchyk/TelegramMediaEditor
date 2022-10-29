@@ -12,6 +12,7 @@ final class BottomControlsView: UIView {
     private let toolsSegmentedControl = UISegmentedControl()
     private let cancelButton = UIButton(type: .system)
     private let saveButton = UIButton(type: .system)
+    private let activityIndicatorView = UIActivityIndicatorView(style: .medium)
     private let contentStackView = UIStackView()
     
     var onCancelTapped: VoidClosure?
@@ -31,6 +32,16 @@ final class BottomControlsView: UIView {
     func setSaveButtonEnabled(_ enabled: Bool) {
         saveButton.isEnabled = enabled
     }
+    
+    func setLoadingActive(_ active: Bool) {
+        saveButton.isHidden = active
+        activityIndicatorView.isHidden = !active
+        if active {
+            activityIndicatorView.startAnimating()
+        } else {
+            activityIndicatorView.stopAnimating()
+        }
+    }
 }
 
 private extension BottomControlsView {
@@ -41,12 +52,15 @@ private extension BottomControlsView {
         toolsSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         
         contentStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate(
             [cancelButton.heightAnchor.constraint(equalTo: cancelButton.widthAnchor),
              saveButton.heightAnchor.constraint(equalTo: saveButton.widthAnchor),
+             activityIndicatorView.heightAnchor.constraint(equalToConstant: 33),
+             activityIndicatorView.widthAnchor.constraint(equalTo: activityIndicatorView.heightAnchor),
              contentStackView.heightAnchor.constraint(equalToConstant: 33)] +
             NSLayoutConstraint.pinViewToSuperviewConstraints(
                 view: contentStackView,
@@ -60,6 +74,8 @@ private extension BottomControlsView {
         setupCancelButton()
         setupSaveButton()
         setupContentStackView()
+        
+        activityIndicatorView.isHidden = true
     }
     
     func setupToolsSegmentedControl() {
@@ -100,7 +116,8 @@ private extension BottomControlsView {
         contentStackView.addArrangedSubviews([
             cancelButton,
             toolsSegmentedControl,
-            saveButton
+            saveButton,
+            activityIndicatorView
         ])
     }
 }

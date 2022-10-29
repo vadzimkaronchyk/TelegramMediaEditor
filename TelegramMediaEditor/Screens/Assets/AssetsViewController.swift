@@ -143,12 +143,35 @@ extension AssetsViewController {
     
     var selectedAssetImageView: UIImageView? {
         guard let selectedIndexPath = selectedIndexPath else { return nil }
+        
+        let visibleIndexPaths = collectionView.indexPathsForVisibleItems
+        if !visibleIndexPaths.contains(selectedIndexPath) {
+            collectionView.scrollToItem(
+                at: selectedIndexPath,
+                at: .centeredVertically,
+                animated: false
+            )
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+            collectionView.layoutIfNeeded()
+        }
+        
         let cell = collectionView.cellForItem(at: selectedIndexPath) as? AssetCell
         return cell?.imageView
     }
     
     var firstAssetImageView: UIImageView? {
-        let cell = collectionView.cellForItem(at: .init(item: 0, section: 0)) as? AssetCell
+        let indexPath = IndexPath(item: 0, section: 0)
+        let visibleIndexPaths = collectionView.indexPathsForVisibleItems
+        if !visibleIndexPaths.contains(indexPath) {
+            collectionView.scrollToItem(
+                at: indexPath,
+                at: .centeredVertically,
+                animated: false
+            )
+            collectionView.reloadItems(at: collectionView.indexPathsForVisibleItems)
+            collectionView.layoutIfNeeded()
+        }
+        let cell = collectionView.cellForItem(at: indexPath) as? AssetCell
         return cell?.imageView
     }
 }

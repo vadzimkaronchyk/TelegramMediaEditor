@@ -58,6 +58,10 @@ final class EditingToolsView: UIView {
     func setSaveButtonEnabled(_ enabled: Bool) {
         bottomView.setSaveButtonEnabled(enabled)
     }
+    
+    func setLoadingActive(_ active: Bool) {
+        bottomView.setLoadingActive(active)
+    }
 }
 
 // MARK: - Setup methods

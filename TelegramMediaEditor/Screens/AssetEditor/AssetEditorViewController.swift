@@ -7,6 +7,7 @@
 
 import UIKit
 import Photos
+import AVFoundation
 
 final class AssetEditorViewController: UIViewController {
     
@@ -130,12 +131,10 @@ private extension AssetEditorViewController {
             self?.presentShapesPopover(sourceView: view)
         }
         editingToolsView.onCancelTapped = { [weak self] in
-            self?.dismiss(animated: true)
+            self?.dismiss()
         }
         editingToolsView.onSaveTapped = { [weak self] in
-            guard let self = self else { return }
-            let image = self.makeDrawingSnapshot()
-            self.saveImage(image)
+            self?.saveDrawing()
         }
         editingToolsView.onStrokeShapeTapped = { [weak self] view in
             self?.presentStrokeShapePopover(sourceView: view)
@@ -143,10 +142,6 @@ private extension AssetEditorViewController {
         editingToolsView.onColorSelected = { [weak self] color in
             self?.handleEditingToolsViewSelectedColor(color)
         }
-    }
-    
-    func makeDrawingSnapshot() -> UIImage {
-        view.snapshot(in: canvasView.frame)
     }
     
     func presentColorPicker() {
@@ -236,23 +231,92 @@ private extension AssetEditorViewController {
         canvasView.drawingColor = color.uiColor
     }
     
-    func saveImage(_ image: UIImage) {
+    func saveDrawing() {
+        switch asset.mediaType {
+        case .video:
+            let image = makeAlphaDrawingSnapshot()
+            let imageManager = PHCachingImageManager()
+            imageManager.requestAVAsset(
+                forVideo: asset,
+                options: nil
+            ) { [weak self] avAsset, _, _ in
+                if let avAsset = avAsset, let image = image.cgImage {
+                    DispatchQueue.main.async {
+                        self?.setLoadingActive(true)
+                    }
+                    VideoEditor.editAndSaveAsset(
+                        avAsset,
+                        withOverlayImage: image
+                    ) { [weak self] saved, error in
+                        DispatchQueue.main.async {
+                            self?.setLoadingActive(false)
+                            if saved {
+                                self?.isDrawingSaved = true
+                                self?.dismiss()
+                            } else {
+                                self?.presentSavingAssetErrorAlert(error: error)
+                            }
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self?.presentSavingAssetErrorAlert()
+                    }
+                }
+            }
+        default:
+            let image = makeDrawingSnapshot()
+            saveToPhotoLibrary(image: image)
+        }
+    }
+    
+    func makeDrawingSnapshot() -> UIImage {
+        view.snapshot(in: canvasView.frame)
+    }
+    
+    func makeAlphaDrawingSnapshot() -> UIImage {
+        canvasView.snapshot()
+    }
+    
+    func setLoadingActive(_ active: Bool) {
+        let canUndo = canvasView.canUndo
+        canvasView.isUserInteractionEnabled = !active
+        undoBarButtonItem.isEnabled = canUndo && !active
+        clearBarButtonItem.isEnabled = canUndo && !active
+        editingToolsView.setLoadingActive(active)
+    }
+    
+    func dismiss() {
+        if let presentedViewController = presentedViewController {
+            presentedViewController.dismiss(animated: true) { [weak self] in
+                self?.dismiss(animated: true)
+            }
+        } else {
+            dismiss(animated: true)
+        }
+    }
+    
+    func saveToPhotoLibrary(image: UIImage) {
         PHPhotoLibrary.shared().performChanges {
             PHAssetCreationRequest.creationRequestForAsset(from: image)
         } completionHandler: { saved, error in
             DispatchQueue.main.async {
                 if saved {
                     self.isDrawingSaved = true
-                    self.dismiss(animated: true)
+                    self.dismiss()
                 } else {
-                    self.presentSavingImageErrorAlert(error: error)
+                    self.presentSavingAssetErrorAlert(error: error)
                 }
             }
         }
     }
     
-    func presentSavingImageErrorAlert(error: Error?) {
-        let alertController = UIAlertController(title: error?.localizedDescription ?? "Unknown Error", message: nil, preferredStyle: .alert)
+    func presentSavingAssetErrorAlert(error: Error? = nil) {
+        let alertController = UIAlertController(
+            title: error?.localizedDescription ?? "Something went worng",
+            message: nil,
+            preferredStyle: .alert
+        )
         alertController.addAction(.init(title: "Ok", style: .cancel))
         present(alertController, animated: true)
     }
