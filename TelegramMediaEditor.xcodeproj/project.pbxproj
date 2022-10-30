@@ -96,6 +96,9 @@
 		D7F724BB290DCDE300660CFF /* LinePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724BA290DCDE300660CFF /* LinePoint.swift */; };
 		D7F724BD290E6A7100660CFF /* CanvasTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724BC290E6A7100660CFF /* CanvasTextView.swift */; };
 		D7F724BF290E8DEE00660CFF /* CanvasStrokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724BE290E8DEE00660CFF /* CanvasStrokeView.swift */; };
+		D7F724C1290EB1D600660CFF /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C0290EB1D600660CFF /* Text.swift */; };
+		D7F724C3290ECF2700660CFF /* CanvasCommitedStrokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */; };
+		D7F724C5290ECF3200660CFF /* CanvasCommitedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -190,6 +193,9 @@
 		D7F724BA290DCDE300660CFF /* LinePoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinePoint.swift; sourceTree = "<group>"; };
 		D7F724BC290E6A7100660CFF /* CanvasTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasTextView.swift; sourceTree = "<group>"; };
 		D7F724BE290E8DEE00660CFF /* CanvasStrokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStrokeView.swift; sourceTree = "<group>"; };
+		D7F724C0290EB1D600660CFF /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasCommitedStrokeView.swift; sourceTree = "<group>"; };
+		D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasCommitedTextView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -258,10 +264,11 @@
 			isa = PBXGroup;
 			children = (
 				D7B0C54E29070F4E00EBA3ED /* AssetZoomTransition */,
-				7212E9F828FF44A200AA6C00 /* HSBColor.swift */,
-				72C42C8A29000FD200823835 /* RGBColor.swift */,
+				D7F724CD290F49EE00660CFF /* Color */,
+				D79130F828F72C4F0074A5A0 /* Closure.swift */,
 				72C42CA1290149B400823835 /* Progress.swift */,
 				72C42CB12903032300823835 /* TimingFunctions.swift */,
+				D7E5C12F290D644300DF7812 /* VideoEditor.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -334,6 +341,10 @@
 				D7374859290A9AAA00675C7A /* Tool.swift */,
 				D7374857290A98D500675C7A /* StrokeShape.swift */,
 				D737485B290AA6EA00675C7A /* Shape.swift */,
+				D7F724B8290DCDD300660CFF /* Canvas.swift */,
+				D7B0C5442906D7C900EBA3ED /* Line.swift */,
+				D7F724C0290EB1D600660CFF /* Text.swift */,
+				D7F724BA290DCDE300660CFF /* LinePoint.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -360,7 +371,8 @@
 				D7389C7228F33C5A00475B7D /* AppDelegate.swift */,
 				D7389C9228F35C4B00475B7D /* AppRouter.swift */,
 				72C42D232906197B00823835 /* AppWindow.swift */,
-				D7389C8828F345D500475B7D /* Screens */,
+				D7F724C7290F490000660CFF /* ViewControllers */,
+				D7F724C6290F48FC00660CFF /* Views */,
 				D7374856290A98C300675C7A /* Models */,
 				72C42C8C29000FD600823835 /* Helpers */,
 				D7389CD128F5B3EE00475B7D /* Extensions */,
@@ -368,18 +380,6 @@
 				D7389C8028F33C5C00475B7D /* Info.plist */,
 			);
 			path = TelegramMediaEditor;
-			sourceTree = "<group>";
-		};
-		D7389C8828F345D500475B7D /* Screens */ = {
-			isa = PBXGroup;
-			children = (
-				D7389C9F28F36F6200475B7D /* MediaAccess */,
-				D7389CA028F36F6A00475B7D /* Assets */,
-				D7389CB228F40CDE00475B7D /* AssetEditor */,
-				D79130FF28F7E91D0074A5A0 /* ColorPicker */,
-				D79130FA28F733A20074A5A0 /* MenuPopover */,
-			);
-			path = Screens;
 			sourceTree = "<group>";
 		};
 		D7389C8C28F3491000475B7D /* Resources */ = {
@@ -396,7 +396,6 @@
 		D7389C9F28F36F6200475B7D /* MediaAccess */ = {
 			isa = PBXGroup;
 			children = (
-				D7389C8628F345D100475B7D /* MediaAccessViewController.swift */,
 				D7B0C54A2906EBC700EBA3ED /* ShimmerButton.swift */,
 			);
 			path = MediaAccess;
@@ -405,8 +404,6 @@
 		D7389CA028F36F6A00475B7D /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				D7389C9428F3627B00475B7D /* AssetsViewController.swift */,
-				D737485F290B18E900675C7A /* AssetsDataSource.swift */,
 				D7389CA128F36F9800475B7D /* AssetCell.swift */,
 			);
 			path = Assets;
@@ -415,9 +412,8 @@
 		D7389CB228F40CDE00475B7D /* AssetEditor */ = {
 			isa = PBXGroup;
 			children = (
-				D7389CB328F40CFA00475B7D /* AssetEditorViewController.swift */,
-				D7E5C12F290D644300DF7812 /* VideoEditor.swift */,
-				D7389CC628F4B14A00475B7D /* Views */,
+				D7B0C5432906D7BF00EBA3ED /* CanvasView */,
+				D737484A2909CE2200675C7A /* EditingTools */,
 			);
 			path = AssetEditor;
 			sourceTree = "<group>";
@@ -435,30 +431,12 @@
 			path = Tools;
 			sourceTree = "<group>";
 		};
-		D7389CC628F4B14A00475B7D /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				D7B0C5432906D7BF00EBA3ED /* CanvasView */,
-				D737484A2909CE2200675C7A /* EditingTools */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		D7389CD128F5B3EE00475B7D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				72C42C9229002EB200823835 /* CGPointExtensions.swift */,
-				D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */,
-				72C42C9429002EBA00823835 /* CGSizeExtensions.swift */,
-				D79130F828F72C4F0074A5A0 /* Closure.swift */,
+				D7F724CE290F4A1400660CFF /* CoreGraphics */,
+				D7F724CF290F4A2B00660CFF /* UIKit */,
 				7212E9FC28FF5D1E00AA6C00 /* ComparableExtensions.swift */,
-				D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */,
-				D791310E28F80CF90074A5A0 /* UIStackViewExtensions.swift */,
-				7212E9C928FD924300AA6C00 /* UICollectionViewExtensions.swift */,
-				72C42C8D2900107200823835 /* UIColorExtensions.swift */,
-				D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */,
-				72C42CBE29058E7200823835 /* UIWindowExtensions.swift */,
-				72C42CBC2905858C00823835 /* UIWindowSceneExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -471,24 +449,6 @@
 				72C42CB329034F2900823835 /* ColorGridCursorView.swift */,
 			);
 			path = Grid;
-			sourceTree = "<group>";
-		};
-		D75F30F428FA0B220080F208 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				72C42CB92905735300823835 /* EyeDropper */,
-				7212E9F328FEDA6300AA6C00 /* Header */,
-				D75F30F328FA0B1B0080F208 /* Grid */,
-				D75F30F528FA0B380080F208 /* Spectrum */,
-				7212E9BE28FD55ED00AA6C00 /* RGB */,
-				7212E9BF28FD58DE00AA6C00 /* Colors */,
-				7212E9BD28FD55E300AA6C00 /* ColorSlider */,
-				D791310828F7F9BC0074A5A0 /* ColorPickerOpacityView.swift */,
-				D791310C28F80C650074A5A0 /* ColorPickerSeparatorView.swift */,
-				D75F30ED28F9ED0C0080F208 /* ColorSliderCursorView.swift */,
-				72C42CA52901B2F600823835 /* PaddedTextField.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		D75F30F528FA0B380080F208 /* Spectrum */ = {
@@ -504,7 +464,6 @@
 			isa = PBXGroup;
 			children = (
 				D79130FB28F733B90074A5A0 /* MenuPopoverViewController.swift */,
-				D79130FD28F74EFB0074A5A0 /* MenuPopoverItemView.swift */,
 			);
 			path = MenuPopover;
 			sourceTree = "<group>";
@@ -513,7 +472,6 @@
 			isa = PBXGroup;
 			children = (
 				D791310028F7E9380074A5A0 /* ColorPickerViewController.swift */,
-				D75F30F428FA0B220080F208 /* Views */,
 			);
 			path = ColorPicker;
 			sourceTree = "<group>";
@@ -524,9 +482,8 @@
 				D7B0C5412906C9E900EBA3ED /* CanvasView.swift */,
 				D7F724BE290E8DEE00660CFF /* CanvasStrokeView.swift */,
 				D7F724BC290E6A7100660CFF /* CanvasTextView.swift */,
-				D7F724B8290DCDD300660CFF /* Canvas.swift */,
-				D7B0C5442906D7C900EBA3ED /* Line.swift */,
-				D7F724BA290DCDE300660CFF /* LinePoint.swift */,
+				D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */,
+				D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */,
 			);
 			path = CanvasView;
 			sourceTree = "<group>";
@@ -539,6 +496,114 @@
 				D7B0C55929071E2900EBA3ED /* AssetZoomOutAnimation.swift */,
 			);
 			path = AssetZoomTransition;
+			sourceTree = "<group>";
+		};
+		D7F724C6290F48FC00660CFF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D7389C9F28F36F6200475B7D /* MediaAccess */,
+				D7389CA028F36F6A00475B7D /* Assets */,
+				D7389CB228F40CDE00475B7D /* AssetEditor */,
+				D7F724CB290F497300660CFF /* ColorPicker */,
+				D7F724CC290F49B100660CFF /* MenuPopover */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D7F724C7290F490000660CFF /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D7F724C9290F493400660CFF /* MediaAccess */,
+				D7F724C8290F492E00660CFF /* Assets */,
+				D7F724CA290F494300660CFF /* AssetEditor */,
+				D79130FF28F7E91D0074A5A0 /* ColorPicker */,
+				D79130FA28F733A20074A5A0 /* MenuPopover */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D7F724C8290F492E00660CFF /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				D7389C9428F3627B00475B7D /* AssetsViewController.swift */,
+				D737485F290B18E900675C7A /* AssetsDataSource.swift */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		D7F724C9290F493400660CFF /* MediaAccess */ = {
+			isa = PBXGroup;
+			children = (
+				D7389C8628F345D100475B7D /* MediaAccessViewController.swift */,
+			);
+			path = MediaAccess;
+			sourceTree = "<group>";
+		};
+		D7F724CA290F494300660CFF /* AssetEditor */ = {
+			isa = PBXGroup;
+			children = (
+				D7389CB328F40CFA00475B7D /* AssetEditorViewController.swift */,
+			);
+			path = AssetEditor;
+			sourceTree = "<group>";
+		};
+		D7F724CB290F497300660CFF /* ColorPicker */ = {
+			isa = PBXGroup;
+			children = (
+				72C42CB92905735300823835 /* EyeDropper */,
+				7212E9F328FEDA6300AA6C00 /* Header */,
+				D75F30F328FA0B1B0080F208 /* Grid */,
+				D75F30F528FA0B380080F208 /* Spectrum */,
+				7212E9BE28FD55ED00AA6C00 /* RGB */,
+				7212E9BF28FD58DE00AA6C00 /* Colors */,
+				7212E9BD28FD55E300AA6C00 /* ColorSlider */,
+				D791310828F7F9BC0074A5A0 /* ColorPickerOpacityView.swift */,
+				D791310C28F80C650074A5A0 /* ColorPickerSeparatorView.swift */,
+				D75F30ED28F9ED0C0080F208 /* ColorSliderCursorView.swift */,
+				72C42CA52901B2F600823835 /* PaddedTextField.swift */,
+			);
+			path = ColorPicker;
+			sourceTree = "<group>";
+		};
+		D7F724CC290F49B100660CFF /* MenuPopover */ = {
+			isa = PBXGroup;
+			children = (
+				D79130FD28F74EFB0074A5A0 /* MenuPopoverItemView.swift */,
+			);
+			path = MenuPopover;
+			sourceTree = "<group>";
+		};
+		D7F724CD290F49EE00660CFF /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				7212E9F828FF44A200AA6C00 /* HSBColor.swift */,
+				72C42C8A29000FD200823835 /* RGBColor.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		D7F724CE290F4A1400660CFF /* CoreGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				72C42C9229002EB200823835 /* CGPointExtensions.swift */,
+				D7B0C5462906D85900EBA3ED /* CGRectExtensions.swift */,
+				72C42C9429002EBA00823835 /* CGSizeExtensions.swift */,
+			);
+			path = CoreGraphics;
+			sourceTree = "<group>";
+		};
+		D7F724CF290F4A2B00660CFF /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				D7389CD228F5B3FF00475B7D /* NSLayoutConstraintExtensions.swift */,
+				7212E9C928FD924300AA6C00 /* UICollectionViewExtensions.swift */,
+				72C42C8D2900107200823835 /* UIColorExtensions.swift */,
+				D791310E28F80CF90074A5A0 /* UIStackViewExtensions.swift */,
+				D7B0C54C2907028300EBA3ED /* UIViewExtensions.swift */,
+				72C42CBE29058E7200823835 /* UIWindowExtensions.swift */,
+				72C42CBC2905858C00823835 /* UIWindowSceneExtensions.swift */,
+			);
+			path = UIKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -655,6 +720,7 @@
 				D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */,
 				72C42CA82901B80400823835 /* ColorCodeTextField.swift in Sources */,
 				D75F30EC28F9ECFA0080F208 /* ColorSliderInputView.swift in Sources */,
+				D7F724C5290ECF3200660CFF /* CanvasCommitedTextView.swift in Sources */,
 				72C42CAB2901D90500823835 /* ColorCodeTextFieldModel.swift in Sources */,
 				72C42C972900540000823835 /* ColorSliderView.swift in Sources */,
 				D791310328F7F85E0074A5A0 /* ColorPickerGridView.swift in Sources */,
@@ -672,6 +738,7 @@
 				72C42CA0290147FA00823835 /* ColorSliderInputModel.swift in Sources */,
 				D7374855290A93EA00675C7A /* BottomControlsView.swift in Sources */,
 				7212E9F928FF44A200AA6C00 /* HSBColor.swift in Sources */,
+				D7F724C3290ECF2700660CFF /* CanvasCommitedStrokeView.swift in Sources */,
 				7212E9F528FEDA7200AA6C00 /* ColorPickerHeaderView.swift in Sources */,
 				D7389C8728F345D100475B7D /* MediaAccessViewController.swift in Sources */,
 				72C42C9529002EBA00823835 /* CGSizeExtensions.swift in Sources */,
@@ -684,6 +751,7 @@
 				D7B0C5472906D85900EBA3ED /* CGRectExtensions.swift in Sources */,
 				7212E9C328FD679C00AA6C00 /* ColorsView.swift in Sources */,
 				72C42CA2290149B400823835 /* Progress.swift in Sources */,
+				D7F724C1290EB1D600660CFF /* Text.swift in Sources */,
 				72C42D202905EE4D00823835 /* ColorReticleStrokeView.swift in Sources */,
 				72C42CA62901B2F600823835 /* PaddedTextField.swift in Sources */,
 				D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */,

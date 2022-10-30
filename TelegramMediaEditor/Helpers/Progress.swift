@@ -17,6 +17,10 @@ struct Progress {
         self.value = value.clamped(minValue: 0, maxValue: 1)
     }
     
+    init(value: Double, min: Double, max: Double) {
+        self.init((value - min)/(max - min))
+    }
+    
     func value(min: Double, max: Double) -> Double {
         min + (max - min)*value
     }

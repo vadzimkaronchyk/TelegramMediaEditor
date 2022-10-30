@@ -22,8 +22,8 @@ final class MenuPopoverViewController<Item: MenuPopoverItem>: UIViewController {
     
     var onSelected: Closure<Item>?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         
         setupLayout()
         setupViews()

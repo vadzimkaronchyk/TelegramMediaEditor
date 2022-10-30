@@ -6,8 +6,8 @@
 //
 
 import Lottie
-import UIKit
 import Photos
+import UIKit
 
 final class MediaAccessViewController: UIViewController {
     

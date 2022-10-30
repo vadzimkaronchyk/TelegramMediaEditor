@@ -5,8 +5,8 @@
 //  Created by Vadzim Karonchyk on 10/9/22.
 //
 
-import UIKit
 import Photos
+import UIKit
 
 final class AssetsViewController: UICollectionViewController {
     

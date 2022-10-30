@@ -16,10 +16,34 @@ final class CanvasTextView: UIView {
         .centerYAnchor
         .constraint(equalTo: centerYAnchor)
     
-    var textContainerInset: UIEdgeInsets?
+    var textOrigin: CGPoint {
+        .init(x: textContainerInset.left, y: textContainerInset.top)
+    }
+    
+    var text: Text {
+        .init(
+            string: textView.text,
+            fontSize: textSize,
+            width: editingText?.width ?? textView.intrinsicContentSize.width
+        )
+    }
+    
+    var onTextChanged: VoidClosure?
+    
+    private var editingText: Text?
+    private var textSizeProgress = Progress(0.75)
+    private var textSize: Double {
+        textSizeProgress.value(min: minTextSize, max: maxTextSize)
+    }
     
     private let minTextSize = 6.0
     private let maxTextSize = 70.0
+    private let textContainerInset = UIEdgeInsets(
+        top: 8,
+        left: 40,
+        bottom: 0,
+        right: 0
+    )
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,20 +57,18 @@ final class CanvasTextView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let textSize = textView.font?.pointSize ?? 0
-        textView.textContainerInset = textContainerInset ?? .init(
-            top: textSizeSlider.frame.midY - textSize/2,
-            left: textSizeSlider.frame.maxX + 8,
-            bottom: 0,
-            right: 0
-        )
+    func setEditingText(_ text: Text?) {
+        editingText = text
+        textView.text = text?.string
+        textSizeProgress = text.map { .init(value: $0.fontSize, min: minTextSize, max: maxTextSize) } ?? .init(0.75)
     }
     
     func makeActive() {
         textView.becomeFirstResponder()
+    }
+    
+    func makeInactive() {
+        textView.resignFirstResponder()
     }
 }
 
@@ -83,10 +105,12 @@ private extension CanvasTextView {
     }
     
     func setupTextView() {
+        textView.delegate = self
         textView.textColor = .white
         textView.tintColor = .white
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
+        textView.textContainerInset = textContainerInset
     }
     
     func setupTextSizeSlider() {
@@ -95,9 +119,8 @@ private extension CanvasTextView {
     }
     
     func setupState() {
-        let progress = Progress(0.75)
-        textSizeSlider.value = progress
-        updateTextSize(progress: progress)
+        textSizeSlider.value = textSizeProgress
+        refreshFont()
     }
     
     func addKeyboardObservers() {
@@ -115,10 +138,12 @@ private extension CanvasTextView {
         )
     }
     
-    func updateTextSize(progress: Progress) {
-        let size = progress.value(min: minTextSize, max: maxTextSize)
-        textView.font = .systemFont(ofSize: size, weight: .bold)
+    func refreshFont() {
+        textView.font = .systemFont(ofSize: textSize, weight: .bold)
     }
+}
+
+private extension CanvasTextView {
     
     @objc func handleKeyboardWillShowNotification(_ notification: Notification) {
         guard
@@ -139,14 +164,19 @@ private extension CanvasTextView {
     }
     
     @objc func handleKeyboardWillHideNotification(_ notification: Notification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        
+        textSizeSliderCenterYConstraint.constant = 0
+        layoutIfNeeded()
     }
     
     @objc func textSizeSliderValueChanged(_ sizeSlider: ToolSizeSlider) {
-        let progress = sizeSlider.value
-        updateTextSize(progress: progress)
+        textSizeProgress = sizeSlider.value
+        refreshFont()
+    }
+}
+
+extension CanvasTextView: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        onTextChanged?()
     }
 }

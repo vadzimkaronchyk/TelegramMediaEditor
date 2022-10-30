@@ -5,9 +5,9 @@
 //  Created by Vadzim Karonchyk on 10/10/22.
 //
 
-import UIKit
-import Photos
 import AVFoundation
+import Photos
+import UIKit
 
 final class AssetEditorViewController: UIViewController {
     
@@ -22,6 +22,18 @@ final class AssetEditorViewController: UIViewController {
         style: .plain,
         target: self,
         action: #selector(clearBarButtonItemTapped)
+    )
+    private lazy var cancelBarButtonItem = UIBarButtonItem(
+        title: "Cancel",
+        style: .plain,
+        target: self,
+        action: #selector(cancelBarButtonItemTapped)
+    )
+    private lazy var doneBarButtonItem = UIBarButtonItem(
+        title: "Done",
+        style: .done,
+        target: self,
+        action: #selector(doneBarButtonItemTapped)
     )
     private let assetImageView = UIImageView()
     private let canvasView = CanvasView()
@@ -79,32 +91,22 @@ private extension AssetEditorViewController {
     
     func setupViews() {
         setupView()
-        setupNavigationItem()
-        setupUndoBarButtonItem()
-        setupClearBarButtonItem()
+        setupBarButtonItems()
         setupAssetImageView()
         setupCanvasView()
         setupEditingToolsView()
-        updateDrawingColor(.white)
+        setupState()
     }
     
     func setupView() {
         view.backgroundColor = .black
     }
     
-    func setupNavigationItem() {
-        undoBarButtonItem.isEnabled = false
-        clearBarButtonItem.isEnabled = false
-        navigationItem.setLeftBarButton(undoBarButtonItem, animated: false)
-        navigationItem.setRightBarButton(clearBarButtonItem, animated: false)
-    }
-    
-    func setupUndoBarButtonItem() {
+    func setupBarButtonItems() {
         undoBarButtonItem.tintColor = .white
-    }
-    
-    func setupClearBarButtonItem() {
         clearBarButtonItem.tintColor = .white
+        cancelBarButtonItem.tintColor = .white
+        doneBarButtonItem.tintColor = .white
     }
     
     func setupAssetImageView() {
@@ -121,6 +123,18 @@ private extension AssetEditorViewController {
             self.clearBarButtonItem.isEnabled = canUndo
             self.editingToolsView.setSaveButtonEnabled(canUndo)
         }
+        canvasView.onTextEditingStarted = { [weak self] in
+            self?.setupTextEditingNavigationItem(
+                animated: true,
+                isDoneEnabled: true
+            )
+        }
+        canvasView.onTextEditingChanged = { [weak self] text in
+            self?.setupTextEditingNavigationItem(
+                animated: true,
+                isDoneEnabled: !text.string.isEmpty
+            )
+        }
     }
     
     func setupEditingToolsView() {
@@ -129,6 +143,12 @@ private extension AssetEditorViewController {
             self?.presentColorPicker()
         }
         editingToolsView.onToolSelected = { [weak self] tool in
+            if case .text = tool {
+                self?.setupTextEditingNavigationItem(
+                    animated: true,
+                    isDoneEnabled: false
+                )
+            }
             self?.canvasView.updateActiveTool(tool)
         }
         editingToolsView.onAddShapeTapped = { [weak self] view in
@@ -149,6 +169,24 @@ private extension AssetEditorViewController {
         editingToolsView.onColorSelected = { [weak self] color in
             self?.handleEditingToolsViewSelectedColor(color)
         }
+    }
+    
+    func setupState() {
+        undoBarButtonItem.isEnabled = false
+        clearBarButtonItem.isEnabled = false
+        setupDefaultNavigationItem(animated: false)
+        updateDrawingColor(.white)
+    }
+    
+    func setupDefaultNavigationItem(animated: Bool) {
+        navigationItem.setLeftBarButton(undoBarButtonItem, animated: animated)
+        navigationItem.setRightBarButton(clearBarButtonItem, animated: animated)
+    }
+    
+    func setupTextEditingNavigationItem(animated: Bool, isDoneEnabled: Bool) {
+        doneBarButtonItem.isEnabled = isDoneEnabled
+        navigationItem.setLeftBarButton(cancelBarButtonItem, animated: animated)
+        navigationItem.setRightBarButton(doneBarButtonItem, animated: animated)
     }
     
     func presentColorPicker() {
@@ -339,6 +377,16 @@ private extension AssetEditorViewController {
     
     @objc func clearBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
         canvasView.clearAll()
+    }
+    
+    @objc func cancelBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
+        setupDefaultNavigationItem(animated: true)
+        canvasView.cancelEditedText()
+    }
+    
+    @objc func doneBarButtonItemTapped(_ barButtonItem: UIBarButtonItem) {
+        setupDefaultNavigationItem(animated: true)
+        canvasView.commitEditedText()
     }
 }
 

@@ -18,51 +18,33 @@ struct StrokeSegment {
 
 final class Line {
     
-    private(set) var points: [LinePoint]
+    private(set) var points = [LinePoint]()
     private var smoothPoints = [LinePoint]()
     private var segments = [StrokeSegment]()
     
-    var currentPoint: LinePoint {
-        points.last!
-    }
+    private var velocities = [CGFloat]()
+    
+    private let minLineWidth = 1.0
+    private let maxLinewidth = 10.0
+    
+    var lineWidth = Progress.mid
     
     let color: UIColor
     
-    init(color: UIColor = .white, point: LinePoint) {
+    init(color: UIColor = .white) {
         self.color = color
-        self.points = [point]
     }
     
-    func appendPoint(_ point: LinePoint) -> CGRect {
-        points.append(point)
+    func draw(
+        atLocation location: CGPoint,
+        velocity: CGPoint,
+        color: UIColor
+    ) -> CGRect {
+        let width = extractLineWidth(from: velocity)
+        velocities.append(width)
         
-        guard points.count > 2 else { return .null }
-        
-        let index = points.count - 1
-        let point0 = points[index - 2]
-        let point1 = points[index - 1]
-        let point2 = points[index]
-        
-        let newSmoothPoints = smoothPoints(
-            fromPoint0: point0,
-            point1: point1,
-            point2: point2
-        )
-        
-        let lastOldSmoothPoint = smoothPoints.last
-        smoothPoints.append(contentsOf: newSmoothPoints)
-        
-        guard smoothPoints.count > 1 else { return .null }
-        
-        let newSegments: ([StrokeSegment], CGRect) = {
-            guard let lastOldSmoothPoint = lastOldSmoothPoint else {
-                return segments(fromSmoothPoints: newSmoothPoints)
-            }
-            return segments(fromSmoothPoints: [lastOldSmoothPoint] + newSmoothPoints)
-        }()
-        segments.append(contentsOf: newSegments.0)
-        
-        return newSegments.1
+        let point = LinePoint(position: location, width: width)
+        return appendPoint(point)
     }
     
     func drawInContext(_ context: CGContext) {
@@ -102,8 +84,54 @@ final class Line {
             context.strokePath()
         }
     }
+}
+
+private extension Line {
     
-    private func smoothPoints(
+    func extractLineWidth(from velocity: CGPoint) -> CGFloat {
+        let length = velocity.length
+        var size = (length / 166).clamped(minValue: 1, maxValue: 40)
+        
+        if let lastVelocity = velocities.last {
+            size = size*0.2 + lastVelocity*0.8;
+        }
+        
+        return size
+    }
+    
+    func appendPoint(_ point: LinePoint) -> CGRect {
+        points.append(point)
+        
+        guard points.count > 2 else { return .null }
+        
+        let index = points.count - 1
+        let point0 = points[index - 2]
+        let point1 = points[index - 1]
+        let point2 = points[index]
+        
+        let newSmoothPoints = smoothPoints(
+            fromPoint0: point0,
+            point1: point1,
+            point2: point2
+        )
+        
+        let lastOldSmoothPoint = smoothPoints.last
+        smoothPoints.append(contentsOf: newSmoothPoints)
+        
+        guard smoothPoints.count > 1 else { return .null }
+        
+        let newSegments: ([StrokeSegment], CGRect) = {
+            guard let lastOldSmoothPoint = lastOldSmoothPoint else {
+                return segments(fromSmoothPoints: newSmoothPoints)
+            }
+            return segments(fromSmoothPoints: [lastOldSmoothPoint] + newSmoothPoints)
+        }()
+        segments.append(contentsOf: newSegments.0)
+        
+        return newSegments.1
+    }
+    
+    func smoothPoints(
         fromPoint0 point0: LinePoint,
         point1: LinePoint,
         point2: LinePoint
@@ -134,7 +162,7 @@ final class Line {
         return smoothPoints
     }
     
-    private func segments(
+    func segments(
         fromSmoothPoints smoothPoints: [LinePoint]
     ) -> ([StrokeSegment], CGRect) {
         var segments = [StrokeSegment]()
