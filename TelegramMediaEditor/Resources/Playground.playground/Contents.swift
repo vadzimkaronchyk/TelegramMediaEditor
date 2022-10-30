@@ -68,5 +68,21 @@ struct Algorithm1: LineDrawerAlgorithm {
     }
 }
 
-PlaygroundPage.current.liveView = canvasView
+//PlaygroundPage.current.liveView = canvasView
 
+
+//let p1 = CGPoint(x: 1, y: 1)
+//let p2 = CGPoint(x: 3, y: 3)
+//
+//let center = (p1 + p2)/2
+//let radius = center - p1
+//let p12 = CGPoint(x: center.x - radius.y, y: center.y + radius.x)
+//print(center, radius, p12)
+
+let p3 = CGPoint(x: 1, y: 0)
+let p4 = CGPoint(x: 4, y: 0)
+
+let center = (p3 + p4)/2
+let radius = center - p3
+let p34 = CGPoint(x: center.x + radius.y, y: center.y - radius.x)
+print(center, radius, p34)

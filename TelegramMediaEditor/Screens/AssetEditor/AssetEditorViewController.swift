@@ -136,6 +136,9 @@ private extension AssetEditorViewController {
         editingToolsView.onSaveTapped = { [weak self] in
             self?.saveDrawing()
         }
+        editingToolsView.onStrokeSizeChanged = { [weak self] value in
+            self?.canvasView.lineWidth = value
+        }
         editingToolsView.onStrokeShapeTapped = { [weak self] view in
             self?.presentStrokeShapePopover(sourceView: view)
         }

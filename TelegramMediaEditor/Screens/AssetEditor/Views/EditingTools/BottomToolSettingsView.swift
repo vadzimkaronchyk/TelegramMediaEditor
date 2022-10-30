@@ -15,6 +15,7 @@ final class BottomToolSettingsView: UIView {
     private let contentStackView = UIStackView()
     
     var onBackTapped: VoidClosure?
+    var onStrokeSizeChanged: Closure<Progress>?
     var onStrokeShapeTapped: Closure<UIView>?
 
     override init(frame: CGRect) {
@@ -57,6 +58,7 @@ private extension BottomToolSettingsView {
     
     func setupViews() {
         setupBackButton()
+        setupSizeSlider()
         setupContentStackView()
         setupStrokeShapeButton()
         updateStrokeShape(.arrow)
@@ -66,6 +68,10 @@ private extension BottomToolSettingsView {
         backButton.tintColor = .white
         backButton.setImage(.init(named: "back"), for: .normal)
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    }
+    
+    func setupSizeSlider() {
+        sizeSlider.addTarget(self, action: #selector(sizeSlideValueChanged), for: .valueChanged)
     }
     
     func setupStrokeShapeButton() {
@@ -92,6 +98,10 @@ private extension BottomToolSettingsView {
     
     @objc func backButtonTapped(_ button: UIButton) {
         onBackTapped?()
+    }
+    
+    @objc func sizeSlideValueChanged(_ sizeSlider: ToolSizeSlider) {
+        onStrokeSizeChanged?(sizeSlider.value)
     }
     
     @objc func strokeShapeButtonTapped(_ button: UIButton) {

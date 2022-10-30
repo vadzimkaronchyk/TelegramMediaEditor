@@ -9,19 +9,47 @@ import UIKit
 
 final class CanvasView: UIView {
     
-    var drawingColor: UIColor = .white {
-        didSet { setNeedsDisplay() }
+    var drawingColor: UIColor = .white
+    
+    var lineWidth: Progress {
+        get { canvas.lineWidth }
+        set { canvas.lineWidth = newValue }
     }
     
     var canUndo: Bool {
-        !previousLines.isEmpty
+        canvas.canUndo
     }
     
     var onUndoChanged: VoidClosure?
     
-    private var velocities = [CGFloat]()
-    private var currentLine: Line?
-    private var previousLines = [Line]()
+    private lazy var frozenContext: CGContext = {
+        let scale = UIScreen.main.scale
+        let boundsSize = bounds.size
+        let size = CGSize(
+            width: boundsSize.width * scale,
+            height: boundsSize.height * scale
+        )
+        
+        let context = CGContext(
+            data: nil,
+            width: Int(size.width),
+            height: Int(size.height),
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        )!
+
+        context.setLineCap(.round)
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+        context.concatenate(transform)
+
+        return context
+    }()
+    
+    private var frozenImage: CGImage?
+    
+    private let canvas = Canvas()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,11 +65,34 @@ final class CanvasView: UIView {
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        var lines = previousLines
-        if let currentLine = currentLine {
-            lines.append(currentLine)
+        if canvas.needsFullRedraw {
+            setFrozenImageNeedsUpdate()
+            frozenContext.clear(bounds)
+            canvas.finishedLines.forEach {
+                $0.drawInContext(frozenContext)
+            }
+            canvas.needsFullRedraw = false
         }
-        lines.forEach { $0.drawInContext(context) }
+        
+        frozenImage = frozenImage ?? frozenContext.makeImage()
+        
+        if let frozenImage = frozenImage {
+            context.draw(frozenImage, in: bounds)
+        }
+        
+        if let activeLine = canvas.activeLine {
+            activeLine.drawInContext(context)
+        }
+    }
+    
+    private func setFrozenImageNeedsUpdate() {
+        frozenImage = nil
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        canvas.rect = bounds
     }
 }
 
@@ -59,58 +110,50 @@ private extension CanvasView {
     }
     
     @objc func handlePanGesgture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        let position = gestureRecognizer.location(in: self)
-        let lineWidth = extractLineSize(from: gestureRecognizer)
-        let linePoint = LinePoint(position: position, width: lineWidth)
+        let location = gestureRecognizer.location(in: self)
+        let velocity = gestureRecognizer.velocity(in: self)
         
         switch gestureRecognizer.state {
         case .began:
-            currentLine = .init(color: drawingColor, point: linePoint)
+            let updateRect = canvas.draw(
+                atLocation: location,
+                velocity: velocity,
+                color: drawingColor
+            )
+            setNeedsDisplay(updateRect)
         case .changed:
-            guard let currentLine = currentLine else { return }
-            currentLine.appendPoint(linePoint)
-            setNeedsDisplay()
+            let updateRect = canvas.draw(
+                atLocation: location,
+                velocity: velocity,
+                color: drawingColor
+            )
+            setNeedsDisplay(updateRect)
         case .ended, .failed, .cancelled:
-            guard let currentLine = currentLine else { return }
-            
-            currentLine.appendPoint(linePoint)
-            previousLines.append(currentLine)
-            self.currentLine = nil
-            velocities.removeAll()
-            setNeedsDisplay()
+            var updateRect = canvas.draw(
+                atLocation: location,
+                velocity: velocity,
+                color: drawingColor
+            )
+            updateRect = updateRect.union(canvas.finishDrawing())
+            setNeedsDisplay(updateRect)
             
             onUndoChanged?()
         default:
             break
         }
     }
-    
-    
-    func extractLineSize(from panGestureRecognizer: UIPanGestureRecognizer) -> CGFloat {
-        let velocity = (panGestureRecognizer.velocity(in: panGestureRecognizer.view)).length
-        var size = (velocity / 166).clamped(minValue: 1, maxValue: 40)
-        
-        if !velocities.isEmpty {
-            size = size*0.2 + velocities[velocities.count-1]*0.8;
-        }
-        
-        velocities.append(size)
-        return size
-    }
 }
 
 extension CanvasView {
     
     func undo() {
-        previousLines.removeLast()
-        // TODO: calcualte rect
+        canvas.undo()
         setNeedsDisplay()
         onUndoChanged?()
     }
     
     func clearAll() {
-        currentLine = nil
-        previousLines.removeAll()
+        canvas.clear()
         setNeedsDisplay()
         onUndoChanged?()
     }

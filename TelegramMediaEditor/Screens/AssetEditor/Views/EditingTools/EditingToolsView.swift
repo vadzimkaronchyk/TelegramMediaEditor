@@ -21,6 +21,7 @@ final class EditingToolsView: UIView {
     var onAddShapeTapped: Closure<UIView>?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
+    var onStrokeSizeChanged: Closure<Progress>?
     var onStrokeShapeTapped: Closure<UIView>?
     var onColorSelected: Closure<HSBColor>?
     
@@ -149,6 +150,9 @@ private extension EditingToolsView {
         }
         bottomView.onBackTapped = { [weak self] in
             self?.drawingToolsPickerView.dehighlight()
+        }
+        bottomView.onStrokeSizeChanged = { [weak self] value in
+            self?.onStrokeSizeChanged?(value)
         }
         bottomView.onStrokeShapeTapped = { [weak self] view in
             self?.onStrokeShapeTapped?(view)

@@ -12,7 +12,7 @@ final class ToolSizeSlider: UIControl {
     private let trackView = ToolSizeSliderTrackView()
     private let thumbView = ToolSizeSliderThumbView()
     
-    var value = 0.5
+    var value: Progress = .init(0.5)
     
     private var trackInsets: UIEdgeInsets {
         .init(top: 0, left: 8, bottom: 0, right: 8)
@@ -35,7 +35,7 @@ final class ToolSizeSlider: UIControl {
         trackView.frame = bounds.inset(by: trackInsets)
         let thumbSize = trackView.bounds.height
         thumbView.frame = .init(
-            origin: .init(x: trackView.frame.minX + trackView.frame.maxX*value, y: 0),
+            origin: .init(x: trackView.frame.minX + trackView.frame.maxX*value.value, y: 0),
             size: .square(size: thumbSize)
         )
     }
@@ -66,7 +66,7 @@ final class ToolSizeSlider: UIControl {
         thumbView.center.x = locationX
         
         let progress = locationX / (bounds.width - trackInsets.left - trackInsets.right)
-        value = progress.clamped(minValue: 0, maxValue: 1)
+        value = .init(progress)
         
         sendActions(for: .valueChanged)
     }

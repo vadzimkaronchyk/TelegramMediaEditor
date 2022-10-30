@@ -15,6 +15,7 @@ final class EditingToolsBottomView: UIView {
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
     var onBackTapped: VoidClosure?
+    var onStrokeSizeChanged: Closure<Progress>?
     var onStrokeShapeTapped: Closure<UIView>?
     
     override init(frame: CGRect) {
@@ -153,6 +154,9 @@ private extension EditingToolsBottomView {
         bottomToolSettingsView.onBackTapped = { [weak self] in
             self?.onBackTapped?()
             self?.showBottomControlsView()
+        }
+        bottomToolSettingsView.onStrokeSizeChanged = { [weak self] value in
+            self?.onStrokeSizeChanged?(value)
         }
         bottomToolSettingsView.onStrokeShapeTapped = { [weak self] view in
             self?.onStrokeShapeTapped?(view)
