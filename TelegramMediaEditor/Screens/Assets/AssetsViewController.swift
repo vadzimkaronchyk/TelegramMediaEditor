@@ -106,7 +106,6 @@ extension AssetsViewController {
         willDisplay cell: UICollectionViewCell,
         forItemAt indexPath: IndexPath
     ) {
-        
     }
     
     override func collectionView(
@@ -114,7 +113,6 @@ extension AssetsViewController {
         didEndDisplaying cell: UICollectionViewCell,
         forItemAt indexPath: IndexPath
     ) {
-        
     }
 }
 

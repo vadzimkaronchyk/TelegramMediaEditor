@@ -33,9 +33,14 @@ final class ToolSizeSlider: UIControl {
         super.layoutSubviews()
         
         trackView.frame = bounds.inset(by: trackInsets)
+        
         let thumbSize = trackView.bounds.height
+        let trackFrame = trackView.frame
         thumbView.frame = .init(
-            origin: .init(x: trackView.frame.minX + trackView.frame.maxX*value.value, y: 0),
+            origin: .init(
+                x: value.value(min: trackFrame.minX, max: trackFrame.maxX) - thumbSize/2,
+                y: 0
+            ),
             size: .square(size: thumbSize)
         )
     }
@@ -62,11 +67,13 @@ final class ToolSizeSlider: UIControl {
     
     private func updateThumbViewLocation(touch: UITouch) {
         let location = touch.location(in: self)
-        let locationX = location.x.clamped(minValue: frame.minX, maxValue: trackView.frame.maxX)
+        let trackFrame = trackView.frame
+        let locationX = location.x.clamped(
+            minValue: trackFrame.minX,
+            maxValue: trackFrame.maxX
+        )
         thumbView.center.x = locationX
-        
-        let progress = locationX / (bounds.width - trackInsets.left - trackInsets.right)
-        value = .init(progress)
+        value = .init((locationX - trackFrame.minX)/(trackFrame.maxX - trackFrame.minX))
         
         sendActions(for: .valueChanged)
     }
@@ -87,9 +94,12 @@ private final class ToolSizeSliderTrackView: UIView {
     override func draw(_ rect: CGRect) {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
-        let fromWidth = rect.height*0.14
-        let toWidth = rect.height*0.82
-        let centerY = rect.height/2
+        let thickness = min(rect.width, rect.height)
+        let length = max(rect.width, rect.height)
+        
+        let fromWidth = thickness*0.14
+        let toWidth = thickness*0.82
+        let centerY = thickness/2
         
         context.setFillColor(UIColor.secondarySystemBackground.cgColor)
         context.move(to: .init(
@@ -104,11 +114,11 @@ private final class ToolSizeSliderTrackView: UIView {
             clockwise: false
         )
         context.addLine(to: .init(
-            x: rect.width - toWidth/2,
+            x: length - toWidth/2,
             y: centerY - toWidth/2)
         )
         context.addArc(
-            center: .init(x: rect.width - toWidth/2, y: centerY),
+            center: .init(x: length - toWidth/2, y: centerY),
             radius: toWidth/2,
             startAngle: -.pi/2,
             endAngle: -.pi*1.5,

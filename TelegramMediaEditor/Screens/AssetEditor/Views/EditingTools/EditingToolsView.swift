@@ -142,6 +142,9 @@ private extension EditingToolsView {
     }
     
     func setupBottomView() {
+        bottomView.onTextToolSelected = { [weak self] in
+            self?.onToolSelected?(.text)
+        }
         bottomView.onCancelTapped = { [weak self] in
             self?.onCancelTapped?()
         }

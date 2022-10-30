@@ -12,6 +12,7 @@ final class EditingToolsBottomView: UIView {
     private let bottomControlsView = BottomControlsView()
     private let bottomToolSettingsView = BottomToolSettingsView()
     
+    var onTextToolSelected: VoidClosure?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
     var onBackTapped: VoidClosure?
@@ -142,6 +143,9 @@ private extension EditingToolsBottomView {
     }
     
     func setupBottomControlsView() {
+        bottomControlsView.onTextToolSelected = { [weak self] in
+            self?.onTextToolSelected?()
+        }
         bottomControlsView.onCancelTapped = { [weak self] in
             self?.onCancelTapped?()
         }

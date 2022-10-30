@@ -94,6 +94,8 @@
 		D7E5C130290D644300DF7812 /* VideoEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E5C12F290D644300DF7812 /* VideoEditor.swift */; };
 		D7F724B9290DCDD300660CFF /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724B8290DCDD300660CFF /* Canvas.swift */; };
 		D7F724BB290DCDE300660CFF /* LinePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724BA290DCDE300660CFF /* LinePoint.swift */; };
+		D7F724BD290E6A7100660CFF /* CanvasTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724BC290E6A7100660CFF /* CanvasTextView.swift */; };
+		D7F724BF290E8DEE00660CFF /* CanvasStrokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724BE290E8DEE00660CFF /* CanvasStrokeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -186,6 +188,8 @@
 		D7E5C12F290D644300DF7812 /* VideoEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoEditor.swift; sourceTree = "<group>"; };
 		D7F724B8290DCDD300660CFF /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		D7F724BA290DCDE300660CFF /* LinePoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinePoint.swift; sourceTree = "<group>"; };
+		D7F724BC290E6A7100660CFF /* CanvasTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasTextView.swift; sourceTree = "<group>"; };
+		D7F724BE290E8DEE00660CFF /* CanvasStrokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasStrokeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -518,6 +522,8 @@
 			isa = PBXGroup;
 			children = (
 				D7B0C5412906C9E900EBA3ED /* CanvasView.swift */,
+				D7F724BE290E8DEE00660CFF /* CanvasStrokeView.swift */,
+				D7F724BC290E6A7100660CFF /* CanvasTextView.swift */,
 				D7F724B8290DCDD300660CFF /* Canvas.swift */,
 				D7B0C5442906D7C900EBA3ED /* Line.swift */,
 				D7F724BA290DCDE300660CFF /* LinePoint.swift */,
@@ -643,6 +649,7 @@
 				D7389CC228F4AFEC00475B7D /* LassoView.swift in Sources */,
 				D75F30EE28F9ED0C0080F208 /* ColorSliderCursorView.swift in Sources */,
 				D7374858290A98D500675C7A /* StrokeShape.swift in Sources */,
+				D7F724BD290E6A7100660CFF /* CanvasTextView.swift in Sources */,
 				7212E9C628FD69DA00AA6C00 /* ColorCell.swift in Sources */,
 				D7374853290A930D00675C7A /* TitleImageButton.swift in Sources */,
 				D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */,
@@ -681,6 +688,7 @@
 				72C42CA62901B2F600823835 /* PaddedTextField.swift in Sources */,
 				D7389CBE28F4AF9A00475B7D /* EraserView.swift in Sources */,
 				72C42CB629036A7600823835 /* ColorsCircleView.swift in Sources */,
+				D7F724BF290E8DEE00660CFF /* CanvasStrokeView.swift in Sources */,
 				D7B0C55829071E2000EBA3ED /* AssetZoomInAnimation.swift in Sources */,
 				72C42CB8290565E500823835 /* EyeDropperColorPickerWindow.swift in Sources */,
 				72C42C8E2900107200823835 /* UIColorExtensions.swift in Sources */,

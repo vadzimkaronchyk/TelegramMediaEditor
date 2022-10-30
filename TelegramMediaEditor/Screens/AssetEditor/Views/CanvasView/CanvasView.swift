@@ -9,137 +9,85 @@ import UIKit
 
 final class CanvasView: UIView {
     
-    var drawingColor: UIColor = .white
+    private let strokeView = CanvasStrokeView()
+    private let textView = CanvasTextView()
+    
+    var drawingColor: UIColor {
+        get { strokeView.drawingColor }
+        set { strokeView.drawingColor = newValue }
+    }
     
     var lineWidth: Progress {
-        get { canvas.lineWidth }
-        set { canvas.lineWidth = newValue }
+        get { strokeView.lineWidth }
+        set { strokeView.lineWidth = newValue }
     }
     
     var canUndo: Bool {
-        canvas.canUndo
+        strokeView.canUndo
     }
     
     var onUndoChanged: VoidClosure?
     
-    private lazy var frozenContext: CGContext = {
-        let scale = UIScreen.main.scale
-        let boundsSize = bounds.size
-        let size = CGSize(
-            width: boundsSize.width * scale,
-            height: boundsSize.height * scale
-        )
-        
-        let context = CGContext(
-            data: nil,
-            width: Int(size.width),
-            height: Int(size.height),
-            bitsPerComponent: 8,
-            bytesPerRow: 0,
-            space: CGColorSpaceCreateDeviceRGB(),
-            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
-        )!
-
-        context.setLineCap(.round)
-        let transform = CGAffineTransform(scaleX: scale, y: scale)
-        context.concatenate(transform)
-
-        return context
-    }()
-    
-    private var frozenImage: CGImage?
-    
-    private let canvas = Canvas()
+    private var activeTool = Tool.drawing(.pen)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setupLayout()
         setupView()
-        addPanGestureRecognizer()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        
-        if canvas.needsFullRedraw {
-            setFrozenImageNeedsUpdate()
-            frozenContext.clear(bounds)
-            canvas.finishedLines.forEach {
-                $0.drawInContext(frozenContext)
-            }
-            canvas.needsFullRedraw = false
-        }
-        
-        frozenImage = frozenImage ?? frozenContext.makeImage()
-        
-        if let frozenImage = frozenImage {
-            context.draw(frozenImage, in: bounds)
-        }
-        
-        if let activeLine = canvas.activeLine {
-            activeLine.drawInContext(context)
+    func updateActiveTool(_ tool: Tool) {
+        activeTool = tool
+        switch tool {
+        case .drawing:
+            strokeView.isUserInteractionEnabled = true
+            textView.isUserInteractionEnabled = false
+            textView.isHidden = true
+        case .text:
+            strokeView.isUserInteractionEnabled = false
+            textView.isUserInteractionEnabled = true
+            textView.isHidden = false
+            textView.makeActive()
         }
     }
     
-    private func setFrozenImageNeedsUpdate() {
-        frozenImage = nil
+    func cancelTextEditing() {
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        canvas.rect = bounds
+    func saveTextEditing() {
     }
 }
 
 private extension CanvasView {
+    
+    func setupLayout() {
+        addSubview(strokeView)
+        addSubview(textView)
+        
+        strokeView.translatesAutoresizingMaskIntoConstraints = false
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate(
+            NSLayoutConstraint.pinViewToSuperviewConstraints(
+                view: strokeView,
+                superview: self
+            ) +
+            NSLayoutConstraint.pinViewToSuperviewConstraints(
+                view: textView,
+                superview: self
+            )
+        )
+    }
 
     func setupView() {
         backgroundColor = .clear
-    }
-    
-    func addPanGestureRecognizer() {
-        addGestureRecognizer(UIPanGestureRecognizer(
-            target: self,
-            action: #selector(handlePanGesgture)
-        ))
-    }
-    
-    @objc func handlePanGesgture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        let location = gestureRecognizer.location(in: self)
-        let velocity = gestureRecognizer.velocity(in: self)
-        
-        switch gestureRecognizer.state {
-        case .began:
-            let updateRect = canvas.draw(
-                atLocation: location,
-                velocity: velocity,
-                color: drawingColor
-            )
-            setNeedsDisplay(updateRect)
-        case .changed:
-            let updateRect = canvas.draw(
-                atLocation: location,
-                velocity: velocity,
-                color: drawingColor
-            )
-            setNeedsDisplay(updateRect)
-        case .ended, .failed, .cancelled:
-            var updateRect = canvas.draw(
-                atLocation: location,
-                velocity: velocity,
-                color: drawingColor
-            )
-            updateRect = updateRect.union(canvas.finishDrawing())
-            setNeedsDisplay(updateRect)
-            
-            onUndoChanged?()
-        default:
-            break
+        strokeView.onUndoChanged = { [weak self] in
+            self?.onUndoChanged?()
         }
     }
 }
@@ -147,14 +95,10 @@ private extension CanvasView {
 extension CanvasView {
     
     func undo() {
-        canvas.undo()
-        setNeedsDisplay()
-        onUndoChanged?()
+        strokeView.undo()
     }
     
     func clearAll() {
-        canvas.clear()
-        setNeedsDisplay()
-        onUndoChanged?()
+        strokeView.clearAll()
     }
 }

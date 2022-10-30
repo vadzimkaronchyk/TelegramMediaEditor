@@ -15,6 +15,7 @@ final class BottomControlsView: UIView {
     private let activityIndicatorView = UIActivityIndicatorView(style: .medium)
     private let contentStackView = UIStackView()
     
+    var onTextToolSelected: VoidClosure?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
     
@@ -94,6 +95,7 @@ private extension BottomControlsView {
         toolsSegmentedControl.insertSegment(withTitle: "Draw", at: 0, animated: false)
         toolsSegmentedControl.insertSegment(withTitle: "Text", at: 1, animated: false)
         toolsSegmentedControl.selectedSegmentIndex = 0
+        toolsSegmentedControl.addTarget(self, action: #selector(toolsSegmentedControlValueChanged), for: .valueChanged)
     }
     
     func setupCancelButton() {
@@ -123,6 +125,12 @@ private extension BottomControlsView {
 }
 
 private extension BottomControlsView {
+    
+    @objc func toolsSegmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
+        if segmentedControl.selectedSegmentIndex == 1 {
+            onTextToolSelected?()
+        }
+    }
     
     @objc func cancelButtonTapped(_ button: UIButton) {
         onCancelTapped?()

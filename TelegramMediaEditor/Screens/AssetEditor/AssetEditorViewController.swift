@@ -113,6 +113,7 @@ private extension AssetEditorViewController {
     }
     
     func setupCanvasView() {
+        canvasView.updateActiveTool(.drawing(.pen))
         canvasView.onUndoChanged = { [weak self] in
             guard let self = self else { return }
             let canUndo = self.canvasView.canUndo
@@ -126,6 +127,9 @@ private extension AssetEditorViewController {
         editingToolsView.setSaveButtonEnabled(false)
         editingToolsView.onColorsCircleTapped = { [weak self] in
             self?.presentColorPicker()
+        }
+        editingToolsView.onToolSelected = { [weak self] tool in
+            self?.canvasView.updateActiveTool(tool)
         }
         editingToolsView.onAddShapeTapped = { [weak self] view in
             self?.presentShapesPopover(sourceView: view)
