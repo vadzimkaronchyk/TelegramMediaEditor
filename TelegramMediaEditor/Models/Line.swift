@@ -24,8 +24,8 @@ final class Line {
     
     private var velocities = [CGFloat]()
     
-    private let minLineWidth = 1.0
-    private let maxLinewidth = 10.0
+    private let minLineWidth = 4.0
+    private let maxLinewidth = 25.0
     
     let color: UIColor
     let lineWidth: Progress
@@ -48,13 +48,7 @@ final class Line {
     }
     
     func drawInContext(_ context: CGContext) {
-        var segments = segments
-        
-        guard segments.count > 2 else { return }
-        
-        // leaving last 2 segments for next draw
-        segments.removeLast(2)
-        
+        let segment = segments
         for segment in segments {
             context.beginPath()
             context.setStrokeColor(color.cgColor)
@@ -90,12 +84,19 @@ private extension Line {
     
     func extractLineWidth(from velocity: CGPoint) -> CGFloat {
         let length = velocity.length
-        var size = (length / 166).clamped(minValue: 1, maxValue: 40)
+        let maxValue = lineWidth.value(
+            min: minLineWidth,
+            max: maxLinewidth
+        )
+        var size = maxValue + 1 - (length / 150).clamped(
+            minValue: minLineWidth,
+            maxValue: maxValue
+        )
         
         if let lastVelocity = velocities.last {
-            size = size*0.2 + lastVelocity*0.8;
+            size = size*0.2 + lastVelocity*0.8
         }
-        
+
         return size
     }
     
