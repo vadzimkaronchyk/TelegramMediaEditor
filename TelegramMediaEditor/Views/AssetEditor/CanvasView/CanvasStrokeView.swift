@@ -10,10 +10,36 @@ import UIKit
 final class CanvasStrokeView: UIView {
     
     var drawingColor: UIColor = .white
-    
     var lineWidth = Progress.mid
     
     var onDrawingLineFinished: Closure<Line>?
+    
+    private var clearFrozenContext = false
+    private lazy var frozenContext: CGContext = {
+        let scale = UIScreen.main.scale
+        var size = bounds.size
+
+        size.width *= scale
+        size.height *= scale
+
+        let context: CGContext = CGContext(
+            data: nil,
+            width: Int(size.width),
+            height: Int(size.height),
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        )!
+
+        context.setLineCap(.round)
+        let transform = CGAffineTransform(scaleX: scale, y: scale)
+        context.concatenate(transform)
+
+        return context
+    }()
+    
+    private var frozenImage: CGImage?
     
     private(set) var line: Line?
     
@@ -29,8 +55,19 @@ final class CanvasStrokeView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext(), let line = line else { return }
-        line.drawInContext(context)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        
+        if clearFrozenContext {
+            frozenImage = nil
+            frozenContext.clear(bounds)
+            clearFrozenContext = false
+        }
+        
+        frozenImage = line?.drawInContext(context, frozenContext: frozenContext, bounds: bounds) ?? frozenImage
+        
+        if let frozenImage = frozenImage {
+            context.draw(frozenImage, in: bounds)
+        }
     }
 }
 
@@ -77,7 +114,10 @@ private extension CanvasStrokeView {
             )
             setNeedsDisplay(updateRect)
             onDrawingLineFinished?(line)
+            
             self.line = nil
+            clearFrozenContext = true
+            setNeedsDisplay()
         default:
             break
         }

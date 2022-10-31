@@ -23,6 +23,7 @@ final class Line {
     private var segments = [StrokeSegment]()
     
     private var velocities = [CGFloat]()
+    private var frozenSegments = [StrokeSegment]()
     
     private let minLineWidth = 4.0
     private let maxLinewidth = 25.0
@@ -48,34 +49,27 @@ final class Line {
     }
     
     func drawInContext(_ context: CGContext) {
-        for segment in segments {
-            context.beginPath()
-            context.setStrokeColor(color.cgColor)
-            context.setFillColor(color.cgColor)
-
-            context.move(to: segment.b)
-            let abStartAngle = atan2(segment.b.y - segment.a.y, segment.b.x - segment.a.x)
-            context.addArc(
-                center: (segment.a + segment.b)/2,
-                radius: segment.abWidth/2,
-                startAngle: abStartAngle,
-                endAngle: abStartAngle + .pi,
-                clockwise: true
-            )
-            context.addLine(to: segment.c)
-            let cdStartAngle = atan2(segment.c.y - segment.d.y, segment.c.x - segment.d.x)
-            context.addArc(
-                center: (segment.c + segment.d)/2,
-                radius: segment.cdWidth/2,
-                startAngle: cdStartAngle,
-                endAngle: cdStartAngle + .pi,
-                clockwise: true
-            )
-            context.closePath()
-            
-            context.fillPath()
-            context.strokePath()
+        drawSegmentes(frozenSegments + segments, inContext: context)
+    }
+    
+    // TODO: refactor
+    func drawInContext(_ context: CGContext, frozenContext: CGContext, bounds: CGRect) -> CGImage? {
+        var segments = segments
+        var frozenImage: CGImage?
+        let pointsToFroze = 1000
+        
+        if segments.count > pointsToFroze {
+            let frozenSegments = Array(segments[..<pointsToFroze])
+            drawSegmentes(frozenSegments, inContext: frozenContext)
+            segments.removeFirst(pointsToFroze)
+            frozenImage = frozenContext.makeImage()
+            self.frozenSegments.append(contentsOf: frozenSegments)
         }
+        
+        drawSegmentes(segments, inContext: context)
+        self.segments = segments
+        
+        return frozenImage
     }
 }
 
@@ -214,5 +208,36 @@ private extension Line {
             ))
         }
         return (segments, updateRect)
+    }
+    
+    func drawSegmentes(_ segments: [StrokeSegment], inContext context: CGContext) {
+        for segment in segments {
+            context.beginPath()
+            context.setStrokeColor(color.cgColor)
+            context.setFillColor(color.cgColor)
+
+            context.move(to: segment.b)
+            let abStartAngle = atan2(segment.b.y - segment.a.y, segment.b.x - segment.a.x)
+            context.addArc(
+                center: (segment.a + segment.b)/2,
+                radius: segment.abWidth/2,
+                startAngle: abStartAngle,
+                endAngle: abStartAngle + .pi,
+                clockwise: true
+            )
+            context.addLine(to: segment.c)
+            let cdStartAngle = atan2(segment.c.y - segment.d.y, segment.c.x - segment.d.x)
+            context.addArc(
+                center: (segment.c + segment.d)/2,
+                radius: segment.cdWidth/2,
+                startAngle: cdStartAngle,
+                endAngle: cdStartAngle + .pi,
+                clockwise: true
+            )
+            context.closePath()
+            
+            context.fillPath()
+            context.strokePath()
+        }
     }
 }
