@@ -48,7 +48,6 @@ final class Line {
     }
     
     func drawInContext(_ context: CGContext) {
-        let segment = segments
         for segment in segments {
             context.beginPath()
             context.setStrokeColor(color.cgColor)
