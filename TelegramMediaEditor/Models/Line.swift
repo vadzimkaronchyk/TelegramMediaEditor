@@ -27,12 +27,12 @@ final class Line {
     private let minLineWidth = 1.0
     private let maxLinewidth = 10.0
     
-    var lineWidth = Progress.mid
-    
     let color: UIColor
+    let lineWidth: Progress
     
-    init(color: UIColor = .white) {
+    init(color: UIColor = .white, lineWidth: Progress) {
         self.color = color
+        self.lineWidth = lineWidth
     }
     
     func draw(

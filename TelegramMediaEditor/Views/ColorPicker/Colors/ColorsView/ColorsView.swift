@@ -7,6 +7,17 @@
 
 import UIKit
 
+// TODO: save to user defaults
+struct Cache {
+    static var cachedColorsItems: [ColorsItem] = [
+        .view(.init(color: .init(hue: 0, saturation: 1, brightness: 1))),
+        .view(.init(color: .init(hue: 60.0/360, saturation: 1, brightness: 1))),
+        .view(.init(color: .init(hue: 195.0/360, saturation: 1, brightness: 1))),
+        .view(.init(color: .init(hue: 120.0/360, saturation: 1, brightness: 1))),
+        .add
+    ]
+}
+
 final class ColorsView: UIView {
     
     private let stackView = UIStackView()
@@ -117,7 +128,7 @@ private extension ColorsView {
     }
     
     func setupDataSource() {
-        dataSource.reload([.add])
+        dataSource.reload(Cache.cachedColorsItems)
         pageControl.numberOfPages = 1
     }
     

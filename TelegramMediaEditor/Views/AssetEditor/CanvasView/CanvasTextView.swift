@@ -69,7 +69,10 @@ final class CanvasTextView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        textToolsView.frame = .init(origin: .zero, size: .init(width: bounds.width, height: 49))
+        textToolsView.frame = .init(
+            origin: .zero,
+            size: .init(width: bounds.width, height: 49)
+        )
     }
     
     func updateTextColor(_ color: HSBColor) {
@@ -82,6 +85,7 @@ final class CanvasTextView: UIView {
         textView.text = text?.string
         textView.textAlignment = text?.alignment ?? .left
         textSizeProgress = text.map { .init(value: $0.fontSize, min: minTextSize, max: maxTextSize) } ?? .init(0.75)
+        refreshTextSize()
     }
     
     func updateTextAlignment(_ alignment: NSTextAlignment) {
@@ -124,7 +128,7 @@ private extension CanvasTextView {
         setupTextView()
         setupTextSizeSlider()
         setupTextToolsView()
-        setupState()
+        refreshTextSize()
     }
     
     func setupView() {
@@ -132,11 +136,13 @@ private extension CanvasTextView {
     }
     
     func setupTextView() {
-        textView.inputAccessoryView = textToolsView
         textView.delegate = self
-        textView.backgroundColor = .clear
-        textView.isScrollEnabled = false
+        textView.inputAccessoryView = textToolsView
         textView.textContainerInset = textContainerInset
+        textView.backgroundColor = .clear
+        textView.spellCheckingType = .no
+        textView.autocorrectionType = .no
+        textView.isScrollEnabled = false
     }
     
     func setupTextSizeSlider() {
@@ -158,7 +164,7 @@ private extension CanvasTextView {
         }
     }
     
-    func setupState() {
+    func refreshTextSize() {
         textSizeSlider.value = textSizeProgress
         refreshFont()
     }

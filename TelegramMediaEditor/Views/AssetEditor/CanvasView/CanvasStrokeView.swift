@@ -11,10 +11,7 @@ final class CanvasStrokeView: UIView {
     
     var drawingColor: UIColor = .white
     
-    var lineWidth: Progress {
-        get { line?.lineWidth ?? .mid }
-        set { line?.lineWidth = newValue }
-    }
+    var lineWidth = Progress.mid
     
     var onDrawingLineFinished: Closure<Line>?
     
@@ -54,7 +51,7 @@ private extension CanvasStrokeView {
         let location = gestureRecognizer.location(in: self)
         let velocity = gestureRecognizer.velocity(in: self)
         
-        let line = line ?? .init(color: drawingColor)
+        let line = line ?? .init(color: drawingColor, lineWidth: lineWidth)
         self.line = line
         
         switch gestureRecognizer.state {

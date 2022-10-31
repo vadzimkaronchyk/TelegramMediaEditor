@@ -110,7 +110,7 @@ private extension ColorPickerSpectrumView {
                 maxValue: spectrumView.frame.maxY
             )
         )
-        let color = spectrumView.color(atLocation: clampedLocation)
+        let color = spectrumView.color(atLocation: convert(location, to: spectrumView))
         
         cursorView.isHidden = false
         cursorView.center = clampedLocation
