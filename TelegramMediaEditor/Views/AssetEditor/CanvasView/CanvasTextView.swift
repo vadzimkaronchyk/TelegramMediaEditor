@@ -16,12 +16,20 @@ final class CanvasTextView: UIView {
         .centerYAnchor
         .constraint(equalTo: centerYAnchor)
     
+    var textColor = UIColor.white {
+        didSet {
+            textView.textColor = textColor
+            textView.tintColor = textColor
+        }
+    }
+    
     var textOrigin: CGPoint {
         .init(x: textContainerInset.left, y: textContainerInset.top)
     }
     
     var text: Text {
         .init(
+            color: textView.textColor ?? .white,
             string: textView.text,
             fontSize: textSize,
             width: editingText?.width ?? textView.intrinsicContentSize.width
@@ -101,13 +109,11 @@ private extension CanvasTextView {
     }
     
     func setupView() {
-        backgroundColor = .clear
+        backgroundColor = .black.withAlphaComponent(0.5)
     }
     
     func setupTextView() {
         textView.delegate = self
-        textView.textColor = .white
-        textView.tintColor = .white
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
         textView.textContainerInset = textContainerInset

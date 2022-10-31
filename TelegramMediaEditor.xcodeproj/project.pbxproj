@@ -99,6 +99,7 @@
 		D7F724C1290EB1D600660CFF /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C0290EB1D600660CFF /* Text.swift */; };
 		D7F724C3290ECF2700660CFF /* CanvasCommitedStrokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */; };
 		D7F724C5290ECF3200660CFF /* CanvasCommitedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */; };
+		D7F724D1290F54FA00660CFF /* CircleTextControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724D0290F54FA00660CFF /* CircleTextControlView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,6 +197,7 @@
 		D7F724C0290EB1D600660CFF /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasCommitedStrokeView.swift; sourceTree = "<group>"; };
 		D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasCommitedTextView.swift; sourceTree = "<group>"; };
+		D7F724D0290F54FA00660CFF /* CircleTextControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTextControlView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -484,6 +486,7 @@
 				D7F724BC290E6A7100660CFF /* CanvasTextView.swift */,
 				D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */,
 				D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */,
+				D7F724D0290F54FA00660CFF /* CircleTextControlView.swift */,
 			);
 			path = CanvasView;
 			sourceTree = "<group>";
@@ -720,6 +723,7 @@
 				D7389CC428F4B0BA00475B7D /* NeonBrushView.swift in Sources */,
 				72C42CA82901B80400823835 /* ColorCodeTextField.swift in Sources */,
 				D75F30EC28F9ECFA0080F208 /* ColorSliderInputView.swift in Sources */,
+				D7F724D1290F54FA00660CFF /* CircleTextControlView.swift in Sources */,
 				D7F724C5290ECF3200660CFF /* CanvasCommitedTextView.swift in Sources */,
 				72C42CAB2901D90500823835 /* ColorCodeTextFieldModel.swift in Sources */,
 				72C42C972900540000823835 /* ColorSliderView.swift in Sources */,

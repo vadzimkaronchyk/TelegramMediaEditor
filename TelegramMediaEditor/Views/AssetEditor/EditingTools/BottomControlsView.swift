@@ -15,6 +15,7 @@ final class BottomControlsView: UIView {
     private let activityIndicatorView = UIActivityIndicatorView(style: .medium)
     private let contentStackView = UIStackView()
     
+    var onDrawingToolSelected: VoidClosure?
     var onTextToolSelected: VoidClosure?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
@@ -127,8 +128,13 @@ private extension BottomControlsView {
 private extension BottomControlsView {
     
     @objc func toolsSegmentedControlValueChanged(_ segmentedControl: UISegmentedControl) {
-        if segmentedControl.selectedSegmentIndex == 1 {
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            onDrawingToolSelected?()
+        case 1:
             onTextToolSelected?()
+        default:
+            break
         }
     }
     

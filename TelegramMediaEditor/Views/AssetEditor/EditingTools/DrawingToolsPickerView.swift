@@ -31,6 +31,10 @@ final class DrawingToolsPickerView: UIControl {
         [penView, brushView, neonBrushView, pencilView, lassoView, eraserView]
     }
     
+    var selectedTool: Tool.Drawing {
+        selectedToolView.tool
+    }
+    
     var onToolSelected: Closure<Tool.Drawing>?
     var onToolHighlighted: Closure<Tool.Drawing>?
     var onToolDehighlighted: VoidClosure?

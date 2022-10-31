@@ -102,6 +102,8 @@ private final class ToolSizeSliderTrackView: UIView {
         let centerY = thickness/2
         
         context.setFillColor(UIColor.secondarySystemBackground.cgColor)
+        context.setAlpha(0.7)
+        
         context.move(to: .init(
             x: fromWidth/2,
             y: centerY + fromWidth/2
@@ -124,6 +126,7 @@ private final class ToolSizeSliderTrackView: UIView {
             endAngle: -.pi*1.5,
             clockwise: false
         )
+        
         context.closePath()
         context.fillPath()
     }

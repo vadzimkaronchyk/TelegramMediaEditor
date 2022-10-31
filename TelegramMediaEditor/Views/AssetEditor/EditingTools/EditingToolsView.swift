@@ -142,6 +142,10 @@ private extension EditingToolsView {
     }
     
     func setupBottomView() {
+        bottomView.onDrawingToolSelected = { [weak self] in
+            guard let self = self else { return }
+            self.onToolSelected?(.drawing(self.drawingToolsPickerView.selectedTool))
+        }
         bottomView.onTextToolSelected = { [weak self] in
             self?.onToolSelected?(.text)
         }

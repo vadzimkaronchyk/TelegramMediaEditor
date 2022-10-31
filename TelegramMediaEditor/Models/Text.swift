@@ -6,8 +6,10 @@
 //
 
 import CoreGraphics
+import UIKit
 
 struct Text {
+    let color: UIColor
     let string: String
     let fontSize: CGFloat
     let width: CGFloat

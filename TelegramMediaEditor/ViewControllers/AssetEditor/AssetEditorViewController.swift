@@ -267,13 +267,13 @@ private extension AssetEditorViewController {
     
     func updateDrawingColor(_ color: HSBColor) {
         drawingColor = color
-        canvasView.drawingColor = color.uiColor
+        canvasView.color = color.uiColor
         editingToolsView.updateDrawingColor(color)
     }
     
     func handleEditingToolsViewSelectedColor(_ color: HSBColor) {
         drawingColor = color
-        canvasView.drawingColor = color.uiColor
+        canvasView.color = color.uiColor
     }
     
     func saveDrawing() {

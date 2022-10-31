@@ -12,12 +12,20 @@ final class CanvasView: UIView {
     private let strokeView = CanvasStrokeView()
     private let textView = CanvasTextView()
     
-    private var focusedTextView: CanvasCommitedTextView?
     private var commitedViews = [UIView]()
+    private var focusedTextView: CanvasCommitedTextView? {
+        commitedViews.first { $0.isFirstResponder } as? CanvasCommitedTextView
+    }
+    private lazy var textTypingTapGestureRecognizer = UITapGestureRecognizer(
+        target: self,
+        action: #selector(handleTextTypingTapGesture)
+    )
     
-    var drawingColor: UIColor {
-        get { strokeView.drawingColor }
-        set { strokeView.drawingColor = newValue }
+    var color: UIColor = .white {
+        didSet {
+            strokeView.drawingColor = color
+            textView.textColor = color
+        }
     }
     
     var lineWidth: Progress {
@@ -40,6 +48,7 @@ final class CanvasView: UIView {
         
         setupLayout()
         setupView()
+        addGestureRecognizers()
     }
     
     required init?(coder: NSCoder) {
@@ -50,12 +59,13 @@ final class CanvasView: UIView {
         activeTool = tool
         switch tool {
         case .drawing:
-            strokeView.isHidden = false
-            textView.isHidden = true
+            hideTextView()
+            showStrokeView()
+            textTypingTapGestureRecognizer.isEnabled = false
         case .text:
-            strokeView.isHidden = true
-            textView.isHidden = false
-            textView.makeActive()
+            hideStrokeView()
+            showTextView()
+            textTypingTapGestureRecognizer.isEnabled = true
         }
     }
     
@@ -76,8 +86,7 @@ final class CanvasView: UIView {
     func cancelEditedText() {
         focusedTextView?.isHidden = false
         
-        textView.isHidden = true
-        textView.setEditingText(nil)
+        hideTextView()
         textView.makeInactive()
     }
     
@@ -90,8 +99,7 @@ final class CanvasView: UIView {
             onUndoChanged?()
         }
         
-        textView.isHidden = true
-        textView.setEditingText(nil)
+        hideTextView()
         textView.makeInactive()
     }
 }
@@ -130,8 +138,37 @@ private extension CanvasView {
         }
     }
     
+    func addGestureRecognizers() {
+        addGestureRecognizer(textTypingTapGestureRecognizer)
+    }
+    
+    func showStrokeView() {
+        strokeView.isHidden = false
+    }
+    
+    func hideStrokeView() {
+        strokeView.isHidden = true
+    }
+    
+    func showTextView() {
+        textView.isHidden = false
+        textView.makeActive()
+    }
+    
+    func hideTextView() {
+        textView.isHidden = true
+        textView.setEditingText(nil)
+    }
+    
     func addEditedText(_ text: Text) {
         let textView = CanvasCommitedTextView(text: text)
+        addGestureRecognizers(toTextView: textView)
+        addSubview(textView: textView)
+        
+        commitedViews.append(textView)
+    }
+    
+    func addGestureRecognizers(toTextView textView: CanvasCommitedTextView) {
         textView.addGestureRecognizer(UITapGestureRecognizer(
             target: self,
             action: #selector(handleTextViewTapGesture)
@@ -140,28 +177,33 @@ private extension CanvasView {
             target: self,
             action: #selector(handleTextViewPanGesture)
         ))
-        
-        addSubview(textView)
+    }
+    
+    func addSubview(textView: CanvasCommitedTextView) {
+        insertSubview(textView, belowSubview: strokeView)
         textView.translatesAutoresizingMaskIntoConstraints = false
-        let textViewAdditionalInset = CGPoint(x: 5, y: 0) // TODO: remove
-        let origin = self.textView.textOrigin + textViewAdditionalInset
+        let textAdditionalInset = CGPoint(x: 5 - 16, y: -4) // TODO: remove hardcoded values
+        let origin = self.textView.textOrigin + textAdditionalInset
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: topAnchor, constant: origin.y),
             textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: origin.x)
         ])
-        
-        commitedViews.append(textView)
     }
     
     func addDrawedLine(_ line: Line) {
         let strokeView = CanvasCommitedStrokeView(line: line)
         strokeView.frame = bounds
-        addSubview(strokeView)
+        insertSubview(strokeView, belowSubview: self.strokeView)
         commitedViews.append(strokeView)
     }
 }
 
 private extension CanvasView {
+    
+    @objc func handleTextTypingTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
+        showTextView()
+        onTextEditingStarted?()
+    }
     
     @objc func handleTextViewTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
         guard let view = gestureRecognizer.view as? CanvasCommitedTextView else {
@@ -169,7 +211,6 @@ private extension CanvasView {
         }
         
         view.becomeFirstResponder()
-        focusedTextView = view
         
         let menuController = UIMenuController.shared
         let deleteMenuItem = UIMenuItem(
@@ -204,9 +245,8 @@ private extension CanvasView {
         guard let focusedTextView = focusedTextView else { return }
         
         focusedTextView.isHidden = true
-        textView.isHidden = false
         textView.setEditingText(focusedTextView.text)
-        textView.makeActive()
+        showTextView()
         
         onTextEditingStarted?()
     }
@@ -219,5 +259,10 @@ private extension CanvasView {
     }
     
     @objc func handleTextViewPanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
+        guard let view = gestureRecognizer.view else { return }
+        
+        let translation = gestureRecognizer.translation(in: view)
+        view.transform = view.transform.translatedBy(x: translation.x, y: translation.y)
+        gestureRecognizer.setTranslation(.zero, in: view)
     }
 }
