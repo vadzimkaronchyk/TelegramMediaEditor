@@ -72,6 +72,7 @@ private extension ColorPickerSpectrumView {
         backgroundColor = .clear
         cursorView.backgroundColor = .clear
         cursorView.isUserInteractionEnabled = false
+        spectrumView.cornerRadius = 8
         addGestureRecognizers()
     }
     
