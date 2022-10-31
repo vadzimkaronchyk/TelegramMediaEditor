@@ -78,10 +78,12 @@ private extension CanvasStrokeView {
     }
     
     func addPanGestureRecognizer() {
-        addGestureRecognizer(UIPanGestureRecognizer(
+        let panGestureRecognizer = UIPanGestureRecognizer(
             target: self,
             action: #selector(handlePanGesgture)
-        ))
+        )
+        panGestureRecognizer.maximumNumberOfTouches = 1
+        addGestureRecognizer(panGestureRecognizer)
     }
     
     @objc func handlePanGesgture(_ gestureRecognizer: UIPanGestureRecognizer) {
