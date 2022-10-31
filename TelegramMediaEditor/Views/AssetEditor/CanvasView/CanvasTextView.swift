@@ -11,22 +11,14 @@ final class CanvasTextView: UIView {
     
     private let textView = UITextView()
     private let textSizeSlider = ToolSizeSlider()
+    private let textToolsView = TextToolsInputAccessoryView()
     
     private lazy var textSizeSliderCenterYConstraint = textSizeSlider
         .centerYAnchor
         .constraint(equalTo: centerYAnchor)
     
-    var textColor = UIColor.white {
-        didSet {
-            textView.textColor = textColor
-            textView.tintColor = textColor
-        }
-    }
-    
-    var alignment: NSTextAlignment {
-        get { textView.textAlignment }
-        set { textView.textAlignment = newValue }
-    }
+    private(set) var textColor = HSBColor.white
+    private(set) var alignment = NSTextAlignment.left
     
     var textOrigin: CGPoint {
         .init(x: textContainerInset.left, y: textContainerInset.top)
@@ -43,6 +35,9 @@ final class CanvasTextView: UIView {
     }
     
     var onTextChanged: VoidClosure?
+    var onColorsCircleTapped: VoidClosure?
+    var onColorSelected: Closure<HSBColor>?
+    var onTextAlignmentChanged: Closure<NSTextAlignment>?
     
     private var editingText: Text?
     private var textSizeProgress = Progress(0.75)
@@ -71,11 +66,27 @@ final class CanvasTextView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        textToolsView.frame = .init(origin: .zero, size: .init(width: bounds.width, height: 49))
+    }
+    
+    func updateTextColor(_ color: HSBColor) {
+        updateTextViewColor(color)
+        textToolsView.updateDrawingColor(color)
+    }
+    
     func setEditingText(_ text: Text?) {
         editingText = text
         textView.text = text?.string
         textView.textAlignment = text?.alignment ?? .left
         textSizeProgress = text.map { .init(value: $0.fontSize, min: minTextSize, max: maxTextSize) } ?? .init(0.75)
+    }
+    
+    func updateTextAlignment(_ alignment: NSTextAlignment) {
+        textView.textAlignment = alignment
+        textToolsView.updateTextAlignment(alignment)
     }
     
     func makeActive() {
@@ -112,6 +123,7 @@ private extension CanvasTextView {
         setupView()
         setupTextView()
         setupTextSizeSlider()
+        setupTextToolsView()
         setupState()
     }
     
@@ -120,6 +132,7 @@ private extension CanvasTextView {
     }
     
     func setupTextView() {
+        textView.inputAccessoryView = textToolsView
         textView.delegate = self
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
@@ -129,6 +142,20 @@ private extension CanvasTextView {
     func setupTextSizeSlider() {
         textSizeSlider.transform = .init(rotationAngle: -.pi/2)
         textSizeSlider.addTarget(self, action: #selector(textSizeSliderValueChanged), for: .valueChanged)
+    }
+    
+    func setupTextToolsView() {
+        textToolsView.onColorsCircleTapped = { [weak self] in
+            self?.onColorsCircleTapped?()
+        }
+        textToolsView.onColorSelected = { [weak self] color in
+            self?.updateTextViewColor(color)
+            self?.onColorSelected?(color)
+        }
+        textToolsView.onTextAlignmentChanged = { [weak self] alignment in
+            self?.textView.textAlignment = alignment
+            self?.onTextAlignmentChanged?(alignment)
+        }
     }
     
     func setupState() {
@@ -153,6 +180,12 @@ private extension CanvasTextView {
     
     func refreshFont() {
         textView.font = .systemFont(ofSize: textSize, weight: .bold)
+    }
+    
+    func updateTextViewColor(_ color: HSBColor) {
+        let uiColor = color.uiColor
+        textView.textColor = uiColor
+        textView.tintColor = uiColor
     }
 }
 

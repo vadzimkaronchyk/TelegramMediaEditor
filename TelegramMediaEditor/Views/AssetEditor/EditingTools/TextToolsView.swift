@@ -27,6 +27,18 @@ final class TextToolsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func updateTextAlignment(_ alignment: NSTextAlignment) {
+        self.alignment = alignment
+        switch alignment {
+        case .left:
+            setAlignmentButtonImage(.init(named: "textLeft"))
+        case .right:
+            setAlignmentButtonImage(.init(named: "textRight"))
+        default:
+            setAlignmentButtonImage(.init(named: "textCenter"))
+        }
+    }
 }
 
 private extension TextToolsView {
@@ -65,18 +77,6 @@ private extension TextToolsView {
         ])
     }
     
-    func updateTextAlignment(_ alignment: NSTextAlignment) {
-        self.alignment = alignment
-        switch alignment {
-        case .left:
-            setAlignmentButtonImage(.init(named: "textLeft"))
-        case .right:
-            setAlignmentButtonImage(.init(named: "textRight"))
-        default:
-            setAlignmentButtonImage(.init(named: "textCenter"))
-        }
-    }
-    
     func setAlignmentButtonImage(_ image: UIImage?) {
         alignmentButton.setImage(image, for: .normal)
     }
@@ -91,7 +91,7 @@ private extension TextToolsView {
     }
 }
 
-private extension NSTextAlignment {
+extension NSTextAlignment {
     
     var next: NSTextAlignment {
         switch self {

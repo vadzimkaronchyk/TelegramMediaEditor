@@ -13,7 +13,7 @@ final class ColorSpectrumView: UIView {
         didSet { setNeedsDisplay() }
     }
     
-    private var colorSize: Double { 2 }
+    private var colorSize: Double { 1 }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -55,6 +55,10 @@ final class EditingToolsView: UIView {
         updateCursorViewLocation(color: color)
     }
     
+    func updateTextAlignment(_ alignment: NSTextAlignment) {
+        textToolsView.updateTextAlignment(alignment)
+    }
+    
     func updateStrokeShape(_ strokeShape: StrokeShape) {
         bottomView.updateStrokeShape(strokeShape)
     }
@@ -78,15 +82,13 @@ private extension EditingToolsView {
         addSubview(textToolsView)
         addSubview(addShapeButton)
         addSubview(bottomView)
-        addSubview(spectrumView)
-        spectrumView.addSubview(spectrumCursorView)
         
         colorsCircleView.translatesAutoresizingMaskIntoConstraints = false
         drawingToolsPickerView.translatesAutoresizingMaskIntoConstraints = false
         textToolsView.translatesAutoresizingMaskIntoConstraints = false
         addShapeButton.translatesAutoresizingMaskIntoConstraints = false
         bottomView.translatesAutoresizingMaskIntoConstraints = false
-        spectrumView.translatesAutoresizingMaskIntoConstraints = false
+        
         
         NSLayoutConstraint.activate([
             colorsCircleView.heightAnchor.constraint(equalToConstant: 33),
@@ -106,11 +108,7 @@ private extension EditingToolsView {
             addShapeButton.bottomAnchor.constraint(equalTo: bottomView.topAnchor, constant: -8),
             bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
             bottomView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            spectrumView.widthAnchor.constraint(equalTo: spectrumView.heightAnchor, multiplier: 12/10),
-            spectrumView.leadingAnchor.constraint(equalTo: colorsCircleView.leadingAnchor),
-            spectrumView.trailingAnchor.constraint(equalTo: addShapeButton.centerXAnchor),
-            spectrumView.bottomAnchor.constraint(equalTo: colorsCircleView.bottomAnchor),
+            bottomView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
@@ -202,6 +200,27 @@ private extension EditingToolsView {
         ))
     }
     
+    func showSpectrumView() {
+        if spectrumView.superview == nil {
+            addSubview(spectrumView)
+            spectrumView.addSubview(spectrumCursorView)
+            
+            spectrumView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                spectrumView.widthAnchor.constraint(equalTo: spectrumView.heightAnchor, multiplier: 12/10),
+                spectrumView.leadingAnchor.constraint(equalTo: colorsCircleView.leadingAnchor),
+                spectrumView.trailingAnchor.constraint(equalTo: addShapeButton.centerXAnchor),
+                spectrumView.bottomAnchor.constraint(equalTo: colorsCircleView.bottomAnchor)
+            ])
+        }
+        spectrumView.isHidden = false
+    }
+    
+    func hideSpectrumView() {
+        spectrumView.isHidden = true
+    }
+    
     func updateCursorViewLocation(color: HSBColor) {
         if let location = spectrumView.location(forColor: color) {
             spectrumCursorView.center = .init(
@@ -240,9 +259,7 @@ private extension EditingToolsView {
     @objc func handleColorCircleViewLongPressGesture(_ gestureRecognizer: UILongPressGestureRecognizer) {
         switch gestureRecognizer.state {
         case .began:
-            spectrumView.isHidden = false
-        case .ended, .cancelled, .failed:
-            spectrumView.isHidden = true
+            showSpectrumView()
         case .changed:
             let location = gestureRecognizer.location(in: spectrumView)
             let clampedLocation = CGPoint(
@@ -265,6 +282,8 @@ private extension EditingToolsView {
             spectrumCursorView.outlineColor = color
 
             onColorSelected?(color)
+        case .ended, .cancelled, .failed:
+            hideSpectrumView()
         default:
             break
         }

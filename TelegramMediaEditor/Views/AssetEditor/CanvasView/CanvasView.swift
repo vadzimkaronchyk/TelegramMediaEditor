@@ -14,15 +14,18 @@ final class CanvasView: UIView {
     
     private var commitedViews = [UIView]()
     private var selectedTextView: CanvasCommitedTextView?
+    
     private lazy var textTypingTapGestureRecognizer = UITapGestureRecognizer(
         target: self,
         action: #selector(handleTextTypingTapGesture)
     )
     
-    var color: UIColor = .white {
+    var color = HSBColor.white {
         didSet {
-            strokeView.drawingColor = color
-            textView.textColor = color
+            let uiColor = color.uiColor
+            updateStrokeViewColor(uiColor)
+            updateTextViewColor(color)
+            updateSelectedTextViewColor(uiColor)
         }
     }
     
@@ -36,8 +39,11 @@ final class CanvasView: UIView {
     }
     
     var onUndoChanged: VoidClosure?
-    var onTextEditingStarted: VoidClosure?
+    var onTextEditingStarted: Closure<Bool>?
     var onTextEditingChanged: Closure<Text>?
+    var onColorsCircleTapped: VoidClosure?
+    var onColorSelected: Closure<HSBColor>?
+    var onTextAlignmentChanged: Closure<NSTextAlignment>?
     
     private var activeTool = Tool.drawing(.pen)
     
@@ -69,12 +75,8 @@ final class CanvasView: UIView {
     }
     
     func updateTextAlignment(_ alignment: NSTextAlignment) {
-        textView.alignment = alignment
-        if let selectedTextView = selectedTextView {
-            var text = selectedTextView.text
-            text.alignment = alignment
-            selectedTextView.updateText(text)
-        }
+        updateTextViewAlignment(alignment)
+        updateSelectedTextViewAlignment(alignment)
     }
     
     func undo() {
@@ -135,6 +137,7 @@ private extension CanvasView {
 
     func setupView() {
         backgroundColor = .clear
+        clipsToBounds = true
         strokeView.onDrawingLineFinished = { [weak self] line in
             guard let self = self else { return }
             self.addDrawedLine(line)
@@ -143,6 +146,18 @@ private extension CanvasView {
         textView.onTextChanged = { [weak self] in
             guard let self = self else { return }
             self.onTextEditingChanged?(self.textView.text)
+        }
+        textView.onColorsCircleTapped = { [weak self] in
+            self?.onColorsCircleTapped?()
+        }
+        textView.onColorSelected = { [weak self] color in
+            let uiColor = color.uiColor
+            self?.updateStrokeViewColor(uiColor)
+            self?.updateSelectedTextViewColor(uiColor)
+            self?.onColorSelected?(color)
+        }
+        textView.onTextAlignmentChanged = { [weak self] alignment in
+            self?.onTextAlignmentChanged?(alignment)
         }
     }
     
@@ -188,6 +203,14 @@ private extension CanvasView {
         }
         selectedTextView = textView
         textView.setSelected(true)
+        
+        let text = textView.text
+        let hsbColor = text.color.hsbColor
+        updateTextViewAlignment(text.alignment)
+        updateStrokeViewColor(text.color)
+        updateTextViewColor(hsbColor)
+        onColorSelected?(hsbColor)
+        onTextAlignmentChanged?(text.alignment)
     }
     
     func addGestureRecognizers(toTextView textView: CanvasCommitedTextView) {
@@ -201,6 +224,37 @@ private extension CanvasView {
         ))
     }
     
+    func updateTextViewAlignment(_ alignment: NSTextAlignment) {
+        textView.updateTextAlignment(alignment)
+    }
+    
+    func updateSelectedTextViewAlignment(_ alignment: NSTextAlignment) {
+        guard let selectedTextView = selectedTextView else {
+            return
+        }
+        var text = selectedTextView.text
+        text.alignment = alignment
+        selectedTextView.updateText(text)
+    }
+    
+    func updateStrokeViewColor(_ color: UIColor) {
+        strokeView.drawingColor = color
+    }
+    
+    func updateTextViewColor(_ color: HSBColor) {
+        textView.updateTextColor(color)
+    }
+    
+    func updateSelectedTextViewColor(_ color: UIColor) {
+        guard let selectedTextView = selectedTextView else {
+            return
+        }
+        
+        var text = selectedTextView.text
+        text.color = color
+        selectedTextView.updateText(text)
+    }
+    
     func addSubview(textView: CanvasCommitedTextView) {
         insertSubview(textView, belowSubview: strokeView)
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -208,7 +262,8 @@ private extension CanvasView {
         let origin = self.textView.textOrigin + textAdditionalInset
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: topAnchor, constant: origin.y),
-            textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: origin.x)
+            textView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: origin.x),
+            textView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor)
         ])
     }
     
@@ -247,7 +302,7 @@ private extension CanvasView {
     @objc func handleTextTypingTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
         showTextView()
         resignSelectedTextView()
-        onTextEditingStarted?()
+        onTextEditingStarted?(false)
     }
     
     @objc func handleTextViewTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -276,7 +331,7 @@ private extension CanvasView {
         textView.setEditingText(selectedTextView.text)
         showTextView()
         
-        onTextEditingStarted?()
+        onTextEditingStarted?(true)
     }
     
     @objc func textViewDuplicateMenuItemTapped(_ menuItem: UIMenuItem) {

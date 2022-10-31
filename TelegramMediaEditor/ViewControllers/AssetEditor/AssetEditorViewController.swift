@@ -123,10 +123,10 @@ private extension AssetEditorViewController {
             self.clearBarButtonItem.isEnabled = canUndo
             self.editingToolsView.setSaveButtonEnabled(canUndo)
         }
-        canvasView.onTextEditingStarted = { [weak self] in
+        canvasView.onTextEditingStarted = { [weak self] isValid in
             self?.setupTextEditingNavigationItem(
                 animated: true,
-                isDoneEnabled: true
+                isDoneEnabled: isValid
             )
         }
         canvasView.onTextEditingChanged = { [weak self] text in
@@ -134,6 +134,15 @@ private extension AssetEditorViewController {
                 animated: true,
                 isDoneEnabled: !text.string.isEmpty
             )
+        }
+        canvasView.onColorsCircleTapped = { [weak self] in
+            self?.presentColorPicker()
+        }
+        canvasView.onColorSelected = { [weak self] color in
+            self?.handleCanvasViewSelectedColor(color)
+        }
+        canvasView.onTextAlignmentChanged = { [weak self] alignment in
+            self?.handleCanvasViewAlignmentChanged(alignment)
         }
     }
     
@@ -270,13 +279,22 @@ private extension AssetEditorViewController {
     
     func updateDrawingColor(_ color: HSBColor) {
         drawingColor = color
-        canvasView.color = color.uiColor
+        canvasView.color = color
         editingToolsView.updateDrawingColor(color)
+    }
+    
+    func handleCanvasViewSelectedColor(_ color: HSBColor) {
+        drawingColor = color
+        editingToolsView.updateDrawingColor(color)
+    }
+    
+    func handleCanvasViewAlignmentChanged(_ alignment: NSTextAlignment) {
+        editingToolsView.updateTextAlignment(alignment)
     }
     
     func handleEditingToolsViewSelectedColor(_ color: HSBColor) {
         drawingColor = color
-        canvasView.color = color.uiColor
+        canvasView.color = color
     }
     
     func saveDrawing() {

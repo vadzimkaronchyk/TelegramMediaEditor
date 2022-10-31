@@ -163,24 +163,46 @@ private extension CanvasCommitedTextView {
     }
     
     func addGestureRecognizers() {
-        leadingControlView.addGestureRecognizer(UIPanGestureRecognizer(
+        let pinchGestureRecognizer = UIPinchGestureRecognizer(
             target: self,
-            action: #selector(handleLeadingControlView)
-        ))
-        trailingControlView.addGestureRecognizer(UIPanGestureRecognizer(
+            action: #selector(handlePinchGesture)
+        )
+        pinchGestureRecognizer.delegate = self
+        addGestureRecognizer(pinchGestureRecognizer)
+        
+        let rotationGestureRecognizer = UIRotationGestureRecognizer(
             target: self,
-            action: #selector(handleTrailingControlView)
-        ))
+            action: #selector(handleRotationGesture)
+        )
+        rotationGestureRecognizer.delegate = self
+        addGestureRecognizer(rotationGestureRecognizer)
     }
 }
 
 private extension CanvasCommitedTextView {
     
-    @objc func handleLeadingControlView(_ gestureRecognizer: UIPanGestureRecognizer) {
-        print("leading pan")
+    @objc func handlePinchGesture(_ gestureRecognizer: UIPinchGestureRecognizer) {
+        guard let view = gestureRecognizer.view else { return }
+        view.transform = view.transform.scaledBy(
+            x: gestureRecognizer.scale,
+            y: gestureRecognizer.scale
+        )
+        gestureRecognizer.scale = 1
     }
     
-    @objc func handleTrailingControlView(_ gestureRecognizer: UIPanGestureRecognizer) {
-        print("trailing pan")
+    @objc func handleRotationGesture(_ gestureRecognizer: UIRotationGestureRecognizer) {
+        guard let view = gestureRecognizer.view else { return }
+        view.transform = view.transform.rotated(by: gestureRecognizer.rotation)
+        gestureRecognizer.rotation = 0
+    }
+}
+
+extension CanvasCommitedTextView: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        return true
     }
 }
