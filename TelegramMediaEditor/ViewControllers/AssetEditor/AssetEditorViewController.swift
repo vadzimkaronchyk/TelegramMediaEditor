@@ -75,9 +75,9 @@ private extension AssetEditorViewController {
         editingToolsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            assetImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            assetImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            assetImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            assetImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            assetImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            assetImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             assetImageView.bottomAnchor.constraint(equalTo: editingToolsView.topAnchor),
             canvasView.topAnchor.constraint(equalTo: assetImageView.topAnchor),
             canvasView.leadingAnchor.constraint(equalTo: assetImageView.leadingAnchor),
