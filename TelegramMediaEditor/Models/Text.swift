@@ -9,8 +9,9 @@ import CoreGraphics
 import UIKit
 
 struct Text {
-    let color: UIColor
-    let string: String
-    let fontSize: CGFloat
-    let width: CGFloat
+    var string: String
+    var alignment: NSTextAlignment
+    var color: UIColor
+    var fontSize: CGFloat
+    var width: CGFloat
 }

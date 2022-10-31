@@ -23,14 +23,20 @@ final class CanvasTextView: UIView {
         }
     }
     
+    var alignment: NSTextAlignment {
+        get { textView.textAlignment }
+        set { textView.textAlignment = newValue }
+    }
+    
     var textOrigin: CGPoint {
         .init(x: textContainerInset.left, y: textContainerInset.top)
     }
     
     var text: Text {
         .init(
-            color: textView.textColor ?? .white,
             string: textView.text,
+            alignment: textView.textAlignment,
+            color: textView.textColor ?? .white,
             fontSize: textSize,
             width: editingText?.width ?? textView.intrinsicContentSize.width
         )
@@ -68,6 +74,7 @@ final class CanvasTextView: UIView {
     func setEditingText(_ text: Text?) {
         editingText = text
         textView.text = text?.string
+        textView.textAlignment = text?.alignment ?? .left
         textSizeProgress = text.map { .init(value: $0.fontSize, min: minTextSize, max: maxTextSize) } ?? .init(0.75)
     }
     

@@ -100,6 +100,7 @@
 		D7F724C3290ECF2700660CFF /* CanvasCommitedStrokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */; };
 		D7F724C5290ECF3200660CFF /* CanvasCommitedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */; };
 		D7F724D1290F54FA00660CFF /* CircleTextControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724D0290F54FA00660CFF /* CircleTextControlView.swift */; };
+		D7F724D3290F766100660CFF /* TextToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F724D2290F766100660CFF /* TextToolsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -198,6 +199,7 @@
 		D7F724C2290ECF2700660CFF /* CanvasCommitedStrokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasCommitedStrokeView.swift; sourceTree = "<group>"; };
 		D7F724C4290ECF3200660CFF /* CanvasCommitedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasCommitedTextView.swift; sourceTree = "<group>"; };
 		D7F724D0290F54FA00660CFF /* CircleTextControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTextControlView.swift; sourceTree = "<group>"; };
+		D7F724D2290F766100660CFF /* TextToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToolsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -327,6 +329,7 @@
 				D7389CC528F4B12E00475B7D /* Tools */,
 				D7389CB528F47E7400475B7D /* EditingToolsView.swift */,
 				D7389CDC28F5E9A400475B7D /* DrawingToolsPickerView.swift */,
+				D7F724D2290F766100660CFF /* TextToolsView.swift */,
 				D737485D290AE43D00675C7A /* EditingToolsBottomView.swift */,
 				D7374854290A93EA00675C7A /* BottomControlsView.swift */,
 				D737484F290A90C000675C7A /* BottomToolSettingsView.swift */,
@@ -715,6 +718,7 @@
 				D737485E290AE43D00675C7A /* EditingToolsBottomView.swift in Sources */,
 				7212E9CA28FD924300AA6C00 /* UICollectionViewExtensions.swift in Sources */,
 				D7389CC228F4AFEC00475B7D /* LassoView.swift in Sources */,
+				D7F724D3290F766100660CFF /* TextToolsView.swift in Sources */,
 				D75F30EE28F9ED0C0080F208 /* ColorSliderCursorView.swift in Sources */,
 				D7374858290A98D500675C7A /* StrokeShape.swift in Sources */,
 				D7F724BD290E6A7100660CFF /* CanvasTextView.swift in Sources */,

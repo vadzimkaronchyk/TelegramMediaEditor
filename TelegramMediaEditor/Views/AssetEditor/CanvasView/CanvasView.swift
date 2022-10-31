@@ -13,9 +13,7 @@ final class CanvasView: UIView {
     private let textView = CanvasTextView()
     
     private var commitedViews = [UIView]()
-    private var focusedTextView: CanvasCommitedTextView? {
-        commitedViews.first { $0.isFirstResponder } as? CanvasCommitedTextView
-    }
+    private var selectedTextView: CanvasCommitedTextView?
     private lazy var textTypingTapGestureRecognizer = UITapGestureRecognizer(
         target: self,
         action: #selector(handleTextTypingTapGesture)
@@ -62,10 +60,20 @@ final class CanvasView: UIView {
             hideTextView()
             showStrokeView()
             textTypingTapGestureRecognizer.isEnabled = false
+            resignSelectedTextView()
         case .text:
             hideStrokeView()
             showTextView()
             textTypingTapGestureRecognizer.isEnabled = true
+        }
+    }
+    
+    func updateTextAlignment(_ alignment: NSTextAlignment) {
+        textView.alignment = alignment
+        if let selectedTextView = selectedTextView {
+            var text = selectedTextView.text
+            text.alignment = alignment
+            selectedTextView.updateText(text)
         }
     }
     
@@ -84,16 +92,16 @@ final class CanvasView: UIView {
     }
     
     func cancelEditedText() {
-        focusedTextView?.isHidden = false
+        selectedTextView?.isHidden = false
         
         hideTextView()
         textView.makeInactive()
     }
     
     func commitEditedText() {
-        if let focusedTextView = focusedTextView {
-            focusedTextView.isHidden = false
-            focusedTextView.updateText(textView.text)
+        if let selectedTextView = selectedTextView {
+            selectedTextView.isHidden = false
+            selectedTextView.updateText(textView.text)
         } else {
             addEditedText(textView.text)
             onUndoChanged?()
@@ -164,8 +172,22 @@ private extension CanvasView {
         let textView = CanvasCommitedTextView(text: text)
         addGestureRecognizers(toTextView: textView)
         addSubview(textView: textView)
+        selectTextView(textView)
         
         commitedViews.append(textView)
+    }
+    
+    func resignSelectedTextView() {
+        selectedTextView?.setSelected(false)
+        selectedTextView = nil
+    }
+    
+    func selectTextView(_ textView: CanvasCommitedTextView) {
+        if let selectedTextView = selectedTextView {
+            selectedTextView.setSelected(false)
+        }
+        selectedTextView = textView
+        textView.setSelected(true)
     }
     
     func addGestureRecognizers(toTextView textView: CanvasCommitedTextView) {
@@ -196,22 +218,8 @@ private extension CanvasView {
         insertSubview(strokeView, belowSubview: self.strokeView)
         commitedViews.append(strokeView)
     }
-}
-
-private extension CanvasView {
     
-    @objc func handleTextTypingTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
-        showTextView()
-        onTextEditingStarted?()
-    }
-    
-    @objc func handleTextViewTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
-        guard let view = gestureRecognizer.view as? CanvasCommitedTextView else {
-            return
-        }
-        
-        view.becomeFirstResponder()
-        
+    func showMenu(fromTextView textView: CanvasCommitedTextView) {
         let menuController = UIMenuController.shared
         let deleteMenuItem = UIMenuItem(
             title: "Delete",
@@ -230,36 +238,61 @@ private extension CanvasView {
             editMenuItem,
             duplicateMenuItem
         ]
-        menuController.showMenu(from: view, rect: view.bounds)
+        menuController.showMenu(from: textView, rect: textView.bounds)
+    }
+}
+
+private extension CanvasView {
+    
+    @objc func handleTextTypingTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
+        showTextView()
+        resignSelectedTextView()
+        onTextEditingStarted?()
+    }
+    
+    @objc func handleTextViewTapGesture(_ gestureRecognizer: UITapGestureRecognizer) {
+        guard let textView = gestureRecognizer.view as? CanvasCommitedTextView else {
+            return
+        }
+        
+        textView.becomeFirstResponder()
+        selectTextView(textView)
+        showMenu(fromTextView: textView)
     }
     
     @objc func textViewDeleteMenuItemTapped(_ menuItem: UIMenuItem) {
-        guard let focusedTextView = focusedTextView else { return }
+        guard let selectedTextView = selectedTextView else { return }
         
-        commitedViews.removeAll { $0 === focusedTextView }
-        focusedTextView.removeFromSuperview()
+        commitedViews.removeAll { $0 === selectedTextView }
+        selectedTextView.removeFromSuperview()
+        resignSelectedTextView()
         onUndoChanged?()
     }
     
     @objc func textViewEditMenuItemTapped(_ menuItem: UIMenuItem) {
-        guard let focusedTextView = focusedTextView else { return }
+        guard let selectedTextView = selectedTextView else { return }
         
-        focusedTextView.isHidden = true
-        textView.setEditingText(focusedTextView.text)
+        selectedTextView.isHidden = true
+        textView.setEditingText(selectedTextView.text)
         showTextView()
         
         onTextEditingStarted?()
     }
     
     @objc func textViewDuplicateMenuItemTapped(_ menuItem: UIMenuItem) {
-        guard let focusedTextView = focusedTextView else { return }
+        guard let selectedTextView = selectedTextView else { return }
         
-        let text = focusedTextView.text
+        let text = selectedTextView.text
         addEditedText(text)
     }
     
     @objc func handleTextViewPanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
         guard let view = gestureRecognizer.view else { return }
+        
+        if gestureRecognizer.state == .began && view.isFirstResponder {
+            UIMenuController.shared.hideMenu()
+            view.resignFirstResponder()
+        }
         
         let translation = gestureRecognizer.translation(in: view)
         view.transform = view.transform.translatedBy(x: translation.x, y: translation.y)

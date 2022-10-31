@@ -95,12 +95,20 @@ final class CanvasCommitedTextView: UIView {
     }
     
     func updateText(_ text: Text) {
+        self.text = text
         textLabel.text = text.string
         textLabel.font = .systemFont(ofSize: text.fontSize, weight: .bold)
         textLabel.textColor = text.color
+        textLabel.textAlignment = text.alignment
         borderDashLayer.strokeColor = text.color.cgColor
         leadingControlView.color = text.color
         trailingControlView.color = text.color
+    }
+    
+    func setSelected(_ selected: Bool) {
+        leadingControlView.isHidden = !selected
+        trailingControlView.isHidden = !selected
+        borderDashLayer.isHidden = !selected
     }
 }
 

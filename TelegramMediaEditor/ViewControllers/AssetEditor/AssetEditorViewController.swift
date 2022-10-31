@@ -151,6 +151,9 @@ private extension AssetEditorViewController {
             }
             self?.canvasView.updateActiveTool(tool)
         }
+        editingToolsView.onTextAlignmentChanged = { [weak self] alignment in
+            self?.canvasView.updateTextAlignment(alignment)
+        }
         editingToolsView.onAddShapeTapped = { [weak self] view in
             self?.presentShapesPopover(sourceView: view)
         }

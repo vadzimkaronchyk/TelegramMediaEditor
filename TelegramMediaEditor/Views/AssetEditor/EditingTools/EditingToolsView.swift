@@ -11,6 +11,7 @@ final class EditingToolsView: UIView {
     
     private let colorsCircleView = ColorsCircleView()
     private let drawingToolsPickerView = DrawingToolsPickerView()
+    private let textToolsView = TextToolsView()
     private let addShapeButton = UIButton(type: .system)
     private let bottomView = EditingToolsBottomView()
     private let spectrumView = ColorSpectrumView()
@@ -18,6 +19,7 @@ final class EditingToolsView: UIView {
     
     var onColorsCircleTapped: VoidClosure?
     var onToolSelected: Closure<Tool>?
+    var onTextAlignmentChanged: Closure<NSTextAlignment>?
     var onAddShapeTapped: Closure<UIView>?
     var onCancelTapped: VoidClosure?
     var onSaveTapped: VoidClosure?
@@ -32,6 +34,7 @@ final class EditingToolsView: UIView {
         
         setupLayout()
         setupViews()
+        showDrawingToolsPickerView()
     }
     
     required init?(coder: NSCoder) {
@@ -72,6 +75,7 @@ private extension EditingToolsView {
     func setupLayout() {
         addSubview(colorsCircleView)
         addSubview(drawingToolsPickerView)
+        addSubview(textToolsView)
         addSubview(addShapeButton)
         addSubview(bottomView)
         addSubview(spectrumView)
@@ -79,6 +83,7 @@ private extension EditingToolsView {
         
         colorsCircleView.translatesAutoresizingMaskIntoConstraints = false
         drawingToolsPickerView.translatesAutoresizingMaskIntoConstraints = false
+        textToolsView.translatesAutoresizingMaskIntoConstraints = false
         addShapeButton.translatesAutoresizingMaskIntoConstraints = false
         bottomView.translatesAutoresizingMaskIntoConstraints = false
         spectrumView.translatesAutoresizingMaskIntoConstraints = false
@@ -92,6 +97,9 @@ private extension EditingToolsView {
             drawingToolsPickerView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 240/390),
             drawingToolsPickerView.topAnchor.constraint(equalTo: topAnchor, constant: 1),
             drawingToolsPickerView.bottomAnchor.constraint(equalTo: bottomView.topAnchor),
+            textToolsView.centerYAnchor.constraint(equalTo: colorsCircleView.centerYAnchor),
+            textToolsView.leadingAnchor.constraint(equalTo: colorsCircleView.trailingAnchor, constant: 14),
+            textToolsView.trailingAnchor.constraint(equalTo: addShapeButton.leadingAnchor, constant: -14),
             addShapeButton.heightAnchor.constraint(equalToConstant: 33),
             addShapeButton.widthAnchor.constraint(equalTo: addShapeButton.heightAnchor),
             addShapeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
@@ -109,12 +117,12 @@ private extension EditingToolsView {
     func setupViews() {
         setupView()
         setupDrawingToolsPickerView()
+        setupTextToolsView()
         setupAddShapeButton()
         setupBottomView()
         setupSpectrumView()
+        setupState()
         addGestureRecognizers()
-        
-        spectrumView.isHidden = true
     }
     
     func setupView() {
@@ -133,6 +141,12 @@ private extension EditingToolsView {
         }
     }
     
+    func setupTextToolsView() {
+        textToolsView.onTextAlignmentChanged = { [weak self] alignment in
+            self?.onTextAlignmentChanged?(alignment)
+        }
+    }
+    
     func setupAddShapeButton() {
         addShapeButton.tintColor = .white
         addShapeButton.backgroundColor = .white.withAlphaComponent(0.1)
@@ -144,9 +158,11 @@ private extension EditingToolsView {
     func setupBottomView() {
         bottomView.onDrawingToolSelected = { [weak self] in
             guard let self = self else { return }
+            self.showDrawingToolsPickerView()
             self.onToolSelected?(.drawing(self.drawingToolsPickerView.selectedTool))
         }
         bottomView.onTextToolSelected = { [weak self] in
+            self?.showTextToolsView()
             self?.onToolSelected?(.text)
         }
         bottomView.onCancelTapped = { [weak self] in
@@ -171,6 +187,10 @@ private extension EditingToolsView {
         spectrumCursorView.frame.size = .square(size: 36)
     }
     
+    func setupState() {
+        spectrumView.isHidden = true
+    }
+    
     func addGestureRecognizers() {
         colorsCircleView.addGestureRecognizer(UITapGestureRecognizer(
             target: self,
@@ -192,6 +212,16 @@ private extension EditingToolsView {
         } else {
             spectrumCursorView.isHidden = true
         }
+    }
+    
+    func showDrawingToolsPickerView() {
+        drawingToolsPickerView.isHidden = false
+        textToolsView.isHidden = true
+    }
+    
+    func showTextToolsView() {
+        drawingToolsPickerView.isHidden = true
+        textToolsView.isHidden = false
     }
 }
 

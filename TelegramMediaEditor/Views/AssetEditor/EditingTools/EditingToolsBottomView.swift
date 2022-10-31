@@ -25,6 +25,7 @@ final class EditingToolsBottomView: UIView {
         
         setupLayout()
         setupViews()
+        setupState()
     }
     
     required init?(coder: NSCoder) {
@@ -135,12 +136,13 @@ private extension EditingToolsBottomView {
     }
     
     func setupViews() {
+        setupView()
         setupBottomControlsView()
         setupBottomToolSettingsView()
-        
+    }
+    
+    func setupView() {
         clipsToBounds = true
-        bottomControlsView.isHidden = false
-        bottomToolSettingsView.isHidden = true
     }
     
     func setupBottomControlsView() {
@@ -169,5 +171,10 @@ private extension EditingToolsBottomView {
         bottomToolSettingsView.onStrokeShapeTapped = { [weak self] view in
             self?.onStrokeShapeTapped?(view)
         }
+    }
+    
+    func setupState() {
+        bottomControlsView.isHidden = false
+        bottomToolSettingsView.isHidden = true
     }
 }
