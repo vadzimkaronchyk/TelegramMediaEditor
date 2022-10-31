@@ -9,7 +9,7 @@ import UIKit
 
 // TODO: save to user defaults
 struct Cache {
-    static var cachedColorsItems: [ColorsItem] = [
+    static var colorItems: [ColorsItem] = [
         .view(.init(color: .init(hue: 0, saturation: 1, brightness: 1))),
         .view(.init(color: .init(hue: 60.0/360, saturation: 1, brightness: 1))),
         .view(.init(color: .init(hue: 195.0/360, saturation: 1, brightness: 1))),
@@ -37,12 +37,13 @@ final class ColorsView: UIView {
     
     private lazy var collectionViewLayout: UICollectionViewCompositionalLayout = {
         .init(
-            sectionProvider: { section, environment in
+            sectionProvider: { [unowned self] section, environment in
                 let section = NSCollectionLayoutSection.colors(
                     contentSize: environment.container.contentSize,
                     horizontalGroupItemsCount: self.itemsCountPerPage(traitCollection: environment.traitCollection) / 2
                 )
-                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+                section.visibleItemsInvalidationHandler = { [weak self] (items, offset, environment) in
+                    guard let self = self else { return }
                     let page = Int(offset.x / environment.container.contentSize.width)
                     self.handlePageChange(page)
                 }
@@ -128,7 +129,7 @@ private extension ColorsView {
     }
     
     func setupDataSource() {
-        dataSource.reload(Cache.cachedColorsItems)
+        dataSource.reload(Cache.colorItems)
         pageControl.numberOfPages = 1
     }
     

@@ -59,5 +59,8 @@ private extension ColorPickerColorsView {
     
     func setupViews() {
         backgroundColor = .clear
+        colorsView.onColorChanged = { [weak self] color in
+            self?.onColorSelected?(color)
+        }
     }
 }

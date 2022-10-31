@@ -63,14 +63,14 @@ final class ColorsDataSource {
     func insertItems(_ items: [ColorsItem], beforeItem item: ColorsItem) {
         var snapshot = dataSource.snapshot()
         snapshot.insertItems(items, beforeItem: item)
-        Cache.cachedColorsItems = snapshot.itemIdentifiers
+        Cache.colorItems = snapshot.itemIdentifiers
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     func deleteItem(_ item: ColorsItem) {
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([item])
-        Cache.cachedColorsItems = snapshot.itemIdentifiers
+        Cache.colorItems = snapshot.itemIdentifiers
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
@@ -79,7 +79,7 @@ final class ColorsDataSource {
         snapshot.deleteAllItems()
         snapshot.appendSections([.colors])
         snapshot.appendItems(items, toSection: .colors)
-        Cache.cachedColorsItems = snapshot.itemIdentifiers
+        Cache.colorItems = snapshot.itemIdentifiers
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
